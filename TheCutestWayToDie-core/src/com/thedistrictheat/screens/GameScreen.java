@@ -7,21 +7,26 @@ import com.thedistrictheat.gameworld.GameWorld;
 import com.thedistrictheat.helpers.InputHandler;
 
 public class GameScreen implements Screen {
+    private static final float DESIREDWIDTH = 180;
+	
     private GameWorld world;
     private GameRenderer renderer;
+    private int floorHeight;
     private float runTime;
 
     public GameScreen() {
         float screenWidth = Gdx.graphics.getWidth();
-        float screenHeight = Gdx.graphics.getHeight();
-        float gameWidth = 136;
-        float gameHeight = gameWidth*(screenHeight/screenWidth);
-        Gdx.app.log("screenWidth", screenWidth + "");
-        Gdx.app.log("screenHeight", screenHeight + "");
-        Gdx.app.log("gameWidth", gameWidth + "");
-        Gdx.app.log("gameHeight", gameHeight + "");
+        float screenHeight = Gdx.graphics.getHeight();        
+		float gameWidth = DESIREDWIDTH;
+		float gameHeight = DESIREDWIDTH * (screenHeight/screenWidth);
 
-        world = new GameWorld();
+    	Gdx.app.log("Screen Width", screenWidth + "");
+    	Gdx.app.log("Screen Height", screenHeight + "");
+    	Gdx.app.log("Game Width", gameWidth + "");
+    	Gdx.app.log("Game Height", gameHeight + "");
+        
+		floorHeight = (int)(gameHeight * 0.1);
+        world = new GameWorld(floorHeight, (int)gameWidth, (int)gameHeight);
         renderer = new GameRenderer(world, (int)gameWidth, (int)gameHeight);
         Gdx.input.setInputProcessor(new InputHandler(world.getGuy()));
     }
