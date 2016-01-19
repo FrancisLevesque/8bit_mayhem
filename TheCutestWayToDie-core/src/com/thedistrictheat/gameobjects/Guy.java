@@ -10,17 +10,19 @@ public class Guy {
 	
 	private int width = 19;
 	private int height = 27;
-	private int floor;
+	private int standingHeight;
 	private int gravity;
+	private int startingX;
 	private boolean jumping = false;
 	private boolean isAlive = true;
 	
 	private Rectangle boundingRectangle; 
 	
-	public Guy(int floor, int gravity, int startingX) {
-		this.floor = floor;
+	public Guy(int standingHeight, int gravity, int startingX) {
+		this.standingHeight = standingHeight;
 		this.gravity = gravity;
-		position = new Vector2(startingX, 0);
+		this.startingX = startingX;
+		position = new Vector2(startingX, standingHeight);
 		velocity = new Vector2(0, 0);
 		acceleration = new Vector2(0, gravity);
 		boundingRectangle = new Rectangle();
@@ -34,8 +36,8 @@ public class Guy {
         }
 
         position.add(velocity.cpy().scl(delta));
-        if(position.y < floor) {
-        	position.y = floor;
+        if(position.y < standingHeight) {
+        	position.y = standingHeight;
         	jumping = false;
         }
         
@@ -48,6 +50,17 @@ public class Guy {
     		jumping = true;
     	}
     }
+
+	public void restart() {
+		position.x = startingX;
+		position.y = standingHeight;
+		velocity.x = 0;
+		velocity.y = 0;
+		acceleration.x = 0;
+		acceleration.y = gravity;
+		jumping = false;
+		isAlive = true;
+	}
 
     public float getX() {
         return position.x;

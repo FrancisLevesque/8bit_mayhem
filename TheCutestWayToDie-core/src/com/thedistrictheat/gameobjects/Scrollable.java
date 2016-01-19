@@ -7,6 +7,7 @@ public class Scrollable {
     protected Vector2 velocity;
     protected int width;
     protected int height;
+    protected float scrollSpeed;
     protected boolean isScrolledLeft;
 
     public Scrollable(float x, float y, int width, int height, float scrollSpeed) {
@@ -14,6 +15,7 @@ public class Scrollable {
         velocity = new Vector2(scrollSpeed, 0);
         this.width = width;
         this.height = height;
+        this.scrollSpeed = scrollSpeed;
         isScrolledLeft = false;
     }
 
@@ -55,5 +57,9 @@ public class Scrollable {
 
 	public void stop() {
 		velocity.x = 0;
+	}
+
+	public void start() {
+		velocity.x = scrollSpeed;
 	}
 }

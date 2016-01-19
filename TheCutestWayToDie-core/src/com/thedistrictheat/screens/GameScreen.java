@@ -28,7 +28,7 @@ public class GameScreen implements Screen {
 		floorHeight = (int)(gameHeight * 0.1);
         world = new GameWorld(floorHeight, (int)gameWidth, (int)gameHeight);
         renderer = new GameRenderer(world, (int)gameWidth, (int)gameHeight);
-        Gdx.input.setInputProcessor(new InputHandler(world.getGuy()));
+        Gdx.input.setInputProcessor(new InputHandler(world));
     }
 
     @Override
