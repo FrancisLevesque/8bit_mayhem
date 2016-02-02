@@ -46,8 +46,12 @@ public class GameRenderer {
 	private Rock rock1;
 	
 	// Game Assets
-	private TextureRegion francis, francisSelected, francisBlink, bombCat, mountains, grass, rock;
-	private Animation francisAnimation;
+	private TextureRegion francis, francisHit, francisJump;
+	private TextureRegion brandon, brandonHit, brandonJump;
+	private TextureRegion stew, stewHit, stewJump;
+	private TextureRegion sean, seanHit, seanJump;
+	private TextureRegion bombCat, mountains, grass, rock;
+	private Animation francisRunning;
 	private BitmapFont font, timeFont;
 	private SimpleButton playButton;
 	
@@ -84,9 +88,22 @@ public class GameRenderer {
 	
 	private void initGameAssets() {
 		francis = AssetLoader.francis;
-		francisSelected = AssetLoader.francisSelected;
-		francisBlink = AssetLoader.francisBlink;
-		francisAnimation = AssetLoader.francisAnimation;
+		francisHit = AssetLoader.francisHit;
+		francisJump = AssetLoader.francisJump;
+		francisRunning = AssetLoader.francisRunning;
+
+		brandon = AssetLoader.brandon;
+		brandonHit = AssetLoader.brandonHit;
+		brandonJump = AssetLoader.brandonJump;
+
+		stew = AssetLoader.stew;
+		stewHit = AssetLoader.stewHit;
+		stewJump = AssetLoader.stewJump;
+
+		sean = AssetLoader.sean;
+		seanHit = AssetLoader.seanHit;
+		seanJump = AssetLoader.seanJump;
+		
 		bombCat = AssetLoader.bombCat;
 		mountains = AssetLoader.mountains;
 		grass = AssetLoader.grass;
@@ -165,14 +182,14 @@ public class GameRenderer {
             spriteBatcher.begin();
         	font.draw(spriteBatcher, "Select your character!", (gameWidth * 0.24f), gameHeight * 0.95f);
         	if(world.francis.characterSelected()) {
-        		spriteBatcher.draw(francisSelected, world.francis.getX()-1, world.francis.getY()-1, world.francis.getWidth()+2, world.francis.getHeight()+2);
+        		spriteBatcher.draw(francis, world.francis.getX()-1, world.francis.getY()-1, world.francis.getWidth()+2, world.francis.getHeight()+2);
         	} 
         	else {
         		spriteBatcher.draw(francis, world.francis.getX(), world.francis.getY(), world.francis.getWidth(), world.francis.getHeight());
         	}
-            spriteBatcher.draw(bombCat, world.sean.getX(), world.sean.getY(), world.sean.getWidth(), world.sean.getHeight());
-            spriteBatcher.draw(rock, world.brandon.getX(), world.brandon.getY(), world.brandon.getWidth(), world.brandon.getHeight());
-            spriteBatcher.draw(francisBlink, world.stew.getX(), world.stew.getY(), world.stew.getWidth(), world.stew.getHeight());
+            spriteBatcher.draw(brandon, world.brandon.getX(), world.brandon.getY(), world.brandon.getWidth(), world.brandon.getHeight());
+            spriteBatcher.draw(stew, world.stew.getX(), world.stew.getY(), world.stew.getWidth(), world.stew.getHeight());
+            spriteBatcher.draw(sean, world.sean.getX(), world.sean.getY(), world.sean.getWidth(), world.sean.getHeight());
             playButton.draw(spriteBatcher);
             spriteBatcher.end();
         	break;
@@ -204,16 +221,16 @@ public class GameRenderer {
             }
             else if (world.isRunning()) {
                 if(guy.isJumping()) {
-                	spriteBatcher.draw(francisBlink, guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
+                	spriteBatcher.draw(francisJump, guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
                 }
                 else {
-                	spriteBatcher.draw(francisAnimation.getKeyFrame(runTime), guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
+                	spriteBatcher.draw(francisRunning.getKeyFrame(runTime), guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
                 }
             }
             else {
             	if(world.isGameOver()) {
                     if(!guy.isAlive()) {
-                    	spriteBatcher.draw(francisBlink, guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
+                    	spriteBatcher.draw(francisHit, guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
                     }
                 	font.draw(spriteBatcher, gameOverString, (gameWidth * 0.5f) - gameOverString.length() * 2, gameHeight * 0.8f);
                 	font.draw(spriteBatcher, tryAgainString, (gameWidth * 0.5f) - tryAgainString.length() * 2, gameHeight * 0.7f);

@@ -26,7 +26,7 @@ public class InputHandler implements InputProcessor {
 		this.guy = gameWorld.getGuy();
 		menuButtons = new ArrayList<SimpleButton>();
 		// TODO: This is drawing both sprites at once
-        playButton = new SimpleButton(10, 10, 30, 10, AssetLoader.playButtonUp, AssetLoader.playButtonDown);
+        playButton = new SimpleButton(60, 10, 36, 10, AssetLoader.playButtonUp, AssetLoader.playButtonDown);
         menuButtons.add(playButton);
 	}
 
@@ -38,7 +38,7 @@ public class InputHandler implements InputProcessor {
 		    int gameY = (int)(screenY * gameHeightRatio);
 			gameWorld.checkIfCharacterSelected(gameX, gameY);
 			if(gameWorld.characterSelected()) {
-				if (playButton.isTouchDown(screenX, screenY)) {
+				if (playButton.isTouchDown(gameX, gameY)) {
 					gameWorld.restart();
 				}
 			}

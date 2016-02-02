@@ -13,7 +13,7 @@ public class GameWorld {
     private int overflow;
 	private int x1, x2, x3;
 	
-	public Character francis, sean, brandon, stew;
+	public Character francis, brandon, stew, sean;
 	private boolean characterSelected = false;
 
 	private float runTime = 0;
@@ -46,9 +46,9 @@ public class GameWorld {
 		x3 = gameWidth;
 		
 		francis = new Character(gameWidth * 0.14f, gameHeight * 0.5f, guy.getWidth(), guy.getHeight());
-		sean = new Character(gameWidth * 0.34f, gameHeight * 0.5f, guy.getWidth(), guy.getHeight());
 		brandon = new Character(gameWidth * 0.54f, gameHeight * 0.5f, guy.getWidth(), guy.getHeight());
 		stew = new Character(gameWidth * 0.74f, gameHeight * 0.5f, guy.getWidth(), guy.getHeight());
+		sean = new Character(gameWidth * 0.34f, gameHeight * 0.5f, guy.getWidth(), guy.getHeight());
 	}
 	
 	public void updateLoading(float delta) {
