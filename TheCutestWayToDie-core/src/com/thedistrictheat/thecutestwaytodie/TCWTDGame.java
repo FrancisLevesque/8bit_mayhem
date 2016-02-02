@@ -9,6 +9,7 @@ public class TCWTDGame extends Game {
 	@Override
 	public void create() {
 		AssetLoader.load();
+		// TODO: Start with the splash screen first
 		setScreen(new GameScreen());
 	}
 	
