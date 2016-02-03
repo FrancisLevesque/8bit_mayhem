@@ -25,13 +25,13 @@ public class GameWorld {
 	private ScrollHandler scrollHandler;
 	
 	public enum GameState {
-		LOADING, SELECT, READY, RUNNING, GAMEOVER
+		SELECT, READY, RUNNING, GAMEOVER
 	}
 	
 	private GameState currentState;
 	
 	public GameWorld(int floorHeight, int gameWidth, int gameHeight, float gameWidthRatio, float gameHeightRatio) {
-		currentState = GameState.LOADING;
+		currentState = GameState.SELECT;
 		this.floorHeight = floorHeight;
 		this.gameWidthRatio = gameWidthRatio;
 		this.gameHeightRatio = gameHeightRatio;
@@ -85,9 +85,6 @@ public class GameWorld {
 	
 	public void update(float delta) {
 		switch(currentState) {
-		case LOADING:
-			updateLoading(delta);
-			break;
 		case SELECT:
 			updateSelect(delta);
 			break;
@@ -125,10 +122,9 @@ public class GameWorld {
 		return x3;
 	}
 
-	public void checkIfCharacterSelected(int gameX, int gameY) {
+	public boolean characterSelected(int gameX, int gameY) {
 		if(francis.gotClicked(gameX, gameY)) {
 			characterSelected = true;
-			// TODO: make PLAY button clickable (should be disabled when no character selected)
 			if(francis.characterSelected()) {
 				francis.reset();
 			}
@@ -139,10 +135,20 @@ public class GameWorld {
 			brandon.reset();
 			stew.reset();
 		}
+		return characterSelected;
+	}
+	
+
+	public boolean characterSelected() {
+		return characterSelected;
 	}
 
 	public boolean playButtonPressed(int screenX, int screenY) {
 		return false;
+	}
+	
+	public void ready() {
+		currentState = GameState.READY;
 	}
 	
 	public void start() {
@@ -158,14 +164,6 @@ public class GameWorld {
 	
 	public GameState currentGameState() {
 		return currentState;
-	}
-	
-	public boolean characterSelected() {
-		return characterSelected;
-	}
-	
-	public boolean isLoading() {
-		return currentState == GameState.LOADING;
 	}
 	
 	public boolean isSelect() {

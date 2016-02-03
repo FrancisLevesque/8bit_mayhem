@@ -2,15 +2,14 @@ package com.thedistrictheat.thecutestwaytodie;
 
 import com.badlogic.gdx.Game;
 import com.thedistrictheat.helpers.AssetLoader;
-import com.thedistrictheat.screens.GameScreen;
+import com.thedistrictheat.screens.SplashScreen;
 
 public class TCWTDGame extends Game {
 
 	@Override
 	public void create() {
 		AssetLoader.load();
-		// TODO: Start with the splash screen first
-		setScreen(new GameScreen());
+		setScreen(new SplashScreen(this));
 	}
 	
 	@Override

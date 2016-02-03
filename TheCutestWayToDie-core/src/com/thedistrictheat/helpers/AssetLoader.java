@@ -32,7 +32,6 @@ public class AssetLoader {
 		texture = new Texture(Gdx.files.internal("graphics/texture.png"));
 		texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
-		// TODO: Add Play Button texture regions
 		playButtonUp = new TextureRegion(texture, 170, 57, 36, 10);
         playButtonDown = new TextureRegion(texture, 170, 67, 36, 10);
 

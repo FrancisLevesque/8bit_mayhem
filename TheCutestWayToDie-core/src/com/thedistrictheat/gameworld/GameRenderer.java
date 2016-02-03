@@ -26,9 +26,6 @@ public class GameRenderer {
 	private OrthographicCamera camera;
 	private ShapeRenderer shapeRenderer;
 	private SpriteBatch spriteBatcher;
-	
-	private String loading = "LOADING";
-	private String dots;
     
 	private long startTime = 0;
 	private long currentTime = 0;
@@ -63,14 +60,10 @@ public class GameRenderer {
 		
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, gameWidth, gameHeight);
-		
 		spriteBatcher = new SpriteBatch();
 		spriteBatcher.setProjectionMatrix(camera.combined);
-
 		shapeRenderer = new ShapeRenderer();
 		shapeRenderer.setProjectionMatrix(camera.combined);
-		
-		playButton = ((InputHandler)(Gdx.input.getInputProcessor())).getPlayButton();
 		
 		initGameObjects();
 		initGameAssets();
@@ -84,6 +77,8 @@ public class GameRenderer {
 		frontGrass = scrollHandler.getFrontGrass();
 		backGrass = scrollHandler.getBackGrass();
 		rock1 = scrollHandler.getRock1();
+
+		playButton = ((InputHandler)(Gdx.input.getInputProcessor())).getPlayButton();
 	}
 	
 	private void initGameAssets() {
@@ -152,20 +147,6 @@ public class GameRenderer {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
         switch(world.currentGameState()) {
-        case LOADING:
-        	int time = (int)(runTime * 3);
-        	if(time % 3 == 0) {
-        		dots = ".";
-        	} else if (time % 3 == 1) {
-        		dots = "..";
-        	} else {
-        		dots = "...";
-        	}
-        	
-            spriteBatcher.begin();
-        	font.draw(spriteBatcher, loading + dots, (gameWidth * 0.35f), gameHeight * 0.6f);
-            spriteBatcher.end();
-        	break;
         case SELECT:
             shapeRenderer.begin(ShapeType.Filled);
             // Draw Background
@@ -190,7 +171,9 @@ public class GameRenderer {
             spriteBatcher.draw(brandon, world.brandon.getX(), world.brandon.getY(), world.brandon.getWidth(), world.brandon.getHeight());
             spriteBatcher.draw(stew, world.stew.getX(), world.stew.getY(), world.stew.getWidth(), world.stew.getHeight());
             spriteBatcher.draw(sean, world.sean.getX(), world.sean.getY(), world.sean.getWidth(), world.sean.getHeight());
-            playButton.draw(spriteBatcher);
+            if(world.characterSelected()) {
+            	playButton.draw(spriteBatcher);
+            }
             spriteBatcher.end();
         	break;
         case READY:

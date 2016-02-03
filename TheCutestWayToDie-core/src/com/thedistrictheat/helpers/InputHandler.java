@@ -10,10 +10,13 @@ import com.thedistrictheat.gameworld.GameWorld;
 import com.thedistrictheat.ui.SimpleButton;
 
 public class InputHandler implements InputProcessor {
+	private final int BUTTON_WIDTH = 36;
+	private final int BUTTON_HEIGHT = 10;
+	
 	private GameWorld gameWorld;
-	private float gameWidthRatio;
-	private float gameHeightRatio;
-	private int screenHeight;
+	private float gameWidthRatio, gameHeightRatio;
+	private int screenWidth, screenHeight;
+	private int gameX, gameY;
 	private Guy guy;
     private List<SimpleButton> menuButtons;
     private SimpleButton playButton;
@@ -22,25 +25,21 @@ public class InputHandler implements InputProcessor {
 		this.gameWorld = gameWorld;
 		this.gameWidthRatio = gameWorld.getGameWidthRatio();
 		this.gameHeightRatio = gameWorld.getGameHeightRatio();
+		this.screenWidth = Gdx.graphics.getWidth();
 		this.screenHeight = Gdx.graphics.getHeight();
 		this.guy = gameWorld.getGuy();
 		menuButtons = new ArrayList<SimpleButton>();
-		// TODO: This is drawing both sprites at once
-        playButton = new SimpleButton(60, 10, 36, 10, AssetLoader.playButtonUp, AssetLoader.playButtonDown);
+        playButton = new SimpleButton(((screenWidth/2)*gameWidthRatio) - (BUTTON_WIDTH/2), ((screenHeight/4)*gameHeightRatio) - (BUTTON_HEIGHT/2), BUTTON_WIDTH, BUTTON_HEIGHT, AssetLoader.playButtonUp, AssetLoader.playButtonDown);
         menuButtons.add(playButton);
 	}
 
 	@Override
 	public boolean touchDown(int screenX, int invertedScreenY, int pointer, int button) {
 		if(gameWorld.isSelect()) {
-			int screenY = screenHeight - invertedScreenY;
-		    int gameX = (int)(screenX * gameWidthRatio);
-		    int gameY = (int)(screenY * gameHeightRatio);
-			gameWorld.checkIfCharacterSelected(gameX, gameY);
-			if(gameWorld.characterSelected()) {
-				if (playButton.isTouchDown(gameX, gameY)) {
-					gameWorld.restart();
-				}
+			gameX = scaleX(screenX);
+		    gameY = scaleY(invertedScreenY);
+			if(gameWorld.characterSelected(gameX, gameY)) {
+				playButton.isTouchDown(gameX, gameY);
 			}
 		}
 		else if(gameWorld.isReady()) {
@@ -54,6 +53,38 @@ public class InputHandler implements InputProcessor {
 		}
 		return true;
 	}
+
+	@Override
+	public boolean touchUp(int screenX, int invertedScreenY, int pointer, int button) {
+		if(gameWorld.isSelect()) {
+			gameX = scaleX(screenX);
+		    gameY = scaleY(invertedScreenY);
+			if(gameWorld.characterSelected(gameX, gameY)) {
+			    if (playButton.isTouchDown(gameX, gameY)) {
+			    	gameWorld.ready();
+			    	return true;
+			    }
+			}
+		}
+		return false;
+	}
+
+    private int scaleX(int screenX) {
+        return (int) (screenX * gameWidthRatio);
+    }
+
+    private int scaleY(int invertedScreenY) {
+		int screenY = screenHeight - invertedScreenY;
+        return (int) (screenY * gameWidthRatio);
+    }
+	
+	public SimpleButton getPlayButton() {
+		return playButton;
+	}
+	
+	public List<SimpleButton> getMenuButtons() {
+        return menuButtons;
+    }
 
 	@Override
 	public boolean keyDown(int keycode) {
@@ -71,11 +102,6 @@ public class InputHandler implements InputProcessor {
 	}
 
 	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		return false;
-	}
-
-	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
 		return false;
 	}
@@ -89,12 +115,4 @@ public class InputHandler implements InputProcessor {
 	public boolean scrolled(int amount) {
 		return false;
 	}
-	
-	public SimpleButton getPlayButton() {
-		return playButton;
-	}
-	
-	public List<SimpleButton> getMenuButtons() {
-        return menuButtons;
-    }
 }
