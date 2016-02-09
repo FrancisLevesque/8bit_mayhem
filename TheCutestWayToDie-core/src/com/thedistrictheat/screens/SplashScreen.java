@@ -51,7 +51,7 @@ public class SplashScreen implements Screen {
 	public void render(float delta) {
 		loadTime += delta;		
 		if (loadTime > 2.0) {
-			game.setScreen(new GameScreen());
+			game.setScreen(new CharacterSelectScreen(game));
 		}
 		
 		if(swap) {

@@ -9,14 +9,16 @@ public class Scrollable {
     protected int height;
     protected float scrollSpeed;
     protected boolean isScrolledLeft;
+    protected int startingX;
 
     public Scrollable(float x, float y, int width, int height, float scrollSpeed) {
-        position = new Vector2(x, y);
-        velocity = new Vector2(scrollSpeed, 0);
         this.width = width;
         this.height = height;
         this.scrollSpeed = scrollSpeed;
+        position = new Vector2(x, y);
+        velocity = new Vector2(scrollSpeed, 0);
         isScrolledLeft = false;
+		startingX = (int)x;
     }
 
     public void update(float delta) {
@@ -26,17 +28,13 @@ public class Scrollable {
         }
     }
 
-    public void reset(float newX) {
-        position.x = newX;
+    public void reset() {
+        position.x = width;
         isScrolledLeft = false;
     }
 
     public boolean isScrolledLeft() {
         return isScrolledLeft;
-    }
-
-    public float getTailX() {
-        return position.x + width;
     }
 
     public float getX() {
@@ -62,4 +60,9 @@ public class Scrollable {
 	public void start() {
 		velocity.x = scrollSpeed;
 	}
+	
+    public void restart() {
+        position.x = startingX;
+        isScrolledLeft = false;
+    }
 }

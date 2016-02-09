@@ -4,12 +4,13 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Guy {	
+	private static int WIDTH = 19;
+	private static int HEIGHT = 27;
+	
 	private Vector2 position;
 	private Vector2 velocity;
 	private Vector2 acceleration;
 	
-	private int width = 19;
-	private int height = 27;
 	private int standingHeight;
 	private int gravity;
 	private int startingX;
@@ -41,7 +42,7 @@ public class Guy {
         	jumping = false;
         }
         
-        boundingRectangle.set(position.x, position.y, width, height);
+        boundingRectangle.set(position.x+5, position.y+2, WIDTH-9, HEIGHT-4);
     }
 
 	public void onClick() {
@@ -71,11 +72,11 @@ public class Guy {
     }
 
     public float getWidth() {
-        return width;
+        return WIDTH;
     }
 
     public float getHeight() {
-        return height;
+        return HEIGHT;
     }
     
     public boolean isJumping() {

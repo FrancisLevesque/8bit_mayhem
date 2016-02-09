@@ -18,6 +18,11 @@ public class Rock extends Scrollable {
 		super.update(delta);
 		boundingCircle.set(position.x + (width/2), position.y + (height/4), radius);
 	}
+
+    public void reset() {
+        position.x = startingX;
+        isScrolledLeft = false;
+    }
 	
 	public Circle getBoundingCircle() {
 		return boundingCircle;

@@ -21,11 +21,6 @@ public class SimpleButton {
         bounds = new Rectangle(x, y, width, height);
     }
 
-    // TODO: something in here isn't scaling the points to the game screen size correctly
-    public boolean isClicked(int screenX, int screenY) {
-        return bounds.contains(screenX, screenY);
-    }
-
     public void draw(SpriteBatch batcher) {
         if (isPressed) {
             batcher.draw(buttonDown, x, y, width, height);
@@ -34,7 +29,7 @@ public class SimpleButton {
         }
     }
 
-    public boolean isTouchDown(int screenX, int screenY) {
+    public boolean checkIfPressed(int screenX, int screenY) {
         if (bounds.contains(screenX, screenY)) {
             isPressed = true;
             return true;
@@ -42,7 +37,7 @@ public class SimpleButton {
         return false;
     }
 
-    public boolean isTouchUp(int screenX, int screenY) {
+    public boolean checkIfReleased(int screenX, int screenY) {
         if (bounds.contains(screenX, screenY) && isPressed) {
             isPressed = false;
             return true;

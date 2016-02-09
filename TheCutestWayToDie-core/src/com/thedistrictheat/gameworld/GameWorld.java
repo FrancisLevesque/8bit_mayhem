@@ -1,67 +1,66 @@
 package com.thedistrictheat.gameworld;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
-import com.thedistrictheat.gameobjects.Character;
+import com.thedistrictheat.gameobjects.Grass;
 import com.thedistrictheat.gameobjects.Guy;
+import com.thedistrictheat.gameobjects.Mountains;
+import com.thedistrictheat.gameobjects.Rock;
 import com.thedistrictheat.gameobjects.ScrollHandler;
+import com.thedistrictheat.gameobjects.Scrollable;
+import com.thedistrictheat.helpers.AssetLoader;
 
 public class GameWorld {
 	public static final int GRAVITY = -300;
-	private static final float LOADTIME = 1;
-
-    private int start;
-    private int overflow;
-	private int x1, x2, x3;
-	
-	public Character francis, brandon, stew, sean;
-	private boolean characterSelected = false;
-
-	private float runTime = 0;
+	private static final int GROUND_SPEED = -50;
+    
+	private boolean goToCharacterSelect = false;
 	private int floorHeight;
 	private float gameWidthRatio;
 	private float gameHeightRatio;
-	private int standingHeight;
-	private Guy guy;
+	private int standingHeight, grassStart, grassHeight;
+	
 	private ScrollHandler scrollHandler;
+	private List<Scrollable> list;
+	private Guy guy;
+    private Mountains frontMountains, backMountains;
+    private Grass frontGrass, backGrass;
+    private Rock rock1;
 	
 	public enum GameState {
-		SELECT, READY, RUNNING, GAMEOVER
+		READY, RUNNING, GAMEOVER
 	}
 	
 	private GameState currentState;
 	
 	public GameWorld(int floorHeight, int gameWidth, int gameHeight, float gameWidthRatio, float gameHeightRatio) {
-		currentState = GameState.SELECT;
+		currentState = GameState.READY;
 		this.floorHeight = floorHeight;
 		this.gameWidthRatio = gameWidthRatio;
 		this.gameHeightRatio = gameHeightRatio;
 		standingHeight = (int)(floorHeight * 0.7);
-		guy = new Guy(standingHeight, GRAVITY, (int)(gameWidth * 0.1));
-		scrollHandler = new ScrollHandler(floorHeight, gameWidth, gameHeight);
+    	grassStart = (int)(floorHeight * 0.6);
+    	grassHeight = (int)(floorHeight * 0.4);
 
-	    start = -gameWidth/4;
-	    overflow = gameWidth - start;
-		x1 = 0;
-		x2 = gameWidth/2;
-		x3 = gameWidth;
+		guy = new Guy(standingHeight, GRAVITY, (int)(gameWidth * 0.1));
 		
-		francis = new Character(gameWidth * 0.14f, gameHeight * 0.5f, guy.getWidth(), guy.getHeight());
-		brandon = new Character(gameWidth * 0.54f, gameHeight * 0.5f, guy.getWidth(), guy.getHeight());
-		stew = new Character(gameWidth * 0.74f, gameHeight * 0.5f, guy.getWidth(), guy.getHeight());
-		sean = new Character(gameWidth * 0.34f, gameHeight * 0.5f, guy.getWidth(), guy.getHeight());
-	}
-	
-	public void updateLoading(float delta) {
-		runTime += delta;
-		if (runTime > LOADTIME) {
-			currentState = GameState.SELECT;
-		}
-	}
-	
-	public void updateSelect(float delta) {
-        x1 = increment(x1);
-        x2 = increment(x2);
-        x3 = increment(x3);
+    	frontMountains = new Mountains(0, floorHeight, gameWidth, gameHeight/2);
+    	backMountains = new Mountains(gameWidth, floorHeight, gameWidth, gameHeight/2);
+    	
+    	frontGrass = new Grass(0, grassStart, gameWidth, grassHeight, GROUND_SPEED);
+    	backGrass = new Grass(gameWidth, grassStart, gameWidth, grassHeight, GROUND_SPEED);
+    
+    	rock1 = new Rock(gameWidth, standingHeight, AssetLoader.ROCKWIDTH, AssetLoader.ROCKHEIGHT, GROUND_SPEED); 
+
+		list = new ArrayList<Scrollable>();
+    	list.add(frontMountains);
+    	list.add(backMountains);
+    	list.add(frontGrass);
+    	list.add(backGrass);
+    	list.add(rock1);
+    	scrollHandler = new ScrollHandler(list);		
 	}
 	
 	public void updateReady(float delta) {
@@ -72,7 +71,7 @@ public class GameWorld {
 		guy.update(delta);
 		scrollHandler.update(delta);
 		
-		if (scrollHandler.collides(guy)) {
+		if (collisionWith(guy)) {
 			scrollHandler.stop();
 			guy.setIsAlive(false);
 			currentState = GameState.GAMEOVER;
@@ -85,9 +84,6 @@ public class GameWorld {
 	
 	public void update(float delta) {
 		switch(currentState) {
-		case SELECT:
-			updateSelect(delta);
-			break;
 		case READY:
 			updateReady(delta);
 			break;
@@ -100,51 +96,6 @@ public class GameWorld {
 		default:
 			Gdx.app.error("ERROR", "Unhandled GameState:" + currentState);
 		}
-	}
-	
-	private int increment(int x) {
-        x++;
-        if(x > overflow) {
-        	x = start;
-        }
-        return x;
-	}
-	
-	public int getX1() {
-		return x1;
-	}
-	
-	public int getX2() {
-		return x2;
-	}
-	
-	public int getX3() {
-		return x3;
-	}
-
-	public boolean characterSelected(int gameX, int gameY) {
-		if(francis.gotClicked(gameX, gameY)) {
-			characterSelected = true;
-			if(francis.characterSelected()) {
-				francis.reset();
-			}
-			else {
-				francis.select();
-			}
-			sean.reset();
-			brandon.reset();
-			stew.reset();
-		}
-		return characterSelected;
-	}
-	
-
-	public boolean characterSelected() {
-		return characterSelected;
-	}
-
-	public boolean playButtonPressed(int screenX, int screenY) {
-		return false;
 	}
 	
 	public void ready() {
@@ -162,12 +113,16 @@ public class GameWorld {
 		scrollHandler.restart();
 	}
 	
-	public GameState currentGameState() {
-		return currentState;
+	public void setGoToCharacterSelect(boolean value) {
+		goToCharacterSelect = value;
 	}
 	
-	public boolean isSelect() {
-		return currentState == GameState.SELECT;
+	public boolean goToCharacterSelect() {
+		return goToCharacterSelect;
+	}
+	
+	public GameState currentGameState() {
+		return currentState;
 	}
 	
 	public boolean isReady() {
@@ -197,6 +152,30 @@ public class GameWorld {
 	public Guy getGuy() {
 		return guy;
 	}
+
+	public boolean collisionWith(Guy guy) {
+		return rock1.collides(guy);
+	}
+
+    public Mountains getFrontMountains() {
+		return frontMountains;
+	}
+
+	public Mountains getBackMountains() {
+		return backMountains;
+	}
+
+	public Grass getFrontGrass() {
+        return frontGrass;
+    }
+
+    public Grass getBackGrass() {
+        return backGrass;
+    }
+    
+    public Rock getRock1() {
+    	return rock1;
+    }
 	
 	public ScrollHandler getScrollHandler() {
 		return scrollHandler;
