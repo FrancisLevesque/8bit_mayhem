@@ -1,48 +1,56 @@
 package com.thedistrictheat.gameobjects;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.thedistrictheat.gameobjects.Tile.TileType;
 
 public class Guy {	
-	private static int WIDTH = 19;
-	private static int HEIGHT = 27;
+	private static final int WIDTH = 19;
+	private static final int HEIGHT = 27;
+	private static final int GRAVITY = -300;
 	
 	private Vector2 position;
 	private Vector2 velocity;
 	private Vector2 acceleration;
 	
-	private int standingHeight;
-	private int gravity;
-	private int startingX;
+	private int startingX, startingY;
 	private boolean jumping = false;
 	private boolean isAlive = true;
 	
 	private Rectangle boundingRectangle; 
 	
-	public Guy(int standingHeight, int gravity, int startingX) {
-		this.standingHeight = standingHeight;
-		this.gravity = gravity;
-		this.startingX = startingX;
-		position = new Vector2(startingX, standingHeight);
+	public Guy() {
+		this.startingX = 10;
+		this.startingY = 40;
+		position = new Vector2(startingX, startingY);
 		velocity = new Vector2(0, 0);
-		acceleration = new Vector2(0, gravity);
+		acceleration = new Vector2(0, GRAVITY);
 		boundingRectangle = new Rectangle();
 	}
 
     public void update(float delta) {
         velocity.add(acceleration.cpy().scl(delta));
-
-        if (velocity.y < gravity) {
-            velocity.y = gravity;
+        if (velocity.y > GRAVITY) {
+            velocity.y = GRAVITY;
         }
-
         position.add(velocity.cpy().scl(delta));
-        if(position.y < standingHeight) {
-        	position.y = standingHeight;
-        	jumping = false;
-        }
         
-        boundingRectangle.set(position.x+5, position.y+2, WIDTH-9, HEIGHT-4);
+        boundingRectangle.set(position.x+5, position.y+4, WIDTH-9, HEIGHT-2);
+    }
+    
+    public void tileCollision(Tile tile) {
+    	if(tile.tileType() == TileType.GRASS) {
+    		if (Intersector.overlaps(boundingRectangle, tile.getBoundingRectangle())) {
+    			Gdx.app.log("Guy", "Tile Type: "+tile.tileType());
+        		Gdx.app.log("Guy", "X: "+tile.getX() + ", Y: "+tile.getY()+ ", Width: "+tile.getWidth()+ ", Height: "+tile.getHeight());
+    			Gdx.app.log("Guy", "COLLISION!");
+    			velocity.y = 0;
+    			position.y = tile.getY() + tile.getHeight();
+    			jumping = false;
+    		}
+    	}
     }
 
 	public void onClick() {
@@ -54,11 +62,11 @@ public class Guy {
 
 	public void restart() {
 		position.x = startingX;
-		position.y = standingHeight;
+		position.y = startingY;
 		velocity.x = 0;
 		velocity.y = 0;
 		acceleration.x = 0;
-		acceleration.y = gravity;
+		acceleration.y = GRAVITY;
 		jumping = false;
 		isAlive = true;
 	}

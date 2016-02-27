@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.thedistrictheat.gameobjects.Character;
 import com.thedistrictheat.gameobjects.Stars;
+import com.thedistrictheat.gameobjects.Tile;
 import com.thedistrictheat.helpers.AssetLoader;
 import com.thedistrictheat.helpers.CharacterSelectInputHandler;
 import com.thedistrictheat.ui.SimpleButton;
@@ -96,6 +97,12 @@ public class CharacterSelectRenderer {
         	playButton.draw(spriteBatcher);
         }
         spriteBatcher.end();
+        
+        // Draw Collision Bounding Shapes
+        shapeRenderer.begin(ShapeType.Line);
+        shapeRenderer.setColor(Color.RED);
+        shapeRenderer.rect(playButton.getBounds().getX(), playButton.getBounds().getY(), playButton.getBounds().getWidth(), playButton.getBounds().getHeight());
+        shapeRenderer.end();
 	}
 	
 	public void setBackgroundColor(Color backgroundColor) {

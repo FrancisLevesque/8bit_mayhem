@@ -1,32 +1,34 @@
 package com.thedistrictheat.helpers;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.thedistrictheat.gameobjects.DirtTile;
+import com.thedistrictheat.gameobjects.GrassTile;
+import com.thedistrictheat.gameobjects.Tile;
 
 public class AssetLoader {
 	public static final int ROCKWIDTH = 19;
 	public static final int ROCKHEIGHT = 9;
 	
-	public static Texture loadingTexture, starsTexture, spritesTexture;
+	public static Texture starsTexture, spritesTexture;
 	public static TextureRegion loading, stars, playButtonUp, playButtonDown;
 	public static TextureRegion francis, francisHit, francisRun1, francisRun2, francisRun3, francisJump;
 	public static TextureRegion brandon, brandonHit, brandonRun1, brandonRun2, brandonRun3, brandonJump;
 	public static TextureRegion stew, stewHit, stewRun1, stewRun2, stewRun3, stewJump;
 	public static TextureRegion sean, seanHit, seanRun1, seanRun2, seanRun3, seanJump;
-	public static TextureRegion bombCat, rock, mountains, grass;
+	public static TextureRegion bombCat, rock, mountains;
 	public static Animation francisRunning;
 	public static Preferences prefs;
+	public static ArrayList<Tile> tileList = new ArrayList<Tile>();
 	
 	public static void load() {
-		// loadingTexture
-        loadingTexture = new Texture(Gdx.files.internal("graphics/loading.jpg"));
-        loadingTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-        loading = new TextureRegion(loadingTexture, 0, 0, 1920, 1080);
-        
         // starsTexture
         starsTexture = new Texture(Gdx.files.internal("graphics/stars.png"));
         starsTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
@@ -36,8 +38,8 @@ public class AssetLoader {
 		spritesTexture = new Texture(Gdx.files.internal("graphics/texture.png"));
 		spritesTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
-		playButtonUp = new TextureRegion(spritesTexture, 170, 57, 36, 10);
-        playButtonDown = new TextureRegion(spritesTexture, 170, 67, 36, 10);
+		playButtonUp = new TextureRegion(spritesTexture, 170, 57, 30, 10);
+        playButtonDown = new TextureRegion(spritesTexture, 170, 67, 30, 10);
 
 		francis = new TextureRegion(spritesTexture, 1, 1, 26, 33);
 		francisHit = new TextureRegion(spritesTexture, 1, 35, 26, 33);
@@ -74,11 +76,42 @@ public class AssetLoader {
 		bombCat = new TextureRegion(spritesTexture, 110, 0, 13, 20);
 		rock = new TextureRegion(spritesTexture, 130, 0, ROCKWIDTH, ROCKHEIGHT);
 		mountains = new TextureRegion(spritesTexture, 170, 0, 213, 50);
-		grass = new TextureRegion(spritesTexture, 170, 50, 210, 7);
 
+		// Preferences File
         prefs = Gdx.app.getPreferences("TheCutestWayToDie");
         if(!prefs.contains("highScore")) {
         	prefs.putInteger("highScore", 0);
+        }
+        
+        // Creating level
+        ArrayList<String> levelLines = new ArrayList<String>();
+        FileHandle levelFile = Gdx.files.internal("levels/level1.txt");
+        String levelText = levelFile.readString();        
+        String[] allLines = levelText.split("\n");
+        
+        for(int i = 0;i < allLines.length;i++) {
+        	if (!allLines[i].startsWith("#")) {
+        		levelLines.add(allLines[i]);
+        	}
+        }
+        
+        int levelHeight = levelLines.size();
+        
+        for(int j = levelHeight;j > 0;j--){ // TODO: FIX THIS
+    		String line = (String) levelLines.get(j);
+        	for(int i = 0;i < line.length();i++){
+        		switch(line.charAt(i)){
+    			case '-':
+    				tileList.add(new GrassTile(i, j));
+    				break;
+    			case '=':
+    				tileList.add(new DirtTile(i, j));
+    				break;
+    			default:
+    				Gdx.app.log("AssetLoader", "Character " + line.charAt(i) + " is not currently supported.");
+    				break;
+        		}
+        	}
         }
 	}
 	
@@ -92,7 +125,6 @@ public class AssetLoader {
 	}
 	
 	public static void dispose() {
-		loadingTexture.dispose();
 		spritesTexture.dispose();
 	}
 }

@@ -4,30 +4,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
-import com.thedistrictheat.gameobjects.Grass;
 import com.thedistrictheat.gameobjects.Guy;
 import com.thedistrictheat.gameobjects.Mountains;
 import com.thedistrictheat.gameobjects.Rock;
 import com.thedistrictheat.gameobjects.ScrollHandler;
 import com.thedistrictheat.gameobjects.Scrollable;
+import com.thedistrictheat.gameobjects.Tile;
 import com.thedistrictheat.helpers.AssetLoader;
 
 public class GameWorld {
 	public static final int GRAVITY = -300;
-	private static final int GROUND_SPEED = -50;
     
 	private boolean goToCharacterSelect = false;
-	private int floorHeight;
 	private float gameWidthRatio;
 	private float gameHeightRatio;
-	private int standingHeight, grassStart, grassHeight;
 	
 	private ScrollHandler scrollHandler;
 	private List<Scrollable> list;
 	private Guy guy;
     private Mountains frontMountains, backMountains;
-    private Grass frontGrass, backGrass;
     private Rock rock1;
+    
+    private ArrayList<Tile> tileList;
 	
 	public enum GameState {
 		READY, RUNNING, GAMEOVER
@@ -35,32 +33,23 @@ public class GameWorld {
 	
 	private GameState currentState;
 	
-	public GameWorld(int floorHeight, int gameWidth, int gameHeight, float gameWidthRatio, float gameHeightRatio) {
+	public GameWorld(int gameWidth, int gameHeight, float gameWidthRatio, float gameHeightRatio) {
 		currentState = GameState.READY;
-		this.floorHeight = floorHeight;
 		this.gameWidthRatio = gameWidthRatio;
 		this.gameHeightRatio = gameHeightRatio;
-		standingHeight = (int)(floorHeight * 0.7);
-    	grassStart = (int)(floorHeight * 0.6);
-    	grassHeight = (int)(floorHeight * 0.4);
 
-		guy = new Guy(standingHeight, GRAVITY, (int)(gameWidth * 0.1));
-		
-    	frontMountains = new Mountains(0, floorHeight, gameWidth, gameHeight/2);
-    	backMountains = new Mountains(gameWidth, floorHeight, gameWidth, gameHeight/2);
-    	
-    	frontGrass = new Grass(0, grassStart, gameWidth, grassHeight, GROUND_SPEED);
-    	backGrass = new Grass(gameWidth, grassStart, gameWidth, grassHeight, GROUND_SPEED);
-    
-    	rock1 = new Rock(gameWidth, standingHeight, AssetLoader.ROCKWIDTH, AssetLoader.ROCKHEIGHT, GROUND_SPEED); 
+		guy = new Guy();
+    	frontMountains = new Mountains(0, gameHeight, gameWidth, gameHeight/2);
+    	backMountains = new Mountains(gameWidth, gameHeight, gameWidth, gameHeight/2);
+//    	rock1 = new Rock(gameWidth, standingHeight, AssetLoader.ROCKWIDTH, AssetLoader.ROCKHEIGHT, GROUND_SPEED); 
 
 		list = new ArrayList<Scrollable>();
     	list.add(frontMountains);
     	list.add(backMountains);
-    	list.add(frontGrass);
-    	list.add(backGrass);
-    	list.add(rock1);
-    	scrollHandler = new ScrollHandler(list);		
+//    	list.add(rock1);
+    	scrollHandler = new ScrollHandler(list);
+    	
+    	tileList = AssetLoader.tileList;
 	}
 	
 	public void updateReady(float delta) {
@@ -70,12 +59,11 @@ public class GameWorld {
 	public void updateRunning(float delta) {
 		guy.update(delta);
 		scrollHandler.update(delta);
+    	for(int i = 0;i < tileList.size();i++) {
+    		tileList.get(i).update(delta);
+    	}
 		
-		if (collisionWith(guy)) {
-			scrollHandler.stop();
-			guy.setIsAlive(false);
-			currentState = GameState.GAMEOVER;
-		}
+    	handleCollisions();
 	}
 	
 	public void updateGameOver(float delta) {
@@ -96,6 +84,22 @@ public class GameWorld {
 		default:
 			Gdx.app.error("ERROR", "Unhandled GameState:" + currentState);
 		}
+	}
+	
+	private boolean rockCollisionWith(Guy guy) {
+    	return false;
+//		return rock1.collides(guy);
+	}
+	
+	private void handleCollisions() {
+//		if (rockCollisionWith(guy)) {
+//			scrollHandler.stop();
+//			guy.setIsAlive(false);
+//			currentState = GameState.GAMEOVER;
+//		}
+    	for(int i = 0;i < tileList.size();i++) {
+    		guy.tileCollision(tileList.get(i));
+    	}
 	}
 	
 	public void ready() {
@@ -137,10 +141,6 @@ public class GameWorld {
 		return currentState == GameState.GAMEOVER;
 	}
 	
-	public int getFloorHeight() {
-		return floorHeight;
-	}
-	
 	public float getGameWidthRatio() {
 		return gameWidthRatio;
 	}
@@ -153,10 +153,6 @@ public class GameWorld {
 		return guy;
 	}
 
-	public boolean collisionWith(Guy guy) {
-		return rock1.collides(guy);
-	}
-
     public Mountains getFrontMountains() {
 		return frontMountains;
 	}
@@ -164,14 +160,6 @@ public class GameWorld {
 	public Mountains getBackMountains() {
 		return backMountains;
 	}
-
-	public Grass getFrontGrass() {
-        return frontGrass;
-    }
-
-    public Grass getBackGrass() {
-        return backGrass;
-    }
     
     public Rock getRock1() {
     	return rock1;

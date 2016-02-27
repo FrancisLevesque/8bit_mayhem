@@ -4,7 +4,7 @@ import com.thedistrictheat.gameworld.CharacterSelectWorld;
 import com.thedistrictheat.ui.SimpleButton;
 
 public class CharacterSelectInputHandler extends InputHandler {
-	private final int BUTTON_WIDTH = 36;
+	private final int BUTTON_WIDTH = 30;
 	private final int BUTTON_HEIGHT = 10;
 	
 	private CharacterSelectWorld world;    
@@ -13,7 +13,9 @@ public class CharacterSelectInputHandler extends InputHandler {
 	public CharacterSelectInputHandler(CharacterSelectWorld world) {
 		super(world.getGameWidthRatio(), world.getGameHeightRatio());
 		this.world = world;
-        playButton = new SimpleButton(((screenWidth/2)*gameWidthRatio) - (BUTTON_WIDTH/2), ((screenHeight/4)*gameHeightRatio) - (BUTTON_HEIGHT/2), BUTTON_WIDTH, BUTTON_HEIGHT, AssetLoader.playButtonUp, AssetLoader.playButtonDown);
+        playButton = new SimpleButton((screenWidth*gameWidthRatio)/2 - (BUTTON_WIDTH/2), 
+        		(screenHeight*gameHeightRatio)/4 - (BUTTON_HEIGHT/2), BUTTON_WIDTH, 
+        		BUTTON_HEIGHT, AssetLoader.playButtonUp, AssetLoader.playButtonDown);
 	}
 
 	@Override

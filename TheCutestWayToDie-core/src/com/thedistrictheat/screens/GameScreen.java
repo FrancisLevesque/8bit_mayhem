@@ -13,7 +13,6 @@ public class GameScreen implements Screen {
     private GameWorld world;
 	private GameInputHandler inputHandler;
     private GameRenderer renderer;
-    private int floorHeight;
     private float runTime;
 
     public GameScreen(TCWTDGame game, CharacterSelectScreen screen, float gameWidth, float gameHeight) {
@@ -24,10 +23,9 @@ public class GameScreen implements Screen {
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
         
-		floorHeight = (int)(gameHeight * 0.1);
 		float gameWidthRatio = gameWidth/screenWidth;
 		float gameHeightRatio = gameHeight/screenHeight;
-        world = new GameWorld(floorHeight, (int)gameWidth, (int)gameHeight, gameWidthRatio, gameHeightRatio);
+        world = new GameWorld((int)gameWidth, (int)gameHeight, gameWidthRatio, gameHeightRatio);
         inputHandler = new GameInputHandler(world);
         Gdx.input.setInputProcessor(inputHandler);
         renderer = new GameRenderer(world, (int)gameWidth, (int)gameHeight);

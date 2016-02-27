@@ -29,20 +29,24 @@ public class SimpleButton {
         }
     }
 
-    public boolean checkIfPressed(int screenX, int screenY) {
-        if (bounds.contains(screenX, screenY)) {
+    public boolean checkIfPressed(int gameX, int gameY) {
+        if (bounds.contains(gameX, gameY)) {
             isPressed = true;
             return true;
         }
         return false;
     }
 
-    public boolean checkIfReleased(int screenX, int screenY) {
-        if (bounds.contains(screenX, screenY) && isPressed) {
+    public boolean checkIfReleased(int gameX, int gameY) {
+        if (bounds.contains(gameX, gameY) && isPressed) {
             isPressed = false;
             return true;
         }
         isPressed = false;
         return false;
+    }
+    
+    public Rectangle getBounds() {
+    	return bounds;
     }
 }
