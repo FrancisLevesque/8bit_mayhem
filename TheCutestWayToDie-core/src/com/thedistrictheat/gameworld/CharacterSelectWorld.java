@@ -3,6 +3,7 @@ package com.thedistrictheat.gameworld;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.thedistrictheat.gameobjects.Character;
 import com.thedistrictheat.gameobjects.ScrollHandler;
@@ -20,6 +21,7 @@ public class CharacterSelectWorld {
 	private Stars stars, stars2;
 
 	public Character francis, brandon, stew, sean;
+	public enum CharacterType { FRANCIS, BRANDON, STEW, SEAN };
 	
 	public CharacterSelectWorld(int gameWidth, int gameHeight, float gameWidthRatio, float gameHeightRatio) {
 		this.gameWidthRatio = gameWidthRatio;
@@ -33,9 +35,9 @@ public class CharacterSelectWorld {
     	scrollHandler = new ScrollHandler(list);
 		
 		francis = new Character(gameWidth * 0.14f, gameHeight * 0.5f, Color.BLUE);
-		brandon = new Character(gameWidth * 0.54f, gameHeight * 0.5f, Color.YELLOW);
-		stew = new Character(gameWidth * 0.74f, gameHeight * 0.5f, Color.RED);
-		sean = new Character(gameWidth * 0.34f, gameHeight * 0.5f, Color.GREEN);
+		brandon = new Character(gameWidth * 0.34f, gameHeight * 0.5f, Color.YELLOW);
+		stew = new Character(gameWidth * 0.54f, gameHeight * 0.5f, Color.RED);
+		sean = new Character(gameWidth * 0.74f, gameHeight * 0.5f, Color.GREEN);
 	}
 	
 	public void update(float delta) {
@@ -114,4 +116,23 @@ public class CharacterSelectWorld {
     public Stars getStars2() {
     	return stars2;
     }
+
+	public CharacterType getSelectedCharacter() {
+		if(francis.characterSelected()) {
+			return CharacterType.FRANCIS;
+		}
+		else if(brandon.characterSelected()) {
+			return CharacterType.BRANDON;
+		}
+		else if(stew.characterSelected()) {
+			return CharacterType.STEW;
+		}
+		else if (sean.characterSelected()) {
+			return CharacterType.SEAN;
+		}
+		else {
+			Gdx.app.log("CharacterSelectWorld", "NO CHARACTER SELECTED! Defaulting to Francis...");
+			return CharacterType.FRANCIS;
+		}
+	}
 }

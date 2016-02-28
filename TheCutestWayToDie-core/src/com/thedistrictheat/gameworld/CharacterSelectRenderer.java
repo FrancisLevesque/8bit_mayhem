@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.thedistrictheat.gameobjects.Character;
 import com.thedistrictheat.gameobjects.Stars;
-import com.thedistrictheat.gameobjects.Tile;
 import com.thedistrictheat.helpers.AssetLoader;
 import com.thedistrictheat.helpers.CharacterSelectInputHandler;
 import com.thedistrictheat.ui.SimpleButton;
@@ -29,7 +28,8 @@ public class CharacterSelectRenderer {
 	// Game Assets
 	private Color backgroundColor;
 	private TextureRegion starsTexture, francisTexture, brandonTexture, stewTexture, seanTexture;
-	private Animation francisRunning;
+	private TextureRegion selectYourCharacterText;
+	private Animation francisRunning, brandonRunning, stewRunning, seanRunning;
 	private SimpleButton playButton;
 	
 	public CharacterSelectRenderer(CharacterSelectWorld world, Color backgroundColor, int gameWidth, int gameHeight) {
@@ -58,11 +58,15 @@ public class CharacterSelectRenderer {
 	
 	private void initGameAssets() {
 	    starsTexture = AssetLoader.stars;
+	    selectYourCharacterText = AssetLoader.selectYourCharacterText;
 		francisTexture = AssetLoader.francis;
 		francisRunning = AssetLoader.francisRunning;
 		brandonTexture = AssetLoader.brandon;
+		brandonRunning = AssetLoader.brandonRunning;
 		stewTexture = AssetLoader.stew;
+		stewRunning = AssetLoader.stewRunning;
 		seanTexture = AssetLoader.sean;
+		seanRunning = AssetLoader.seanRunning;
 	}
 	
 	private void drawCharacter(Character character, TextureRegion waiting, TextureRegion running) {        
@@ -88,21 +92,16 @@ public class CharacterSelectRenderer {
             spriteBatcher.draw(starsTexture, stars.getX(), stars.getY(), stars.getWidth(), stars.getHeight());
             spriteBatcher.draw(starsTexture, stars2.getX(), stars2.getY(), stars2.getWidth(), stars2.getHeight());
         }
+        spriteBatcher.draw(selectYourCharacterText, (gameWidth/2)-(selectYourCharacterText.getRegionWidth()/2), gameHeight*0.9f, selectYourCharacterText.getRegionWidth(), selectYourCharacterText.getRegionHeight());
         drawCharacter(world.francis, francisTexture, francisRunning.getKeyFrame(runTime));
-        drawCharacter(world.brandon, brandonTexture, francisRunning.getKeyFrame(runTime));
-        drawCharacter(world.stew, stewTexture, francisRunning.getKeyFrame(runTime));
-        drawCharacter(world.sean, seanTexture, francisRunning.getKeyFrame(runTime));
+        drawCharacter(world.brandon, brandonTexture, brandonRunning.getKeyFrame(runTime));
+        drawCharacter(world.stew, stewTexture, stewRunning.getKeyFrame(runTime));
+        drawCharacter(world.sean, seanTexture, seanRunning.getKeyFrame(runTime));
         
         if(world.characterSelected()) {
         	playButton.draw(spriteBatcher);
         }
         spriteBatcher.end();
-        
-        // Draw Collision Bounding Shapes
-        shapeRenderer.begin(ShapeType.Line);
-        shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(playButton.getBounds().getX(), playButton.getBounds().getY(), playButton.getBounds().getWidth(), playButton.getBounds().getHeight());
-        shapeRenderer.end();
 	}
 	
 	public void setBackgroundColor(Color backgroundColor) {

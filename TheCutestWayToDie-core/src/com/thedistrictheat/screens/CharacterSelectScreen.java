@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.thedistrictheat.gameworld.CharacterSelectRenderer;
 import com.thedistrictheat.gameworld.CharacterSelectWorld;
+import com.thedistrictheat.gameworld.CharacterSelectWorld.CharacterType;
 import com.thedistrictheat.helpers.CharacterSelectInputHandler;
 import com.thedistrictheat.thecutestwaytodie.TCWTDGame;
 
@@ -55,21 +56,25 @@ public class CharacterSelectScreen implements Screen {
     		game.setScreen(gameScreen);
     	}
     }
-
-    @Override
-    public void resize(int width, int height) {
+    
+    public CharacterType getGuy(){
+    	return world.getSelectedCharacter();
     }
 
     @Override
     public void show() {
+		world.setCharacterSelected(false);
+		renderer.setBackgroundColor(BACKGROUND_COLOR);
 		Gdx.input.setCatchBackKey(false);
         Gdx.input.setInputProcessor(inputHandler);
     }
 
     @Override
     public void hide() {
-		world.setCharacterSelected(false);
-		renderer.setBackgroundColor(BACKGROUND_COLOR);
+    }
+
+    @Override
+    public void resize(int width, int height) {
     }
 
     @Override

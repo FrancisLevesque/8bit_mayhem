@@ -48,6 +48,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+        world.ready(screen.getGuy());
 		Gdx.input.setCatchBackKey(true);
         Gdx.input.setInputProcessor(inputHandler);
     }

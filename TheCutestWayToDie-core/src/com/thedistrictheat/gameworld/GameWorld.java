@@ -10,6 +10,7 @@ import com.thedistrictheat.gameobjects.Rock;
 import com.thedistrictheat.gameobjects.ScrollHandler;
 import com.thedistrictheat.gameobjects.Scrollable;
 import com.thedistrictheat.gameobjects.Tile;
+import com.thedistrictheat.gameworld.CharacterSelectWorld.CharacterType;
 import com.thedistrictheat.helpers.AssetLoader;
 
 public class GameWorld {
@@ -102,7 +103,8 @@ public class GameWorld {
     	}
 	}
 	
-	public void ready() {
+	public void ready(CharacterType type) {
+		guy.setSprites(type);
 		currentState = GameState.READY;
 	}
 	

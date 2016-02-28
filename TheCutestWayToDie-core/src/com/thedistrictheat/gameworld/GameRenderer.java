@@ -6,7 +6,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -30,12 +29,8 @@ public class GameRenderer {
 	private Rock rock1;
 	
 	// Game Assets
-	private TextureRegion francis, francisHit, francisJump;
-	private TextureRegion brandon, brandonHit, brandonJump;
-	private TextureRegion stew, stewHit, stewJump;
-	private TextureRegion sean, seanHit, seanJump;
-	private TextureRegion bombCat, mountains, grass, rock;
-	private Animation francisRunning;
+	private TextureRegion bombCat, mountains, rock;
+	private TextureRegion clickToBeginText, gameOverText;
 	private ArrayList<Tile> tileList;
 	
 	public GameRenderer(GameWorld world, int gameWidth, int gameHeight) {
@@ -62,22 +57,8 @@ public class GameRenderer {
 	}
 	
 	private void initGameAssets() {
-		francis = AssetLoader.francis;
-		francisHit = AssetLoader.francisHit;
-		francisJump = AssetLoader.francisJump;
-		francisRunning = AssetLoader.francisRunning;
-
-		brandon = AssetLoader.brandon;
-		brandonHit = AssetLoader.brandonHit;
-		brandonJump = AssetLoader.brandonJump;
-
-		stew = AssetLoader.stew;
-		stewHit = AssetLoader.stewHit;
-		stewJump = AssetLoader.stewJump;
-
-		sean = AssetLoader.sean;
-		seanHit = AssetLoader.seanHit;
-		seanJump = AssetLoader.seanJump;
+		clickToBeginText = AssetLoader.clickToBeginText;
+		gameOverText = AssetLoader.gameOverText;
 		
 		bombCat = AssetLoader.bombCat;
 		mountains = AssetLoader.mountains;
@@ -117,22 +98,23 @@ public class GameRenderer {
 //        drawRocks();
         
         if(world.isReady()) {
-        	spriteBatcher.draw(francis, guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
+        	spriteBatcher.draw(clickToBeginText, (gameWidth/2)-(clickToBeginText.getRegionWidth()/2), gameHeight*0.9f, clickToBeginText.getRegionWidth(), clickToBeginText.getRegionHeight());
+        	spriteBatcher.draw(guy.standingSprite(), guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
         }
         else if (world.isRunning()) {
             if(guy.isJumping()) {
-            	spriteBatcher.draw(francisJump, guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
+            	spriteBatcher.draw(guy.jumpingSprite(), guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
             }
             else {
-            	spriteBatcher.draw(francisRunning.getKeyFrame(runTime), guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
+            	spriteBatcher.draw(guy.runningAnimation().getKeyFrame(runTime), guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
             }
         }
         else {
         	if(world.isGameOver()) {
                 if(!guy.isAlive()) {
-                	spriteBatcher.draw(francisHit, guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
+                	spriteBatcher.draw(guy.hitSprite(), guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
                 }
-                // TODO: Draw Game Over Screen
+                spriteBatcher.draw(gameOverText, (gameWidth/2)-(gameOverText.getRegionWidth()/2), gameHeight*0.9f, gameOverText.getRegionWidth(), gameOverText.getRegionHeight());
         	}
         }
         spriteBatcher.end();

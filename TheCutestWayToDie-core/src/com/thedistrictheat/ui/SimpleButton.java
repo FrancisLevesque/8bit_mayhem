@@ -45,8 +45,4 @@ public class SimpleButton {
         isPressed = false;
         return false;
     }
-    
-    public Rectangle getBounds() {
-    	return bounds;
-    }
 }
