@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.thedistrictheat.gameworld.GameRenderer;
 import com.thedistrictheat.gameworld.GameWorld;
+import com.thedistrictheat.helpers.AssetLoader;
 import com.thedistrictheat.helpers.GameInputHandler;
 import com.thedistrictheat.thecutestwaytodie.TCWTDGame;
 
@@ -14,6 +15,7 @@ public class GameScreen implements Screen {
 	private GameInputHandler inputHandler;
     private GameRenderer renderer;
     private float runTime;
+    private boolean levelNotLoaded = true;
 
     public GameScreen(TCWTDGame game, CharacterSelectScreen screen, float gameWidth, float gameHeight) {
 		Gdx.input.setCatchBackKey(true);
@@ -33,6 +35,11 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {      
+    	if(levelNotLoaded) {
+    		AssetLoader.loadLevel(screen.getGuy());
+    		renderer.refreshGameAssets();
+    		levelNotLoaded = false;
+    	}
 		if(world.goToCharacterSelect()) {
 			world.setGoToCharacterSelect(false);
 			game.setScreen(screen);
@@ -49,6 +56,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         world.ready(screen.getGuy());
+        levelNotLoaded = true;
 		Gdx.input.setCatchBackKey(true);
         Gdx.input.setInputProcessor(inputHandler);
     }

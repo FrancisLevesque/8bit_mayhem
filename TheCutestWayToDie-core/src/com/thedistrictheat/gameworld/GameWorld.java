@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.thedistrictheat.gameobjects.FirstBackgroundLayer;
 import com.thedistrictheat.gameobjects.Guy;
-import com.thedistrictheat.gameobjects.Mountains;
 import com.thedistrictheat.gameobjects.Rock;
 import com.thedistrictheat.gameobjects.ScrollHandler;
 import com.thedistrictheat.gameobjects.Scrollable;
+import com.thedistrictheat.gameobjects.SecondBackgroundLayer;
+import com.thedistrictheat.gameobjects.ThirdBackgroundLayer;
 import com.thedistrictheat.gameobjects.Tile;
 import com.thedistrictheat.gameworld.CharacterSelectWorld.CharacterType;
 import com.thedistrictheat.helpers.AssetLoader;
@@ -23,7 +25,9 @@ public class GameWorld {
 	private ScrollHandler scrollHandler;
 	private List<Scrollable> list;
 	private Guy guy;
-    private Mountains frontMountains, backMountains;
+    private FirstBackgroundLayer frontFirstLayer, backFirstLayer;
+    private SecondBackgroundLayer frontSecondLayer, backSecondLayer;
+    private ThirdBackgroundLayer frontThirdLayer, backThirdLayer;
     private Rock rock1;
     
     private ArrayList<Tile> tileList;
@@ -40,13 +44,21 @@ public class GameWorld {
 		this.gameHeightRatio = gameHeightRatio;
 
 		guy = new Guy();
-    	frontMountains = new Mountains(0, gameHeight, gameWidth, gameHeight/2);
-    	backMountains = new Mountains(gameWidth, gameHeight, gameWidth, gameHeight/2);
+		frontFirstLayer  = new FirstBackgroundLayer(0, 0, (int)(gameWidth), (int)(gameHeight/8));
+		backFirstLayer   = new FirstBackgroundLayer(0, 0, (int)(gameWidth), (int)(gameHeight/8));
+		frontSecondLayer = new SecondBackgroundLayer(0, 0, (int)(gameWidth), (int)(gameHeight/4));
+		backSecondLayer  = new SecondBackgroundLayer(0, 0, (int)(gameWidth), (int)(gameHeight/4));
+		frontThirdLayer  = new ThirdBackgroundLayer(0, 0, gameWidth, (int)(gameHeight * 0.8f));
+		backThirdLayer   = new ThirdBackgroundLayer(0, 0, gameWidth, (int)(gameHeight * 0.8f));
 //    	rock1 = new Rock(gameWidth, standingHeight, AssetLoader.ROCKWIDTH, AssetLoader.ROCKHEIGHT, GROUND_SPEED); 
 
 		list = new ArrayList<Scrollable>();
-    	list.add(frontMountains);
-    	list.add(backMountains);
+    	list.add(frontFirstLayer);
+    	list.add(backFirstLayer);
+    	list.add(frontSecondLayer);
+    	list.add(backSecondLayer);
+    	list.add(frontThirdLayer);
+    	list.add(backThirdLayer);
 //    	list.add(rock1);
     	scrollHandler = new ScrollHandler(list);
     	
@@ -64,6 +76,7 @@ public class GameWorld {
     		tileList.get(i).update(delta);
     	}
 		
+    	checkIfAlive();
     	handleCollisions();
 	}
 	
@@ -87,17 +100,20 @@ public class GameWorld {
 		}
 	}
 	
+	private void checkIfAlive() {
+		if(!getGuy().isAlive()) {
+			scrollHandler.stop();
+			currentState = GameState.GAMEOVER;
+		}
+	}
+	
 	private boolean rockCollisionWith(Guy guy) {
     	return false;
 //		return rock1.collides(guy);
 	}
 	
 	private void handleCollisions() {
-//		if (rockCollisionWith(guy)) {
-//			scrollHandler.stop();
-//			guy.setIsAlive(false);
-//			currentState = GameState.GAMEOVER;
-//		}
+//		rockCollisionWith(guy)
     	for(int i = 0;i < tileList.size();i++) {
     		guy.tileCollision(tileList.get(i));
     	}
@@ -117,6 +133,9 @@ public class GameWorld {
 		currentState = GameState.READY;
 		guy.restart();
 		scrollHandler.restart();
+    	for(int i = 0;i < tileList.size();i++) {
+    		tileList.get(i).restart();
+    	}
 	}
 	
 	public void setGoToCharacterSelect(boolean value) {
@@ -155,12 +174,28 @@ public class GameWorld {
 		return guy;
 	}
 
-    public Mountains getFrontMountains() {
-		return frontMountains;
+    public FirstBackgroundLayer getFrontFirstLayer() {
+		return frontFirstLayer;
 	}
 
-	public Mountains getBackMountains() {
-		return backMountains;
+	public FirstBackgroundLayer getBackFirstLayer() {
+		return backFirstLayer;
+	}
+
+    public SecondBackgroundLayer getFrontSecondLayer() {
+		return frontSecondLayer;
+	}
+
+	public SecondBackgroundLayer getBackSecondLayer() {
+		return backSecondLayer;
+	}
+
+    public ThirdBackgroundLayer getFrontThirdLayer() {
+		return frontThirdLayer;
+	}
+
+	public ThirdBackgroundLayer getBackThirdLayer() {
+		return backThirdLayer;
 	}
     
     public Rock getRock1() {

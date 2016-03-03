@@ -30,7 +30,7 @@ public class Rock extends Scrollable {
 
 	public boolean collides(Guy guy) {
 		if (guy.getX() + guy.getWidth() > position.x) {
-			return (Intersector.overlaps(boundingCircle, guy.getBoundingRectangle()));
+			return (Intersector.overlaps(boundingCircle, guy.getRunningFrontBox()));
 		}
 		return false;
 	}

@@ -1,6 +1,5 @@
 package com.thedistrictheat.gameobjects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Intersector;
@@ -13,7 +12,9 @@ import com.thedistrictheat.helpers.AssetLoader;
 public class Guy {	
 	private static final int WIDTH = 19;
 	private static final int HEIGHT = 27;
-	private static final int GRAVITY = -10;
+	private static final int GRAVITY = -300;
+	private static final int MAX_SPEED = -80;
+	private static final int JUMP_SPEED = 160;
 	
 	private Vector2 position;
 	private Vector2 velocity;
@@ -25,16 +26,76 @@ public class Guy {
 	
 	private TextureRegion standingSprite, jumpingSprite,  hitSprite;
 	private Animation runningAnimation;
-	
-	private Rectangle boundingRectangle; 
+
+	private Rectangle runningFootBox; 
+	private Rectangle runningFrontBox; 
+	private Rectangle jumpingFootBox; 
+	private Rectangle jumpingFrontBox; 
 	
 	public Guy() {
 		this.startingX = 10;
-		this.startingY = 40;
+		this.startingY = 20;
 		position = new Vector2(startingX, startingY);
 		velocity = new Vector2(0, 0);
 		acceleration = new Vector2(0, GRAVITY);
-		boundingRectangle = new Rectangle();
+		runningFootBox = new Rectangle(position.x + 3, position.y, WIDTH - 7, 2);
+		runningFrontBox = new Rectangle(position.x + WIDTH - 6, position.y, 2, HEIGHT - 7);
+		jumpingFootBox = new Rectangle(position.x + 6, position.y, 4, 2);
+		jumpingFrontBox = new Rectangle(position.x + WIDTH - 3, position.y + 4, 2, HEIGHT - 8);
+	}
+
+	public void update(float delta) {
+        velocity.add(acceleration.cpy().scl(delta));
+        if (velocity.y < MAX_SPEED) {
+            velocity.y = MAX_SPEED;
+        }
+        position.add(velocity.cpy().scl(delta));
+        
+        if(position.y + getHeight() < 0) {
+        	setIsAlive(false);
+        }
+        
+        runningFootBox.setPosition(position.x + 3, position.y);
+        runningFrontBox.setPosition(position.x + WIDTH - 6, position.y);
+        jumpingFootBox.setPosition(position.x + 6, position.y);
+        jumpingFrontBox.setPosition(position.x + WIDTH - 3, position.y + 4);
+    }
+    
+    public void tileCollision(Tile tile) {
+		TileType type = tile.tileType();
+    	if(jumping && velocity.y < 0) {
+        	if(type == TileType.TOP_TILE || type == TileType.TOP_TILE_RIGHT || type == TileType.TOP_TILE_LEFT) {
+        		if (Intersector.overlaps(jumpingFootBox, tile.getBoundingRectangle())) {
+        			velocity.y = 0;
+        			position.y = tile.getY() + tile.getHeight();
+        			jumping = false;
+        		}
+        	}
+    	}
+    	else if (!jumping) {
+        	if(type == TileType.TOP_TILE || type == TileType.TOP_TILE_RIGHT || type == TileType.TOP_TILE_LEFT) {
+        		if (Intersector.overlaps(runningFootBox, tile.getBoundingRectangle())) {
+        			velocity.y = 0;
+        			position.y = tile.getY() + tile.getHeight();
+        		}
+        	}
+    	}
+    }
+
+	public void onClick() {
+    	if (isAlive && jumping == false) {
+    		velocity.y = JUMP_SPEED;
+    		jumping = true;
+    	}
+    }
+
+	public void restart() {
+		position.x = startingX;
+		position.y = startingY;
+		velocity.x = 0;
+		velocity.y = 0;
+		jumping = false;
+		isAlive = true;
 	}
 
     public void setSprites(CharacterType type) {
@@ -65,48 +126,6 @@ public class Guy {
 		
 	}
 
-	public void update(float delta) {
-        velocity.add(acceleration.cpy().scl(delta));
-        if (velocity.y > GRAVITY) {
-            velocity.y = GRAVITY;
-        }
-        position.add(velocity.cpy().scl(delta));
-        
-        boundingRectangle.set(position.x, position.y, WIDTH, HEIGHT);
-    }
-    
-    public void tileCollision(Tile tile) {
-    	if(tile.tileType() == TileType.GRASS) {
-    		if (Intersector.overlaps(boundingRectangle, tile.getBoundingRectangle())) {
-        		Gdx.app.log("Guy", "X: "+getX() + ", Y: "+getY()+ ", Width: "+getWidth()+ ", Height: "+getHeight());
-    			Gdx.app.log("Guy", "TILE ID: " + tile.getIdX() + ", " + tile.getIdY());
-        		Gdx.app.log("Guy", "X: "+tile.getX() + ", Y: "+tile.getY()+ ", Width: "+tile.getWidth()+ ", Height: "+tile.getHeight());
-    			Gdx.app.log("Guy", "TILE TYPE: " + tile.tileType());
-    			velocity.y = 0;
-    			position.y = tile.getY() + tile.getHeight();
-    			jumping = false;
-    		}
-    	}
-    }
-
-	public void onClick() {
-    	if (isAlive && jumping == false) {
-    		velocity.y = 160;
-    		jumping = true;
-    	}
-    }
-
-	public void restart() {
-		position.x = startingX;
-		position.y = startingY;
-		velocity.x = 0;
-		velocity.y = 0;
-		acceleration.x = 0;
-		acceleration.y = GRAVITY;
-		jumping = false;
-		isAlive = true;
-	}
-
     public float getX() {
         return position.x;
     }
@@ -134,9 +153,21 @@ public class Guy {
     public void setIsAlive(boolean isAlive) {
     	this.isAlive = isAlive;
     }
+    
+    public Rectangle getRunningFootBox() {
+		return runningFootBox;
+	}
 
-    public Rectangle getBoundingRectangle() {
-		return boundingRectangle;
+    public Rectangle getRunningFrontBox() {
+		return runningFrontBox;
+	}
+
+    public Rectangle getJumpingFootBox() {
+		return jumpingFootBox;
+	}
+
+    public Rectangle getJumpingFrontBox() {
+		return jumpingFrontBox;
 	}
 
 	public TextureRegion standingSprite() {

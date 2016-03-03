@@ -37,7 +37,7 @@ public class CharacterSelectWorld {
 		francis = new Character(gameWidth * 0.14f, gameHeight * 0.5f, Color.BLUE);
 		brandon = new Character(gameWidth * 0.34f, gameHeight * 0.5f, Color.YELLOW);
 		stew = new Character(gameWidth * 0.54f, gameHeight * 0.5f, Color.RED);
-		sean = new Character(gameWidth * 0.74f, gameHeight * 0.5f, Color.GREEN);
+		sean = new Character((int)(gameWidth * 0.74f), gameHeight * 0.5f, Color.GREEN);
 	}
 	
 	public void update(float delta) {

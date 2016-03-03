@@ -29,6 +29,7 @@ public class CharacterSelectRenderer {
 	private Color backgroundColor;
 	private TextureRegion starsTexture, francisTexture, brandonTexture, stewTexture, seanTexture;
 	private TextureRegion selectYourCharacterText;
+	private TextureRegion francisText, brandonText, stewText, seanText;
 	private Animation francisRunning, brandonRunning, stewRunning, seanRunning;
 	private SimpleButton playButton;
 	
@@ -59,6 +60,10 @@ public class CharacterSelectRenderer {
 	private void initGameAssets() {
 	    starsTexture = AssetLoader.stars;
 	    selectYourCharacterText = AssetLoader.selectYourCharacterText;
+	    francisText = AssetLoader.francisText;
+	    brandonText = AssetLoader.brandonText;
+	    stewText = AssetLoader.stewText;
+	    seanText = AssetLoader.seanText;
 		francisTexture = AssetLoader.francis;
 		francisRunning = AssetLoader.francisRunning;
 		brandonTexture = AssetLoader.brandon;
@@ -69,10 +74,13 @@ public class CharacterSelectRenderer {
 		seanRunning = AssetLoader.seanRunning;
 	}
 	
-	private void drawCharacter(Character character, TextureRegion waiting, TextureRegion running) {        
+	private void drawCharacter(Character character, TextureRegion waiting, TextureRegion running, TextureRegion name) {        
 		if(character.characterSelected()){
 			backgroundColor = character.getColor();
         	spriteBatcher.draw(running, character.getX(), character.getY(), character.getWidth(), character.getHeight());
+    		int nameWidth = name.getRegionWidth();
+    		int nameHeight = name.getRegionHeight();
+    		spriteBatcher.draw(name, character.getX()+(character.getWidth()/2)-(nameWidth/2), character.getY()-nameHeight-4, nameWidth, nameHeight);
         } else {
         	spriteBatcher.draw(waiting, character.getX(), character.getY(), character.getWidth(), character.getHeight());
         }
@@ -93,10 +101,10 @@ public class CharacterSelectRenderer {
             spriteBatcher.draw(starsTexture, stars2.getX(), stars2.getY(), stars2.getWidth(), stars2.getHeight());
         }
         spriteBatcher.draw(selectYourCharacterText, (gameWidth/2)-(selectYourCharacterText.getRegionWidth()/2), gameHeight*0.9f, selectYourCharacterText.getRegionWidth(), selectYourCharacterText.getRegionHeight());
-        drawCharacter(world.francis, francisTexture, francisRunning.getKeyFrame(runTime));
-        drawCharacter(world.brandon, brandonTexture, brandonRunning.getKeyFrame(runTime));
-        drawCharacter(world.stew, stewTexture, stewRunning.getKeyFrame(runTime));
-        drawCharacter(world.sean, seanTexture, seanRunning.getKeyFrame(runTime));
+        drawCharacter(world.francis, francisTexture, francisRunning.getKeyFrame(runTime), francisText);
+        drawCharacter(world.brandon, brandonTexture, brandonRunning.getKeyFrame(runTime), brandonText);
+        drawCharacter(world.stew, stewTexture, stewRunning.getKeyFrame(runTime), stewText);
+        drawCharacter(world.sean, seanTexture, seanRunning.getKeyFrame(runTime), seanText);
         
         if(world.characterSelected()) {
         	playButton.draw(spriteBatcher);
