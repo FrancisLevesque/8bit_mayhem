@@ -3,13 +3,11 @@ package com.thedistrictheat.gameworld;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.thedistrictheat.gameobjects.Enemy;
 import com.thedistrictheat.gameobjects.FirstBackgroundLayer;
 import com.thedistrictheat.gameobjects.Guy;
@@ -17,6 +15,8 @@ import com.thedistrictheat.gameobjects.SecondBackgroundLayer;
 import com.thedistrictheat.gameobjects.ThirdBackgroundLayer;
 import com.thedistrictheat.gameobjects.Tile;
 import com.thedistrictheat.helpers.AssetLoader;
+import com.thedistrictheat.helpers.GameInputHandler;
+import com.thedistrictheat.ui.SimpleButton;
 
 public class GameRenderer {
 	private GameWorld world;
@@ -34,10 +34,11 @@ public class GameRenderer {
 	
 	// Game Assets
 	private TextureRegion catWalking, catJumping, catFlying;
-	private TextureRegion clickToBeginText, gameOverText;
 	private TextureRegion topTile, topTileRight, topTileLeft;
 	private TextureRegion bottomTile, bottomTileRight, bottomTileLeft;
 	private TextureRegion firstBackgroundLayer, secondBackgroundLayer, thirdBackgroundLayer;
+	private TextureRegion clickToBeginText, gameOverText;
+    private SimpleButton backButton;
 	private ArrayList<Tile> tileList;
 	private ArrayList<Enemy> enemyList;
 	
@@ -87,13 +88,14 @@ public class GameRenderer {
 		backSecondLayer = world.getBackSecondLayer();
 		frontThirdLayer = world.getFrontThirdLayer();
 		backThirdLayer = world.getBackThirdLayer();
+		backButton = ((GameInputHandler)(Gdx.input.getInputProcessor())).getBackButton();
 	}
 	
 	private void initGameAssets() {
-		clickToBeginText = AssetLoader.clickToBeginText;
-		gameOverText = AssetLoader.gameOverText;
 		enemyList = AssetLoader.enemyList;
 		tileList = AssetLoader.tileList;
+		clickToBeginText = AssetLoader.clickToBeginText;
+		gameOverText = AssetLoader.gameOverText;
 	}
 
 	private void drawBackground() {
@@ -202,6 +204,9 @@ public class GameRenderer {
                 spriteBatcher.draw(gameOverText, (gameWidth/2)-(gameOverText.getRegionWidth()/2), gameHeight*0.9f, gameOverText.getRegionWidth(), gameOverText.getRegionHeight());
         	}
         }
+        
+        backButton.draw(spriteBatcher);
+        
         spriteBatcher.end();
         
 //      Draw Collision Bounding Shapes

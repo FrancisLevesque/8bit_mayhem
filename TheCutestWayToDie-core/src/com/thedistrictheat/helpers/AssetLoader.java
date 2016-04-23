@@ -36,7 +36,7 @@ public class AssetLoader {
 	public static TextureRegion stew, stewHit, stewRun1, stewRun2, stewRun3, stewJump;
 	public static TextureRegion sean, seanHit, seanRun1, seanRun2, seanRun3, seanJump;
 	public static Animation francisRunning, brandonRunning, stewRunning, seanRunning;
-	public static TextureRegion playButtonUp, playButtonDown;
+	public static TextureRegion playButtonUp, playButtonDown, backButton;
 	public static TextureRegion selectYourCharacterText, clickToBeginText, gameOverText;
 	public static TextureRegion francisText, brandonText, stewText, seanText;
 	public static TextureRegion catExploding1, catExploding2, catExploding3;
@@ -115,6 +115,7 @@ public class AssetLoader {
         brandonText = new TextureRegion(textTexture, 0, 60, 41, 6);
         stewText = new TextureRegion(textTexture, 0, 70, 23, 6);
         seanText = new TextureRegion(textTexture, 0, 80, 23, 6);
+        backButton = new TextureRegion(textTexture, 30, 0, 20, 10);
         
         // enemiesTexture
         enemiesTexture = new Texture("graphics/enemies.png");
