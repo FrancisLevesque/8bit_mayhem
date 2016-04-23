@@ -9,18 +9,25 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.thedistrictheat.gameobjects.BottomTile;
-import com.thedistrictheat.gameobjects.BottomTileLeft;
-import com.thedistrictheat.gameobjects.BottomTileRight;
+import com.thedistrictheat.gameobjects.TileBottom;
+import com.thedistrictheat.gameobjects.TileBottomLeft;
+import com.thedistrictheat.gameobjects.TileBottomRight;
+import com.thedistrictheat.gameobjects.Enemy;
+import com.thedistrictheat.gameobjects.EnemyFlying;
+import com.thedistrictheat.gameobjects.EnemyJumping;
+import com.thedistrictheat.gameobjects.EnemyWalking;
+import com.thedistrictheat.gameobjects.Guy;
 import com.thedistrictheat.gameobjects.Tile;
-import com.thedistrictheat.gameobjects.TopTile;
-import com.thedistrictheat.gameobjects.TopTileLeft;
-import com.thedistrictheat.gameobjects.TopTileRight;
+import com.thedistrictheat.gameobjects.TileTop;
+import com.thedistrictheat.gameobjects.TileTopLeft;
+import com.thedistrictheat.gameobjects.TileTopRight;
 import com.thedistrictheat.gameworld.CharacterSelectWorld.CharacterType;
 
 public class AssetLoader {
 	public static final int ROCKWIDTH = 19;
 	public static final int ROCKHEIGHT = 9;
+	public static final int CAT_WIDTH = 13;
+	public static final int CAT_HEIGHT = 20;
 	
 	public static Texture starsTexture, charactersTexture, textTexture, enemiesTexture, levelTexture;
 	public static TextureRegion stars;
@@ -28,16 +35,20 @@ public class AssetLoader {
 	public static TextureRegion brandon, brandonHit, brandonRun1, brandonRun2, brandonRun3, brandonJump;
 	public static TextureRegion stew, stewHit, stewRun1, stewRun2, stewRun3, stewJump;
 	public static TextureRegion sean, seanHit, seanRun1, seanRun2, seanRun3, seanJump;
+	public static Animation francisRunning, brandonRunning, stewRunning, seanRunning;
 	public static TextureRegion playButtonUp, playButtonDown;
 	public static TextureRegion selectYourCharacterText, clickToBeginText, gameOverText;
 	public static TextureRegion francisText, brandonText, stewText, seanText;
-	public static TextureRegion bombCat, rock;
+	public static TextureRegion catExploding1, catExploding2, catExploding3;
+	public static TextureRegion catWalking, catJumping, catFlying, rock;
+	public static Animation catExploding;
 	public static TextureRegion topTile, topTileRight, topTileLeft;
 	public static TextureRegion bottomTile, bottomTileRight, bottomTileLeft;
 	public static TextureRegion firstBackgroundLayer, secondBackgroundLayer, thirdBackgroundLayer;
-	public static Animation francisRunning, brandonRunning, stewRunning, seanRunning;
 	public static Preferences prefs;
+	public static Guy guy = new Guy(20, 20);
 	public static ArrayList<Tile> tileList = new ArrayList<Tile>();
+	public static ArrayList<Enemy> enemyList = new ArrayList<Enemy>();
 	
 	public static void load() {
         // starsTexture
@@ -109,8 +120,19 @@ public class AssetLoader {
         // enemiesTexture
         enemiesTexture = new Texture("graphics/enemies.png");
         enemiesTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-		bombCat = new TextureRegion(enemiesTexture, 0, 0, 13, 20);
+		catWalking = new TextureRegion(enemiesTexture, 0, 0, 13, 20);
+		catJumping = new TextureRegion(enemiesTexture, 0, 0, 13, 20);
+		catFlying = new TextureRegion(enemiesTexture, 0, 0, 13, 20);
+		catExploding1 = new TextureRegion(enemiesTexture, 0, 0, 13, 20);
+		catExploding1.flip(true, true);
+		catExploding2 = new TextureRegion(enemiesTexture, 0, 0, 13, 20);
+		catExploding3 = new TextureRegion(enemiesTexture, 0, 0, 13, 20);
+		catExploding3.flip(true, true);
 		rock = new TextureRegion(enemiesTexture, 20, 0, ROCKWIDTH, ROCKHEIGHT);
+
+        TextureRegion[] explodingSprites = { catExploding1, catExploding2, catExploding3 };
+        catExploding = new Animation(2.0f, explodingSprites);
+        catExploding.setPlayMode(Animation.PlayMode.NORMAL);
 
 		// Preferences File
         prefs = Gdx.app.getPreferences("TheCutestWayToDie");
@@ -122,6 +144,7 @@ public class AssetLoader {
 	public static void loadLevel(CharacterType type) {
 		String graphicsFile;
 		String textFile;
+		guy.setSprites(type);
 		switch(type) {
 		case FRANCIS:
 			graphicsFile = "graphics/level_forest.png";
@@ -172,28 +195,57 @@ public class AssetLoader {
         
         int levelHeight = levelLines.size();
         
+//        LEGEND
+//        G: Selected Character
+//        W: Walking Cats
+//        J: Jumping Cats
+//        F: Flying Cats
+//        -: Top Tile
+//        {: TopTileLeft
+//        }: TopTileRight
+//        =: BottomTile
+//        [: BottomTileLeft
+//        ]: BottomTileRight
+
+		Gdx.app.log("AssetLoader", "Creating lists.");
+		boolean guyInLevel = false;
         tileList.clear();
+        enemyList.clear();
         for(int j = 0;j < levelHeight;j++){
     		String line = (String) levelLines.get(levelHeight - 1 - j);
         	for(int i = 0;i < line.length();i++){
         		switch(line.charAt(i)){
+    			case 'G':
+    				Gdx.app.log("AssetLoader", "Initiallizing Character at (" + i*10 + ", " + j*10 + ").");
+    				guy.restart(i * 10, j * 10);
+    				guyInLevel = true;
+    				break;
+    			case 'W':
+    				enemyList.add(new EnemyWalking(i * 10, j * 10, CAT_WIDTH, CAT_HEIGHT));
+    				break;
+    			case 'J':
+    				enemyList.add(new EnemyJumping(i * 10, j * 10, CAT_WIDTH, CAT_HEIGHT));
+    				break;
+    			case 'F':
+    				enemyList.add(new EnemyFlying(i * 10, j * 10, CAT_WIDTH, CAT_HEIGHT));
+    				break;
     			case '-':
-    				tileList.add(new TopTile(i, j));
+    				tileList.add(new TileTop(i, j));
     				break;
     			case '}':
-    				tileList.add(new TopTileRight(i, j));
+    				tileList.add(new TileTopRight(i, j));
     				break;
     			case '{':
-    				tileList.add(new TopTileLeft(i, j));
+    				tileList.add(new TileTopLeft(i, j));
     				break;
     			case '=':
-    				tileList.add(new BottomTile(i, j));
+    				tileList.add(new TileBottom(i, j));
     				break;
     			case ']':
-    				tileList.add(new BottomTileRight(i, j));
+    				tileList.add(new TileBottomRight(i, j));
     				break;
     			case '[':
-    				tileList.add(new BottomTileLeft(i, j));
+    				tileList.add(new TileBottomLeft(i, j));
     				break;
     			default:
     				Gdx.app.log("AssetLoader", "Character " + line.charAt(i) + " is not currently supported.");
@@ -201,6 +253,10 @@ public class AssetLoader {
         		}
         	}
         }
+    	if (guyInLevel == false) { 
+    		Gdx.app.log("AssetLoader", "No character was specified in the level file; Defaulting to (10, 20).");
+			guy.restart(10, 20);
+    	}
 	}
 	
 	public static void setHighScore(int score) {

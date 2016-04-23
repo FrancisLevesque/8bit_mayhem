@@ -55,7 +55,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        world.ready(screen.getGuy());
+        world.ready();
         levelNotLoaded = true;
 		Gdx.input.setCatchBackKey(true);
         Gdx.input.setInputProcessor(inputHandler);

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.thedistrictheat.gameobjects.Enemy.EnemyType;
 import com.thedistrictheat.gameobjects.Tile.TileType;
 import com.thedistrictheat.gameworld.CharacterSelectWorld.CharacterType;
 import com.thedistrictheat.helpers.AssetLoader;
@@ -27,21 +28,28 @@ public class Guy {
 	private TextureRegion standingSprite, jumpingSprite,  hitSprite;
 	private Animation runningAnimation;
 
-	private Rectangle runningFootBox; 
-	private Rectangle runningFrontBox; 
-	private Rectangle jumpingFootBox; 
-	private Rectangle jumpingFrontBox; 
+	private Rectangle runningBottomHitBox; 
+	private Rectangle runningFrontHitBox; 
+	private Rectangle jumpingBottomHitBox; 
+	private Rectangle jumpingFrontHitBox; 
 	
-	public Guy() {
-		this.startingX = 10;
-		this.startingY = 20;
+	private void updateBoundingBoxes() {
+        runningBottomHitBox.setPosition(position.x + 3, position.y);
+        runningFrontHitBox.setPosition(position.x + WIDTH - 6, position.y);
+        jumpingBottomHitBox.setPosition(position.x + 6, position.y);
+        jumpingFrontHitBox.setPosition(position.x + WIDTH - 3, position.y + 4);
+	}
+	
+	public Guy(int startingX, int startingY) {
+		this.startingX = startingX;
+		this.startingY = startingY;
 		position = new Vector2(startingX, startingY);
 		velocity = new Vector2(0, 0);
 		acceleration = new Vector2(0, GRAVITY);
-		runningFootBox = new Rectangle(position.x + 3, position.y, WIDTH - 7, 2);
-		runningFrontBox = new Rectangle(position.x + WIDTH - 6, position.y, 2, HEIGHT - 7);
-		jumpingFootBox = new Rectangle(position.x + 6, position.y, 4, 2);
-		jumpingFrontBox = new Rectangle(position.x + WIDTH - 3, position.y + 4, 2, HEIGHT - 8);
+		runningBottomHitBox = new Rectangle(position.x + 3, position.y, WIDTH - 7, 2);
+		runningFrontHitBox = new Rectangle(position.x + WIDTH - 6, position.y, 2, HEIGHT - 7);
+		jumpingBottomHitBox = new Rectangle(position.x + 6, position.y, 4, 2);
+		jumpingFrontHitBox = new Rectangle(position.x + WIDTH - 3, position.y + 4, 2, HEIGHT - 8);
 	}
 
 	public void update(float delta) {
@@ -55,17 +63,14 @@ public class Guy {
         	setIsAlive(false);
         }
         
-        runningFootBox.setPosition(position.x + 3, position.y);
-        runningFrontBox.setPosition(position.x + WIDTH - 6, position.y);
-        jumpingFootBox.setPosition(position.x + 6, position.y);
-        jumpingFrontBox.setPosition(position.x + WIDTH - 3, position.y + 4);
+        updateBoundingBoxes();
     }
     
     public void tileCollision(Tile tile) {
 		TileType type = tile.tileType();
     	if(jumping && velocity.y < 0) {
-        	if(type == TileType.TOP_TILE || type == TileType.TOP_TILE_RIGHT || type == TileType.TOP_TILE_LEFT) {
-        		if (Intersector.overlaps(jumpingFootBox, tile.getBoundingRectangle())) {
+        	if(type == TileType.TILE_TOP || type == TileType.TILE_TOP_RIGHT || type == TileType.TILE_TOP_LEFT) {
+        		if (Intersector.overlaps(jumpingBottomHitBox, tile.getBoundingRectangle())) {
         			velocity.y = 0;
         			position.y = tile.getY() + tile.getHeight();
         			jumping = false;
@@ -73,12 +78,30 @@ public class Guy {
         	}
     	}
     	else if (!jumping) {
-        	if(type == TileType.TOP_TILE || type == TileType.TOP_TILE_RIGHT || type == TileType.TOP_TILE_LEFT) {
-        		if (Intersector.overlaps(runningFootBox, tile.getBoundingRectangle())) {
+        	if(type == TileType.TILE_TOP || type == TileType.TILE_TOP_RIGHT || type == TileType.TILE_TOP_LEFT) {
+        		if (Intersector.overlaps(runningBottomHitBox, tile.getBoundingRectangle())) {
         			velocity.y = 0;
         			position.y = tile.getY() + tile.getHeight();
         		}
         	}
+    	}
+    }
+    
+    public void enemyCollision(Enemy enemy) {
+		EnemyType type = enemy.getEnemyType();
+    	if(type == EnemyType.WALKING ) {
+    		if (!jumping) {
+    			if (Intersector.overlaps(runningFrontHitBox, enemy.getHitBox())) {
+    				setIsAlive(false);
+    				enemy.setIsExploding(true);
+    			}
+    		}
+    		if (jumping) {
+    			if (Intersector.overlaps(jumpingFrontHitBox, enemy.getHitBox())) {
+    				setIsAlive(false);
+    				enemy.setIsExploding(true);
+    			}
+    		}
     	}
     }
 
@@ -96,6 +119,19 @@ public class Guy {
 		velocity.y = 0;
 		jumping = false;
 		isAlive = true;
+        updateBoundingBoxes();
+	}
+
+	public void restart(int x, int y) {
+		startingX = x;
+		position.x = x;
+		startingY = y;
+		position.y = y;
+		velocity.x = 0;
+		velocity.y = 0;
+		jumping = false;
+		isAlive = true;
+        updateBoundingBoxes();
 	}
 
     public void setSprites(CharacterType type) {
@@ -155,19 +191,19 @@ public class Guy {
     }
     
     public Rectangle getRunningFootBox() {
-		return runningFootBox;
+		return runningBottomHitBox;
 	}
 
     public Rectangle getRunningFrontBox() {
-		return runningFrontBox;
+		return runningFrontHitBox;
 	}
 
     public Rectangle getJumpingFootBox() {
-		return jumpingFootBox;
+		return jumpingBottomHitBox;
 	}
 
     public Rectangle getJumpingFrontBox() {
-		return jumpingFrontBox;
+		return jumpingFrontHitBox;
 	}
 
 	public TextureRegion standingSprite() {

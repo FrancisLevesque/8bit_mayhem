@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.thedistrictheat.gameobjects.Enemy;
 import com.thedistrictheat.gameobjects.FirstBackgroundLayer;
 import com.thedistrictheat.gameobjects.Guy;
 import com.thedistrictheat.gameobjects.Rock;
@@ -24,12 +25,12 @@ public class GameWorld {
 	
 	private ScrollHandler scrollHandler;
 	private List<Scrollable> list;
-	private Guy guy;
     private FirstBackgroundLayer frontFirstLayer, backFirstLayer;
     private SecondBackgroundLayer frontSecondLayer, backSecondLayer;
     private ThirdBackgroundLayer frontThirdLayer, backThirdLayer;
-    private Rock rock1;
-    
+
+	private Guy guy;
+    private ArrayList<Enemy> enemyList;
     private ArrayList<Tile> tileList;
 	
 	public enum GameState {
@@ -43,14 +44,12 @@ public class GameWorld {
 		this.gameWidthRatio = gameWidthRatio;
 		this.gameHeightRatio = gameHeightRatio;
 
-		guy = new Guy();
 		frontFirstLayer  = new FirstBackgroundLayer(0, 0, (int)(gameWidth), (int)(gameHeight/8));
 		backFirstLayer   = new FirstBackgroundLayer(0, 0, (int)(gameWidth), (int)(gameHeight/8));
 		frontSecondLayer = new SecondBackgroundLayer(0, 0, (int)(gameWidth), (int)(gameHeight/4));
 		backSecondLayer  = new SecondBackgroundLayer(0, 0, (int)(gameWidth), (int)(gameHeight/4));
 		frontThirdLayer  = new ThirdBackgroundLayer(0, 0, gameWidth, (int)(gameHeight * 0.8f));
 		backThirdLayer   = new ThirdBackgroundLayer(0, 0, gameWidth, (int)(gameHeight * 0.8f));
-//    	rock1 = new Rock(gameWidth, standingHeight, AssetLoader.ROCKWIDTH, AssetLoader.ROCKHEIGHT, GROUND_SPEED); 
 
 		list = new ArrayList<Scrollable>();
     	list.add(frontFirstLayer);
@@ -59,29 +58,31 @@ public class GameWorld {
     	list.add(backSecondLayer);
     	list.add(frontThirdLayer);
     	list.add(backThirdLayer);
-//    	list.add(rock1);
     	scrollHandler = new ScrollHandler(list);
-    	
+
+		guy = AssetLoader.guy;
+    	enemyList = AssetLoader.enemyList;
     	tileList = AssetLoader.tileList;
 	}
 	
 	public void updateReady(float delta) {
-
 	}
 	
 	public void updateRunning(float delta) {
 		guy.update(delta);
-		scrollHandler.update(delta);
+		for(int i = 0;i < enemyList.size();i++) {
+			enemyList.get(i).update(delta);
+		}
     	for(int i = 0;i < tileList.size();i++) {
     		tileList.get(i).update(delta);
     	}
+		scrollHandler.update(delta);
 		
     	checkIfAlive();
     	handleCollisions();
 	}
 	
 	public void updateGameOver(float delta) {
-
 	}
 	
 	public void update(float delta) {
@@ -114,13 +115,16 @@ public class GameWorld {
 	
 	private void handleCollisions() {
 //		rockCollisionWith(guy)
+    	for(int i = 0;i < enemyList.size();i++) {
+    		guy.enemyCollision(enemyList.get(i));
+    	}
     	for(int i = 0;i < tileList.size();i++) {
     		guy.tileCollision(tileList.get(i));
     	}
 	}
 	
-	public void ready(CharacterType type) {
-		guy.setSprites(type);
+	public void ready() {
+//		guy.setSprites(type);
 		currentState = GameState.READY;
 	}
 	
@@ -133,6 +137,9 @@ public class GameWorld {
 		currentState = GameState.READY;
 		guy.restart();
 		scrollHandler.restart();
+    	for(int i = 0;i < enemyList.size();i++) {
+    		enemyList.get(i).restart();
+    	}
     	for(int i = 0;i < tileList.size();i++) {
     		tileList.get(i).restart();
     	}
@@ -197,10 +204,6 @@ public class GameWorld {
 	public ThirdBackgroundLayer getBackThirdLayer() {
 		return backThirdLayer;
 	}
-    
-    public Rock getRock1() {
-    	return rock1;
-    }
 	
 	public ScrollHandler getScrollHandler() {
 		return scrollHandler;

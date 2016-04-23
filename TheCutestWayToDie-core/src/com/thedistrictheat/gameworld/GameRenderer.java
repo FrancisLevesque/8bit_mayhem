@@ -10,9 +10,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.thedistrictheat.gameobjects.Guy;
+import com.thedistrictheat.gameobjects.Enemy;
+import com.thedistrictheat.gameobjects.EnemyWalking;
 import com.thedistrictheat.gameobjects.FirstBackgroundLayer;
-import com.thedistrictheat.gameobjects.Rock;
+import com.thedistrictheat.gameobjects.Guy;
 import com.thedistrictheat.gameobjects.SecondBackgroundLayer;
 import com.thedistrictheat.gameobjects.ThirdBackgroundLayer;
 import com.thedistrictheat.gameobjects.Tile;
@@ -27,18 +28,19 @@ public class GameRenderer {
 	
 	// Game Objects
 	private Guy guy;
+	private EnemyWalking cat;
     private FirstBackgroundLayer frontFirstLayer, backFirstLayer;
     private SecondBackgroundLayer frontSecondLayer, backSecondLayer;
     private ThirdBackgroundLayer frontThirdLayer, backThirdLayer;
-	private Rock rock1;
 	
 	// Game Assets
-	private TextureRegion bombCat, rock;
+	private TextureRegion catWalking, catJumping, catFlying, rock;
 	private TextureRegion clickToBeginText, gameOverText;
 	private TextureRegion topTile, topTileRight, topTileLeft;
 	private TextureRegion bottomTile, bottomTileRight, bottomTileLeft;
 	private TextureRegion firstBackgroundLayer, secondBackgroundLayer, thirdBackgroundLayer;
 	private ArrayList<Tile> tileList;
+	private ArrayList<Enemy> enemyList;
 	
 	public GameRenderer(GameWorld world, int gameWidth, int gameHeight) {
 		this.world = world;
@@ -57,6 +59,9 @@ public class GameRenderer {
 	}
 	
 	public void refreshGameAssets() {
+		catWalking = AssetLoader.catWalking;
+		catJumping = AssetLoader.catJumping;
+		catFlying = AssetLoader.catFlying;
 		topTile = AssetLoader.topTile;
 		topTileRight = AssetLoader.topTileRight;
 		topTileLeft = AssetLoader.topTileLeft;
@@ -76,14 +81,12 @@ public class GameRenderer {
 		backSecondLayer = world.getBackSecondLayer();
 		frontThirdLayer = world.getFrontThirdLayer();
 		backThirdLayer = world.getBackThirdLayer();
-		rock1 = world.getRock1();
 	}
 	
 	private void initGameAssets() {
 		clickToBeginText = AssetLoader.clickToBeginText;
 		gameOverText = AssetLoader.gameOverText;
-		bombCat = AssetLoader.bombCat;
-		rock = AssetLoader.rock;
+		enemyList = AssetLoader.enemyList;
 		tileList = AssetLoader.tileList;
 	}
 
@@ -96,27 +99,54 @@ public class GameRenderer {
 		spriteBatcher.draw(firstBackgroundLayer, backFirstLayer.getX(), backFirstLayer.getY(), backFirstLayer.getWidth(), backFirstLayer.getHeight());
 	}
 	
+	private void drawEnemies(float runTime) {
+		for(int i = 0;i < enemyList.size();i++) {
+			Enemy enemy = enemyList.get(i);
+			if(enemy.isExploding()) {
+				spriteBatcher.draw(AssetLoader.catExploding.getKeyFrame(runTime), enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
+			} else {
+		        TextureRegion texture;
+				switch (enemy.getEnemyType()) {
+				case WALKING:
+					texture = catWalking;
+					break;
+				case JUMPING:
+					texture = catJumping;
+					break;
+				case FLYING:
+					texture = catFlying;
+					break;
+				default:
+					Gdx.app.log("GameRenderer", "Unssuported EnemyType passed in: " + enemy.getEnemyType() + "\nDefaulting to 'WALKING' type.");
+					texture = catWalking;
+					break;
+				}
+		        spriteBatcher.draw(texture, enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
+	        }
+		}
+	}
+	
 	private void drawTiles() {
 		for(int i = 0;i < tileList.size();i++) {
 			Tile tile = tileList.get(i);
 	        TextureRegion texture;
 			switch (tile.tileType()) {
-			case TOP_TILE:
+			case TILE_TOP:
 				texture = topTile;
 				break;
-			case TOP_TILE_RIGHT:
+			case TILE_TOP_RIGHT:
 				texture = topTileRight;
 				break;
-			case TOP_TILE_LEFT:
+			case TILE_TOP_LEFT:
 				texture = topTileLeft;
 				break;
-			case BOTTOM_TILE:
+			case TILE_BOTTOM:
 				texture = bottomTile;
 				break;
-			case BOTTOM_TILE_RIGHT:
+			case TILE_BOTTOM_RIGHT:
 				texture = bottomTileRight;
 				break;
-			case BOTTOM_TILE_LEFT:
+			case TILE_BOTTOM_LEFT:
 				texture = bottomTileLeft;
 				break;
 			default:
@@ -128,16 +158,13 @@ public class GameRenderer {
 		}
 	}
 	
-	private void drawRocks() {
-		spriteBatcher.draw(rock, rock1.getX(), rock1.getY(), rock1.getWidth(), rock1.getHeight());
-	}
-	
 	public void render(float runTime) {
         Gdx.gl.glClearColor(0.2f, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
         spriteBatcher.begin();
         drawBackground();
+        drawEnemies(runTime);
         drawTiles();
         
         if(world.isReady()) {
@@ -162,21 +189,25 @@ public class GameRenderer {
         }
         spriteBatcher.end();
         
-        // Draw Collision Bounding Shapes
-//        shapeRenderer.begin(ShapeType.Line);
-//        shapeRenderer.setColor(Color.RED);
-//        if(world.getGuy().isJumping()) {
-//        	shapeRenderer.rect(guy.getJumpingFootBox().getX(), guy.getJumpingFootBox().getY(), guy.getJumpingFootBox().getWidth(), guy.getJumpingFootBox().getHeight());
-////        	shapeRenderer.rect(guy.getJumpingFrontBox().getX(), guy.getJumpingFrontBox().getY(), guy.getJumpingFrontBox().getWidth(), guy.getJumpingFrontBox().getHeight());
-//        } else {
-//            shapeRenderer.rect(guy.getRunningFootBox().getX(), guy.getRunningFootBox().getY(), guy.getRunningFootBox().getWidth(), guy.getRunningFootBox().getHeight());
-////            shapeRenderer.rect(guy.getRunningFrontBox().getX(), guy.getRunningFrontBox().getY(), guy.getRunningFrontBox().getWidth(), guy.getRunningFrontBox().getHeight());
-//        }
-//		for(int i = 0;i < tileList.size();i++) {
-//			Tile tile = tileList.get(i);
-//	        shapeRenderer.rect(tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight());
-//		}
-////        shapeRenderer.circle(rock1.getBoundingCircle().x, rock1.getBoundingCircle().y, rock1.getBoundingCircle().radius);
-//        shapeRenderer.end();
+//      Draw Collision Bounding Shapes
+        shapeRenderer.begin(ShapeType.Line);
+        shapeRenderer.setColor(Color.RED);
+        if(world.getGuy().isJumping()) {
+        	shapeRenderer.rect(guy.getJumpingFootBox().getX(), guy.getJumpingFootBox().getY(), guy.getJumpingFootBox().getWidth(), guy.getJumpingFootBox().getHeight());
+        	shapeRenderer.rect(guy.getJumpingFrontBox().getX(), guy.getJumpingFrontBox().getY(), guy.getJumpingFrontBox().getWidth(), guy.getJumpingFrontBox().getHeight());
+        } else {
+            shapeRenderer.rect(guy.getRunningFootBox().getX(), guy.getRunningFootBox().getY(), guy.getRunningFootBox().getWidth(), guy.getRunningFootBox().getHeight());
+            shapeRenderer.rect(guy.getRunningFrontBox().getX(), guy.getRunningFrontBox().getY(), guy.getRunningFrontBox().getWidth(), guy.getRunningFrontBox().getHeight());
+        }
+		for(int i = 0;i < enemyList.size();i++) {
+			Enemy enemy = enemyList.get(i);
+	        shapeRenderer.rect(enemy.getHitBox().x, enemy.getHitBox().y, enemy.getHitBox().width, enemy.getHitBox().height);
+		}
+		for(int i = 0;i < tileList.size();i++) {
+			Tile tile = tileList.get(i);
+	        shapeRenderer.rect(tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight());
+		}
+//        shapeRenderer.circle(rock1.getBoundingCircle().x, rock1.getBoundingCircle().y, rock1.getBoundingCircle().radius);
+        shapeRenderer.end();
 	}
 }

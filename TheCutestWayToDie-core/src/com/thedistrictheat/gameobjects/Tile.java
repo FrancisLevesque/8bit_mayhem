@@ -5,13 +5,13 @@ import com.badlogic.gdx.math.Rectangle;
 public class Tile extends Scrollable {
 	public static final int TILE_WIDTH = 10;
 	public static final int TILE_HEIGHT = 10;
-	public static final int TILE_SPEED = -40;
+	public static final int TILE_SPEED = -20;
 	
 	private Rectangle boundingRectangle;
 	private TileType type;
 
 	public static enum TileType {
-		TOP_TILE, TOP_TILE_RIGHT, TOP_TILE_LEFT, BOTTOM_TILE, BOTTOM_TILE_RIGHT, BOTTOM_TILE_LEFT
+		TILE_TOP, TILE_TOP_RIGHT, TILE_TOP_LEFT, TILE_BOTTOM, TILE_BOTTOM_RIGHT, TILE_BOTTOM_LEFT
 	}
 	
 	public Tile(int x, int y, TileType type) {
