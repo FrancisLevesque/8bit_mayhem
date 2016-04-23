@@ -1,7 +1,5 @@
 package com.thedistrictheat.gameobjects;
 
-import com.thedistrictheat.gameobjects.Enemy.EnemyType;
-
 public class EnemyFlying extends Enemy{
     private static final int ENEMY_FLYING_SPEED = -90;
 

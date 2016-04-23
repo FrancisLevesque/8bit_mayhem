@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.thedistrictheat.gameobjects.Enemy;
-import com.thedistrictheat.gameobjects.EnemyWalking;
 import com.thedistrictheat.gameobjects.FirstBackgroundLayer;
 import com.thedistrictheat.gameobjects.Guy;
 import com.thedistrictheat.gameobjects.SecondBackgroundLayer;
@@ -25,16 +24,16 @@ public class GameRenderer {
 	private OrthographicCamera camera;
 	private ShapeRenderer shapeRenderer;
 	private SpriteBatch spriteBatcher;
+	private float explodingTime;
 	
 	// Game Objects
 	private Guy guy;
-	private EnemyWalking cat;
     private FirstBackgroundLayer frontFirstLayer, backFirstLayer;
     private SecondBackgroundLayer frontSecondLayer, backSecondLayer;
     private ThirdBackgroundLayer frontThirdLayer, backThirdLayer;
 	
 	// Game Assets
-	private TextureRegion catWalking, catJumping, catFlying, rock;
+	private TextureRegion catWalking, catJumping, catFlying;
 	private TextureRegion clickToBeginText, gameOverText;
 	private TextureRegion topTile, topTileRight, topTileLeft;
 	private TextureRegion bottomTile, bottomTileRight, bottomTileLeft;
@@ -46,6 +45,7 @@ public class GameRenderer {
 		this.world = world;
 		this.gameWidth = gameWidth;
 		this.gameHeight = gameHeight;
+		explodingTime = 0.0f;
 		
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, gameWidth, gameHeight);
@@ -71,6 +71,12 @@ public class GameRenderer {
 		firstBackgroundLayer = AssetLoader.firstBackgroundLayer; 
 		secondBackgroundLayer = AssetLoader.secondBackgroundLayer;
 		thirdBackgroundLayer = AssetLoader.thirdBackgroundLayer;
+	}
+	
+	private void resetExplodingTime() {
+		if (explodingTime != 0.0f) {
+			explodingTime = 0.0f;
+		}
 	}
 	
 	private void initGameObjects() {
@@ -103,7 +109,15 @@ public class GameRenderer {
 		for(int i = 0;i < enemyList.size();i++) {
 			Enemy enemy = enemyList.get(i);
 			if(enemy.isExploding()) {
-				spriteBatcher.draw(AssetLoader.catExploding.getKeyFrame(runTime), enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
+				if (explodingTime < 20.0f) {
+					spriteBatcher.draw(AssetLoader.catExploding1, enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
+					explodingTime += runTime;
+				} else if (explodingTime < 40.0f) {
+					spriteBatcher.draw(AssetLoader.catExploding2, enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
+					explodingTime += runTime;
+				} else {
+					spriteBatcher.draw(AssetLoader.catExploding3, enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
+				}
 			} else {
 		        TextureRegion texture;
 				switch (enemy.getEnemyType()) {
@@ -168,6 +182,7 @@ public class GameRenderer {
         drawTiles();
         
         if(world.isReady()) {
+        	resetExplodingTime();
         	spriteBatcher.draw(clickToBeginText, (gameWidth/2)-(clickToBeginText.getRegionWidth()/2), gameHeight*0.9f, clickToBeginText.getRegionWidth(), clickToBeginText.getRegionHeight());
         	spriteBatcher.draw(guy.standingSprite(), guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
         }
@@ -190,24 +205,18 @@ public class GameRenderer {
         spriteBatcher.end();
         
 //      Draw Collision Bounding Shapes
-        shapeRenderer.begin(ShapeType.Line);
-        shapeRenderer.setColor(Color.RED);
-        if(world.getGuy().isJumping()) {
-        	shapeRenderer.rect(guy.getJumpingFootBox().getX(), guy.getJumpingFootBox().getY(), guy.getJumpingFootBox().getWidth(), guy.getJumpingFootBox().getHeight());
-        	shapeRenderer.rect(guy.getJumpingFrontBox().getX(), guy.getJumpingFrontBox().getY(), guy.getJumpingFrontBox().getWidth(), guy.getJumpingFrontBox().getHeight());
-        } else {
-            shapeRenderer.rect(guy.getRunningFootBox().getX(), guy.getRunningFootBox().getY(), guy.getRunningFootBox().getWidth(), guy.getRunningFootBox().getHeight());
-            shapeRenderer.rect(guy.getRunningFrontBox().getX(), guy.getRunningFrontBox().getY(), guy.getRunningFrontBox().getWidth(), guy.getRunningFrontBox().getHeight());
-        }
-		for(int i = 0;i < enemyList.size();i++) {
-			Enemy enemy = enemyList.get(i);
-	        shapeRenderer.rect(enemy.getHitBox().x, enemy.getHitBox().y, enemy.getHitBox().width, enemy.getHitBox().height);
-		}
-		for(int i = 0;i < tileList.size();i++) {
-			Tile tile = tileList.get(i);
-	        shapeRenderer.rect(tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight());
-		}
-//        shapeRenderer.circle(rock1.getBoundingCircle().x, rock1.getBoundingCircle().y, rock1.getBoundingCircle().radius);
-        shapeRenderer.end();
+//        shapeRenderer.begin(ShapeType.Line);
+//        shapeRenderer.setColor(Color.RED);
+//
+//    	shapeRenderer.rect(guy.getHitBox().getX(), guy.getHitBox().getY(), guy.getHitBox().getWidth(), guy.getHitBox().getHeight());
+//		for(int i = 0;i < enemyList.size();i++) {
+//			Enemy enemy = enemyList.get(i);
+//	        shapeRenderer.rect(enemy.getHitBox().x, enemy.getHitBox().y, enemy.getHitBox().width, enemy.getHitBox().height);
+//		}
+//		for(int i = 0;i < tileList.size();i++) {
+//			Tile tile = tileList.get(i);
+//	        shapeRenderer.rect(tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight());
+//		}
+//        shapeRenderer.end();
 	}
 }

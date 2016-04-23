@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Rectangle;
 public class Tile extends Scrollable {
 	public static final int TILE_WIDTH = 10;
 	public static final int TILE_HEIGHT = 10;
-	public static final int TILE_SPEED = -20;
+	public static final int TILE_SPEED = -30;
 	
 	private Rectangle boundingRectangle;
 	private TileType type;

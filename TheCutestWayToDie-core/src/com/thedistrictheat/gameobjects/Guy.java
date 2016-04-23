@@ -1,12 +1,12 @@
 package com.thedistrictheat.gameobjects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.thedistrictheat.gameobjects.Enemy.EnemyType;
-import com.thedistrictheat.gameobjects.Tile.TileType;
 import com.thedistrictheat.gameworld.CharacterSelectWorld.CharacterType;
 import com.thedistrictheat.helpers.AssetLoader;
 
@@ -28,16 +28,10 @@ public class Guy {
 	private TextureRegion standingSprite, jumpingSprite,  hitSprite;
 	private Animation runningAnimation;
 
-	private Rectangle runningBottomHitBox; 
-	private Rectangle runningFrontHitBox; 
-	private Rectangle jumpingBottomHitBox; 
-	private Rectangle jumpingFrontHitBox; 
+	private Rectangle hitBox;
 	
 	private void updateBoundingBoxes() {
-        runningBottomHitBox.setPosition(position.x + 3, position.y);
-        runningFrontHitBox.setPosition(position.x + WIDTH - 6, position.y);
-        jumpingBottomHitBox.setPosition(position.x + 6, position.y);
-        jumpingFrontHitBox.setPosition(position.x + WIDTH - 3, position.y + 4);
+		hitBox.setPosition(position.x + 3, position.y);
 	}
 	
 	public Guy(int startingX, int startingY) {
@@ -46,10 +40,7 @@ public class Guy {
 		position = new Vector2(startingX, startingY);
 		velocity = new Vector2(0, 0);
 		acceleration = new Vector2(0, GRAVITY);
-		runningBottomHitBox = new Rectangle(position.x + 3, position.y, WIDTH - 7, 2);
-		runningFrontHitBox = new Rectangle(position.x + WIDTH - 6, position.y, 2, HEIGHT - 7);
-		jumpingBottomHitBox = new Rectangle(position.x + 6, position.y, 4, 2);
-		jumpingFrontHitBox = new Rectangle(position.x + WIDTH - 3, position.y + 4, 2, HEIGHT - 8);
+		hitBox = new Rectangle(0, 0, WIDTH - 6, HEIGHT - 6);
 	}
 
 	public void update(float delta) {
@@ -67,41 +58,24 @@ public class Guy {
     }
     
     public void tileCollision(Tile tile) {
-		TileType type = tile.tileType();
-    	if(jumping && velocity.y < 0) {
-        	if(type == TileType.TILE_TOP || type == TileType.TILE_TOP_RIGHT || type == TileType.TILE_TOP_LEFT) {
-        		if (Intersector.overlaps(jumpingBottomHitBox, tile.getBoundingRectangle())) {
-        			velocity.y = 0;
-        			position.y = tile.getY() + tile.getHeight();
-        			jumping = false;
-        		}
-        	}
-    	}
-    	else if (!jumping) {
-        	if(type == TileType.TILE_TOP || type == TileType.TILE_TOP_RIGHT || type == TileType.TILE_TOP_LEFT) {
-        		if (Intersector.overlaps(runningBottomHitBox, tile.getBoundingRectangle())) {
-        			velocity.y = 0;
-        			position.y = tile.getY() + tile.getHeight();
-        		}
-        	}
+    	if(velocity.y < 0) {
+			if (Intersector.overlaps(hitBox, tile.getBoundingRectangle())) {
+				velocity.y = 0;
+				position.y = tile.getY() + tile.getHeight();
+				if(jumping) {
+					jumping = false;
+				}
+			}
     	}
     }
     
     public void enemyCollision(Enemy enemy) {
 		EnemyType type = enemy.getEnemyType();
     	if(type == EnemyType.WALKING ) {
-    		if (!jumping) {
-    			if (Intersector.overlaps(runningFrontHitBox, enemy.getHitBox())) {
-    				setIsAlive(false);
-    				enemy.setIsExploding(true);
-    			}
-    		}
-    		if (jumping) {
-    			if (Intersector.overlaps(jumpingFrontHitBox, enemy.getHitBox())) {
-    				setIsAlive(false);
-    				enemy.setIsExploding(true);
-    			}
-    		}
+			if (Intersector.overlaps(hitBox, enemy.getHitBox())) {
+				setIsAlive(false);
+				enemy.setIsExploding(true);
+			}
     	}
     }
 
@@ -159,7 +133,6 @@ public class Guy {
 	    	jumpingSprite = AssetLoader.seanJump;
 	    	hitSprite = AssetLoader.seanHit;
     	}
-		
 	}
 
     public float getX() {
@@ -190,20 +163,8 @@ public class Guy {
     	this.isAlive = isAlive;
     }
     
-    public Rectangle getRunningFootBox() {
-		return runningBottomHitBox;
-	}
-
-    public Rectangle getRunningFrontBox() {
-		return runningFrontHitBox;
-	}
-
-    public Rectangle getJumpingFootBox() {
-		return jumpingBottomHitBox;
-	}
-
-    public Rectangle getJumpingFrontBox() {
-		return jumpingFrontHitBox;
+    public Rectangle getHitBox() {
+		return hitBox;
 	}
 
 	public TextureRegion standingSprite() {

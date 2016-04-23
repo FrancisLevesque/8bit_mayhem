@@ -9,7 +9,7 @@ public class Scrollable {
     protected int height;
     protected float scrollSpeed;
     protected boolean isScrolledLeft;
-    protected int startingX;
+    protected int startingX, startingY;
 
     public Scrollable(float x, float y, int width, int height, float scrollSpeed) {
         this.width = width;
@@ -19,6 +19,7 @@ public class Scrollable {
         velocity = new Vector2(scrollSpeed, 0);
         isScrolledLeft = false;
 		startingX = (int)x;
+		startingY = (int)y;
     }
 
     public void update(float delta) {
@@ -63,6 +64,7 @@ public class Scrollable {
 	
     public void restart() {
         position.x = startingX;
+        position.y = startingY;
         isScrolledLeft = false;
     }
 }

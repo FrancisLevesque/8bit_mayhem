@@ -7,13 +7,12 @@ import com.badlogic.gdx.Gdx;
 import com.thedistrictheat.gameobjects.Enemy;
 import com.thedistrictheat.gameobjects.FirstBackgroundLayer;
 import com.thedistrictheat.gameobjects.Guy;
-import com.thedistrictheat.gameobjects.Rock;
 import com.thedistrictheat.gameobjects.ScrollHandler;
 import com.thedistrictheat.gameobjects.Scrollable;
 import com.thedistrictheat.gameobjects.SecondBackgroundLayer;
 import com.thedistrictheat.gameobjects.ThirdBackgroundLayer;
 import com.thedistrictheat.gameobjects.Tile;
-import com.thedistrictheat.gameworld.CharacterSelectWorld.CharacterType;
+import com.thedistrictheat.gameobjects.Tile.TileType;
 import com.thedistrictheat.helpers.AssetLoader;
 
 public class GameWorld {
@@ -108,18 +107,18 @@ public class GameWorld {
 		}
 	}
 	
-	private boolean rockCollisionWith(Guy guy) {
-    	return false;
-//		return rock1.collides(guy);
-	}
-	
 	private void handleCollisions() {
-//		rockCollisionWith(guy)
     	for(int i = 0;i < enemyList.size();i++) {
-    		guy.enemyCollision(enemyList.get(i));
-    	}
-    	for(int i = 0;i < tileList.size();i++) {
-    		guy.tileCollision(tileList.get(i));
+    		Enemy enemy = enemyList.get(i);
+    		guy.enemyCollision(enemy);
+        	for(int j = 0;j < tileList.size();j++) {
+        		Tile tile = tileList.get(j);
+        		TileType type = tile.tileType();
+        		if(type == TileType.TILE_TOP || type == TileType.TILE_TOP_RIGHT || type == TileType.TILE_TOP_LEFT) {
+        			guy.tileCollision(tile);
+        			enemy.tileCollision(tile);
+        		}
+        	}
     	}
 	}
 	

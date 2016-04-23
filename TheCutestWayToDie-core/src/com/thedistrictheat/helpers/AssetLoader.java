@@ -41,7 +41,6 @@ public class AssetLoader {
 	public static TextureRegion francisText, brandonText, stewText, seanText;
 	public static TextureRegion catExploding1, catExploding2, catExploding3;
 	public static TextureRegion catWalking, catJumping, catFlying, rock;
-	public static Animation catExploding;
 	public static TextureRegion topTile, topTileRight, topTileLeft;
 	public static TextureRegion bottomTile, bottomTileRight, bottomTileLeft;
 	public static TextureRegion firstBackgroundLayer, secondBackgroundLayer, thirdBackgroundLayer;
@@ -120,19 +119,13 @@ public class AssetLoader {
         // enemiesTexture
         enemiesTexture = new Texture("graphics/enemies.png");
         enemiesTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-		catWalking = new TextureRegion(enemiesTexture, 0, 0, 13, 20);
-		catJumping = new TextureRegion(enemiesTexture, 0, 0, 13, 20);
-		catFlying = new TextureRegion(enemiesTexture, 0, 0, 13, 20);
-		catExploding1 = new TextureRegion(enemiesTexture, 0, 0, 13, 20);
-		catExploding1.flip(true, true);
-		catExploding2 = new TextureRegion(enemiesTexture, 0, 0, 13, 20);
-		catExploding3 = new TextureRegion(enemiesTexture, 0, 0, 13, 20);
-		catExploding3.flip(true, true);
+		catWalking = new TextureRegion(enemiesTexture, 0, 0, 14, 20);
+		catJumping = new TextureRegion(enemiesTexture, 0, 0, 14, 20);
+		catFlying = new TextureRegion(enemiesTexture, 0, 0, 14, 20);
+		catExploding1 = new TextureRegion(enemiesTexture, 0, 20, 14, 20);
+		catExploding2 = new TextureRegion(enemiesTexture, 0, 40, 14, 20);
+		catExploding3 = new TextureRegion(enemiesTexture, 0, 60, 14, 20);
 		rock = new TextureRegion(enemiesTexture, 20, 0, ROCKWIDTH, ROCKHEIGHT);
-
-        TextureRegion[] explodingSprites = { catExploding1, catExploding2, catExploding3 };
-        catExploding = new Animation(2.0f, explodingSprites);
-        catExploding.setPlayMode(Animation.PlayMode.NORMAL);
 
 		// Preferences File
         prefs = Gdx.app.getPreferences("TheCutestWayToDie");
@@ -246,6 +239,10 @@ public class AssetLoader {
     				break;
     			case '[':
     				tileList.add(new TileBottomLeft(i, j));
+    				break;
+    			case ' ':
+    			case '\n':
+    			case '\r':
     				break;
     			default:
     				Gdx.app.log("AssetLoader", "Character " + line.charAt(i) + " is not currently supported.");
