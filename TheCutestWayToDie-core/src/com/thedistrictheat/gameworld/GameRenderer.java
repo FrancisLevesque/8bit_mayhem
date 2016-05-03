@@ -37,7 +37,7 @@ public class GameRenderer {
 	private TextureRegion topTile, topTileRight, topTileLeft;
 	private TextureRegion bottomTile, bottomTileRight, bottomTileLeft;
 	private TextureRegion firstBackgroundLayer, secondBackgroundLayer, thirdBackgroundLayer;
-	private TextureRegion clickToBeginText, gameOverText;
+	private TextureRegion clickToBeginText, gameOverText, youWinText;
     private SimpleButton backButton;
 	private ArrayList<Tile> tileList;
 	private ArrayList<Enemy> enemyList;
@@ -96,6 +96,7 @@ public class GameRenderer {
 		tileList = AssetLoader.tileList;
 		clickToBeginText = AssetLoader.clickToBeginText;
 		gameOverText = AssetLoader.gameOverText;
+		youWinText = AssetLoader.youWinText;
 	}
 
 	private void drawBackground() {
@@ -110,35 +111,59 @@ public class GameRenderer {
 	private void drawEnemies(float runTime) {
 		for(int i = 0;i < enemyList.size();i++) {
 			Enemy enemy = enemyList.get(i);
-			if(enemy.isExploding()) {
-				if (explodingTime < 20.0f) {
-					spriteBatcher.draw(AssetLoader.catExploding1, enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
-					explodingTime += runTime;
-				} else if (explodingTime < 40.0f) {
-					spriteBatcher.draw(AssetLoader.catExploding2, enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
-					explodingTime += runTime;
+	        TextureRegion texture;
+			switch (enemy.getEnemyType()) {
+			case WALKING:			
+				if(enemy.isExploding()) {
+					if (explodingTime < 20.0f) {
+						texture = AssetLoader.catWalkingExploding1;
+						explodingTime += runTime;
+					} else if (explodingTime < 40.0f) {
+						texture = AssetLoader.catWalkingExploding2;
+						explodingTime += runTime;
+					} else {
+						texture = AssetLoader.catWalkingExploding3;
+					}
 				} else {
-					spriteBatcher.draw(AssetLoader.catExploding3, enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
-				}
-			} else {
-		        TextureRegion texture;
-				switch (enemy.getEnemyType()) {
-				case WALKING:
 					texture = catWalking;
-					break;
-				case JUMPING:
+				}
+				break;
+			case JUMPING:
+				if(enemy.isExploding()) {
+					if (explodingTime < 20.0f) {
+						texture = AssetLoader.catJumpingExploding1;
+						explodingTime += runTime;
+					} else if (explodingTime < 40.0f) {
+						texture = AssetLoader.catJumpingExploding2;
+						explodingTime += runTime;
+					} else {
+						texture = AssetLoader.catJumpingExploding3;
+					}
+				} else {
 					texture = catJumping;
-					break;
-				case FLYING:
-					texture = catFlying;
-					break;
-				default:
-					Gdx.app.log("GameRenderer", "Unssuported EnemyType passed in: " + enemy.getEnemyType() + "\nDefaulting to 'WALKING' type.");
-					texture = catWalking;
-					break;
 				}
-		        spriteBatcher.draw(texture, enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
-	        }
+				break;
+			case FLYING:
+				if(enemy.isExploding()) {
+					if (explodingTime < 20.0f) {
+						texture = AssetLoader.catFlyingExploding1;
+						explodingTime += runTime;
+					} else if (explodingTime < 40.0f) {
+						texture = AssetLoader.catFlyingExploding2;
+						explodingTime += runTime;
+					} else {
+						texture = AssetLoader.catFlyingExploding3;
+					}
+				} else {
+					texture = catFlying;
+				}
+				break;
+			default:
+				Gdx.app.log("GameRenderer", "Unssuported EnemyType passed in: " + enemy.getEnemyType() + "\nDefaulting to 'WALKING' type.");
+				texture = catWalking;
+				break;
+			}
+	        spriteBatcher.draw(texture, enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
 		}
 	}
 	
@@ -164,6 +189,9 @@ public class GameRenderer {
 				break;
 			case TILE_BOTTOM_LEFT:
 				texture = bottomTileLeft;
+				break;
+			case TILE_FLAG:
+				texture = catWalking;
 				break;
 			default:
 				Gdx.app.log("GameRenderer", "ERROR: Unsupported type: " + tile.tileType() + " passed in; defaulting to topTile...");
@@ -196,13 +224,15 @@ public class GameRenderer {
             	spriteBatcher.draw(guy.runningAnimation().getKeyFrame(runTime), guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
             }
         }
-        else {
-        	if(world.isGameOver()) {
-                if(!guy.isAlive()) {
-                	spriteBatcher.draw(guy.hitSprite(), guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
-                }
-                spriteBatcher.draw(gameOverText, (gameWidth/2)-(gameOverText.getRegionWidth()/2), gameHeight*0.9f, gameOverText.getRegionWidth(), gameOverText.getRegionHeight());
-        	}
+        else if(world.isGameOver()) {
+           	spriteBatcher.draw(guy.hitSprite(), guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
+            spriteBatcher.draw(gameOverText, (gameWidth/2)-(gameOverText.getRegionWidth()/2), gameHeight*0.9f, gameOverText.getRegionWidth(), gameOverText.getRegionHeight());
+        	spriteBatcher.draw(clickToBeginText, (gameWidth/2)-(clickToBeginText.getRegionWidth()/2), gameHeight*0.8f, clickToBeginText.getRegionWidth(), clickToBeginText.getRegionHeight());
+        } 
+        else if (world.isWinner()) {
+           	spriteBatcher.draw(guy.jumpingSprite(), guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
+        	spriteBatcher.draw(youWinText, (gameWidth/2)-(youWinText.getRegionWidth()/2), gameHeight*0.9f, youWinText.getRegionWidth(), youWinText.getRegionHeight());
+        	spriteBatcher.draw(clickToBeginText, (gameWidth/2)-(clickToBeginText.getRegionWidth()/2), gameHeight*0.8f, clickToBeginText.getRegionWidth(), clickToBeginText.getRegionHeight());
         }
         
         backButton.draw(spriteBatcher);

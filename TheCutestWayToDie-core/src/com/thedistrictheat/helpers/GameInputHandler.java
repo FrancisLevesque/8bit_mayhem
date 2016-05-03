@@ -30,7 +30,7 @@ public class GameInputHandler extends InputHandler {
 		else if (world.isRunning()){
 			guy.onClick();
 		}
-		else if(world.isGameOver()) {
+		else if(world.isGameOver() || world.isWinner()) {
 			world.restart();
 		}
 		return true;

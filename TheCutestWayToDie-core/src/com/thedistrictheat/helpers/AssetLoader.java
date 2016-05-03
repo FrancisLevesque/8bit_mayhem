@@ -9,25 +9,25 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.thedistrictheat.gameobjects.TileBottom;
-import com.thedistrictheat.gameobjects.TileBottomLeft;
-import com.thedistrictheat.gameobjects.TileBottomRight;
 import com.thedistrictheat.gameobjects.Enemy;
 import com.thedistrictheat.gameobjects.EnemyFlying;
 import com.thedistrictheat.gameobjects.EnemyJumping;
 import com.thedistrictheat.gameobjects.EnemyWalking;
 import com.thedistrictheat.gameobjects.Guy;
 import com.thedistrictheat.gameobjects.Tile;
+import com.thedistrictheat.gameobjects.TileBottom;
+import com.thedistrictheat.gameobjects.TileBottomLeft;
+import com.thedistrictheat.gameobjects.TileBottomRight;
+import com.thedistrictheat.gameobjects.TileFlag;
 import com.thedistrictheat.gameobjects.TileTop;
 import com.thedistrictheat.gameobjects.TileTopLeft;
 import com.thedistrictheat.gameobjects.TileTopRight;
 import com.thedistrictheat.gameworld.CharacterSelectWorld.CharacterType;
 
 public class AssetLoader {
-	public static final int ROCKWIDTH = 19;
-	public static final int ROCKHEIGHT = 9;
 	public static final int CAT_WIDTH = 13;
-	public static final int CAT_HEIGHT = 20;
+	public static final int CAT_HEIGHT = 14;
+	public static final int CAT_FLYING_WIDTH = 15;
 	
 	public static Texture starsTexture, charactersTexture, textTexture, enemiesTexture, levelTexture;
 	public static TextureRegion stars;
@@ -37,10 +37,11 @@ public class AssetLoader {
 	public static TextureRegion sean, seanHit, seanRun1, seanRun2, seanRun3, seanJump;
 	public static Animation francisRunning, brandonRunning, stewRunning, seanRunning;
 	public static TextureRegion playButtonUp, playButtonDown, backButton;
-	public static TextureRegion selectYourCharacterText, clickToBeginText, gameOverText;
+	public static TextureRegion selectYourCharacterText, clickToBeginText, gameOverText, youWinText;
 	public static TextureRegion francisText, brandonText, stewText, seanText;
-	public static TextureRegion catExploding1, catExploding2, catExploding3;
-	public static TextureRegion catWalking, catJumping, catFlying, rock;
+	public static TextureRegion catWalking, catWalkingExploding1, catWalkingExploding2, catWalkingExploding3;
+	public static TextureRegion catJumping, catJumpingExploding1, catJumpingExploding2, catJumpingExploding3;
+	public static TextureRegion catFlying, catFlyingExploding1, catFlyingExploding2, catFlyingExploding3;
 	public static TextureRegion topTile, topTileRight, topTileLeft;
 	public static TextureRegion bottomTile, bottomTileRight, bottomTileLeft;
 	public static TextureRegion firstBackgroundLayer, secondBackgroundLayer, thirdBackgroundLayer;
@@ -115,18 +116,24 @@ public class AssetLoader {
         brandonText = new TextureRegion(textTexture, 0, 60, 41, 6);
         stewText = new TextureRegion(textTexture, 0, 70, 23, 6);
         seanText = new TextureRegion(textTexture, 0, 80, 23, 6);
+        youWinText = new TextureRegion(textTexture, 0, 90, 37, 6);
         backButton = new TextureRegion(textTexture, 30, 0, 20, 10);
         
         // enemiesTexture
         enemiesTexture = new Texture("graphics/enemies.png");
         enemiesTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		catWalking = new TextureRegion(enemiesTexture, 0, 0, 14, 20);
-		catJumping = new TextureRegion(enemiesTexture, 0, 0, 14, 20);
-		catFlying = new TextureRegion(enemiesTexture, 0, 0, 14, 20);
-		catExploding1 = new TextureRegion(enemiesTexture, 0, 20, 14, 20);
-		catExploding2 = new TextureRegion(enemiesTexture, 0, 40, 14, 20);
-		catExploding3 = new TextureRegion(enemiesTexture, 0, 60, 14, 20);
-		rock = new TextureRegion(enemiesTexture, 20, 0, ROCKWIDTH, ROCKHEIGHT);
+		catWalkingExploding1 = new TextureRegion(enemiesTexture, 0, 20, 14, 20);
+		catWalkingExploding2 = new TextureRegion(enemiesTexture, 0, 40, 14, 20);
+		catWalkingExploding3 = new TextureRegion(enemiesTexture, 0, 60, 14, 20);
+		catJumping = new TextureRegion(enemiesTexture, 20, 0, 14, 20);
+		catJumpingExploding1 = new TextureRegion(enemiesTexture, 20, 20, 14, 20);
+		catJumpingExploding2 = new TextureRegion(enemiesTexture, 20, 40, 14, 20);
+		catJumpingExploding3 = new TextureRegion(enemiesTexture, 20, 60, 14, 20);
+		catFlying = new TextureRegion(enemiesTexture, 40, 0, 16, 20);
+		catFlyingExploding1 = new TextureRegion(enemiesTexture, 40, 20, 16, 20);
+		catFlyingExploding2 = new TextureRegion(enemiesTexture, 40, 40, 16, 20);
+		catFlyingExploding3 = new TextureRegion(enemiesTexture, 40, 60, 16, 20);
 
 		// Preferences File
         prefs = Gdx.app.getPreferences("TheCutestWayToDie");
@@ -200,6 +207,7 @@ public class AssetLoader {
 //        =: BottomTile
 //        [: BottomTileLeft
 //        ]: BottomTileRight
+//        !: End of Level Flag
 
 		Gdx.app.log("AssetLoader", "Creating lists.");
 		boolean guyInLevel = false;
@@ -221,7 +229,7 @@ public class AssetLoader {
     				enemyList.add(new EnemyJumping(i * 10, j * 10, CAT_WIDTH, CAT_HEIGHT));
     				break;
     			case 'F':
-    				enemyList.add(new EnemyFlying(i * 10, j * 10, CAT_WIDTH, CAT_HEIGHT));
+    				enemyList.add(new EnemyFlying(i * 10, j * 10, CAT_FLYING_WIDTH, CAT_HEIGHT));
     				break;
     			case '-':
     				tileList.add(new TileTop(i, j));
@@ -240,6 +248,9 @@ public class AssetLoader {
     				break;
     			case '[':
     				tileList.add(new TileBottomLeft(i, j));
+    				break;
+    			case '!':
+    				tileList.add(new TileFlag(i, j));
     				break;
     			case ' ':
     			case '\n':

@@ -1,5 +1,6 @@
 ## Java
 
+*.project
 *.class
 *.war
 *.ear

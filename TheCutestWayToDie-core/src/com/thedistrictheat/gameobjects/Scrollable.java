@@ -61,6 +61,10 @@ public class Scrollable {
 	public void start() {
 		velocity.x = scrollSpeed;
 	}
+
+	public void start(float speed) {
+		velocity.x = speed;
+	}
 	
     public void restart() {
         position.x = startingX;

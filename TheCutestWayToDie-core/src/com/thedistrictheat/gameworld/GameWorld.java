@@ -19,8 +19,7 @@ public class GameWorld {
 	public static final int GRAVITY = -300;
     
 	private boolean goToCharacterSelect = false;
-	private float gameWidthRatio;
-	private float gameHeightRatio;
+	private float gameWidth, gameWidthRatio, gameHeightRatio;
 	
 	private ScrollHandler scrollHandler;
 	private List<Scrollable> list;
@@ -33,13 +32,14 @@ public class GameWorld {
     private ArrayList<Tile> tileList;
 	
 	public enum GameState {
-		READY, RUNNING, GAMEOVER
+		READY, RUNNING, GAMEOVER, WINNER
 	}
 	
 	private GameState currentState;
 	
 	public GameWorld(int gameWidth, int gameHeight, float gameWidthRatio, float gameHeightRatio) {
 		currentState = GameState.READY;
+		this.gameWidth = gameWidth;
 		this.gameWidthRatio = gameWidthRatio;
 		this.gameHeightRatio = gameHeightRatio;
 
@@ -70,18 +70,22 @@ public class GameWorld {
 	public void updateRunning(float delta) {
 		guy.update(delta);
 		for(int i = 0;i < enemyList.size();i++) {
-			enemyList.get(i).update(delta);
+			enemyList.get(i).update(delta, gameWidth);
 		}
     	for(int i = 0;i < tileList.size();i++) {
     		tileList.get(i).update(delta);
     	}
 		scrollHandler.update(delta);
 		
+		checkIfGameWon();
     	checkIfAlive();
     	handleCollisions();
 	}
 	
 	public void updateGameOver(float delta) {
+	}
+	
+	public void updateWinner(float delta) {
 	}
 	
 	public void update(float delta) {
@@ -95,8 +99,18 @@ public class GameWorld {
 		case GAMEOVER:
 			updateGameOver(delta);
 			break;
+		case WINNER:
+			updateWinner(delta);
+			break;
 		default:
 			Gdx.app.error("ERROR", "Unhandled GameState:" + currentState);
+		}
+	}
+	
+	private void checkIfGameWon() {
+		if(getGuy().isGameWon()) {
+			scrollHandler.stop();
+			currentState = GameState.WINNER;
 		}
 	}
 	
@@ -117,6 +131,9 @@ public class GameWorld {
         		if(type == TileType.TILE_TOP || type == TileType.TILE_TOP_RIGHT || type == TileType.TILE_TOP_LEFT) {
         			guy.tileCollision(tile);
         			enemy.tileCollision(tile);
+        		} 
+        		else if(type == TileType.TILE_FLAG) {
+        			guy.flagCollision(tile);
         		}
         	}
     	}
@@ -166,6 +183,10 @@ public class GameWorld {
 	
 	public boolean isGameOver() {
 		return currentState == GameState.GAMEOVER;
+	}
+	
+	public boolean isWinner() {
+		return currentState == GameState.WINNER;
 	}
 	
 	public float getGameWidthRatio() {

@@ -5,14 +5,13 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Enemy extends Scrollable {
-	private static final int GRAVITY = -300;
 	private static final int MAX_SPEED = -80;
+	private static final int GRAVITY = -300;
 	
 	private Vector2 acceleration;
-	
-	private Rectangle hitBox;	
-	private EnemyType type;
-	boolean isExploding;
+	protected Rectangle hitBox;	
+	protected EnemyType type;
+	protected boolean isExploding;
 
 	public static enum EnemyType {
 		WALKING, JUMPING, FLYING
@@ -20,16 +19,21 @@ public class Enemy extends Scrollable {
 
 	public Enemy(float x, float y, int width, int height, float scrollSpeed, EnemyType type) {
 		super(x, y, width, height, scrollSpeed);
-		acceleration = new Vector2(0, GRAVITY);
+		setAcceleration(new Vector2(0, GRAVITY));
 		hitBox = new Rectangle(x, y, width-4, height);
 		this.type = type;
 		isExploding = false;
 	}
 	
-	@Override
-	public void update(float delta) {
+	public void update(float delta, float frameEdge) {
 		super.update(delta);
-        velocity.add(acceleration.cpy().scl(delta));
+		if (getX() <= frameEdge) {
+			start();
+		} else if (getX() > frameEdge) {
+			start(Tile.TILE_SPEED/2);
+		}
+		
+        velocity.add(getAcceleration().cpy().scl(delta));
         if (velocity.y < MAX_SPEED) {
             velocity.y = MAX_SPEED;
         }
@@ -71,6 +75,14 @@ public class Enemy extends Scrollable {
 
 	public void setIsExploding(boolean value) {
 		isExploding = value;
+	}
+
+	public Vector2 getAcceleration() {
+		return acceleration;
+	}
+
+	public void setAcceleration(Vector2 acceleration) {
+		this.acceleration = acceleration;
 	}
 
 }

@@ -1,12 +1,10 @@
 package com.thedistrictheat.gameobjects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.thedistrictheat.gameobjects.Enemy.EnemyType;
 import com.thedistrictheat.gameworld.CharacterSelectWorld.CharacterType;
 import com.thedistrictheat.helpers.AssetLoader;
 
@@ -24,6 +22,7 @@ public class Guy {
 	private int startingX, startingY;
 	private boolean jumping = false;
 	private boolean isAlive = true;
+	private boolean gameWon = false;
 	
 	private TextureRegion standingSprite, jumpingSprite,  hitSprite;
 	private Animation runningAnimation;
@@ -69,13 +68,16 @@ public class Guy {
     	}
     }
     
+    public void flagCollision(Tile tile) {
+		if (Intersector.overlaps(hitBox, tile.getBoundingRectangle())) {
+			setGameWon(true);
+		}
+    }
+    
     public void enemyCollision(Enemy enemy) {
-		EnemyType type = enemy.getEnemyType();
-    	if(type == EnemyType.WALKING ) {
-			if (Intersector.overlaps(hitBox, enemy.getHitBox())) {
-				setIsAlive(false);
-				enemy.setIsExploding(true);
-			}
+		if (Intersector.overlaps(hitBox, enemy.getHitBox())) {
+			setIsAlive(false);
+			enemy.setIsExploding(true);
     	}
     }
 
@@ -93,6 +95,7 @@ public class Guy {
 		velocity.y = 0;
 		jumping = false;
 		isAlive = true;
+		setGameWon(false);
         updateBoundingBoxes();
 	}
 
@@ -104,7 +107,7 @@ public class Guy {
 		velocity.x = 0;
 		velocity.y = 0;
 		jumping = false;
-		isAlive = true;
+		setIsAlive(true);
         updateBoundingBoxes();
 	}
 
@@ -181,5 +184,13 @@ public class Guy {
 
 	public TextureRegion hitSprite() {
 		return hitSprite;
+	}
+
+	public boolean isGameWon() {
+		return gameWon;
+	}
+
+	public void setGameWon(boolean gameWon) {
+		this.gameWon = gameWon;
 	}
 }
