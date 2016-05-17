@@ -12,7 +12,7 @@ public class ScrollHandler {
     public void update(float delta) {
     	for(int i = 0;i < list.size();i++) {
     		list.get(i).update(delta);
-	        if (list.get(i).isScrolledLeft()) {
+	        if (list.get(i).isScrolledOffScreen()) {
 	        	list.get(i).reset();
 	        }
     	}
@@ -21,6 +21,12 @@ public class ScrollHandler {
     public void start() {
     	for(int i = 0;i < list.size();i++) {
 	        list.get(i).start();
+    	}
+    }
+    
+    public void start(float speed) {
+    	for(int i = 0;i < list.size();i++) {
+	        list.get(i).start(speed);
     	}
     }
     

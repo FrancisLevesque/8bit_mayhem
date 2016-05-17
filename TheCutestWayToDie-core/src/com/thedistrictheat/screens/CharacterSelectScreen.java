@@ -11,7 +11,7 @@ import com.thedistrictheat.thecutestwaytodie.TCWTDGame;
 
 public class CharacterSelectScreen implements Screen {
     private static final float DESIREDWIDTH = 180;
-    private static final Color BACKGROUND_COLOR = Color.GRAY;
+    private static final Color BACKGROUND_COLOR = Color.LIGHT_GRAY;
 
 	private TCWTDGame game;
 	private float gameWidth;

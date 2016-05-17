@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.thedistrictheat.gameobjects.Character;
-import com.thedistrictheat.gameobjects.Stars;
+import com.thedistrictheat.gameobjects.Scrollable;
 import com.thedistrictheat.helpers.AssetLoader;
 import com.thedistrictheat.helpers.CharacterSelectInputHandler;
 import com.thedistrictheat.ui.SimpleButton;
@@ -23,7 +23,7 @@ public class CharacterSelectRenderer {
 	private SpriteBatch spriteBatcher;
 		
 	// Game Objects
-	private Stars stars, stars2;
+	private Scrollable stars, stars2;
 	
 	// Game Assets
 	private Color backgroundColor;
@@ -96,10 +96,8 @@ public class CharacterSelectRenderer {
         shapeRenderer.end();
 
         spriteBatcher.begin();
-        if(world.characterSelected()) {
-            spriteBatcher.draw(starsTexture, stars.getX(), stars.getY(), stars.getWidth(), stars.getHeight());
-            spriteBatcher.draw(starsTexture, stars2.getX(), stars2.getY(), stars2.getWidth(), stars2.getHeight());
-        }
+        spriteBatcher.draw(starsTexture, stars.getX(), stars.getY(), stars.getWidth(), stars.getHeight());
+        spriteBatcher.draw(starsTexture, stars2.getX(), stars2.getY(), stars2.getWidth(), stars2.getHeight());
         spriteBatcher.draw(selectYourCharacterText, (gameWidth/2)-(selectYourCharacterText.getRegionWidth()/2), gameHeight*0.9f, selectYourCharacterText.getRegionWidth(), selectYourCharacterText.getRegionHeight());
         drawCharacter(world.francis, francisTexture, francisRunning.getKeyFrame(runTime), francisText);
         drawCharacter(world.brandon, brandonTexture, brandonRunning.getKeyFrame(runTime), brandonText);

@@ -1,5 +1,7 @@
 package com.thedistrictheat.gameobjects;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Intersector;
@@ -23,11 +25,16 @@ public class Guy {
 	private boolean jumping = false;
 	private boolean isAlive = true;
 	private boolean gameWon = false;
+	private Level currentLevel;
 	
 	private TextureRegion standingSprite, jumpingSprite,  hitSprite;
 	private Animation runningAnimation;
 
 	private Rectangle hitBox;
+	
+	public static enum Level {
+		FOREST, VOLCANO, TUNDRA, CITY
+	}
 	
 	private void updateBoundingBoxes() {
 		hitBox.setPosition(position.x + 3, position.y);
@@ -117,24 +124,28 @@ public class Guy {
 	    	runningAnimation = AssetLoader.francisRunning;
 	    	jumpingSprite = AssetLoader.francisJump;
 	    	hitSprite = AssetLoader.francisHit;
+	    	currentLevel = Level.FOREST;
     	}
     	else if (type == CharacterType.BRANDON) {
 	    	standingSprite = AssetLoader.brandon;
 	    	runningAnimation = AssetLoader.brandonRunning;
 	    	jumpingSprite = AssetLoader.brandonJump;
 	    	hitSprite = AssetLoader.brandonHit;
+	    	currentLevel = Level.TUNDRA;
     	}
     	else if (type == CharacterType.STEW) {
 	    	standingSprite = AssetLoader.stew;
 	    	runningAnimation = AssetLoader.stewRunning;
 	    	jumpingSprite = AssetLoader.stewJump;
 	    	hitSprite = AssetLoader.stewHit;
+	    	currentLevel = Level.VOLCANO;
     	}
     	else if (type == CharacterType.SEAN) {
 	    	standingSprite = AssetLoader.sean;
 	    	runningAnimation = AssetLoader.seanRunning;
 	    	jumpingSprite = AssetLoader.seanJump;
 	    	hitSprite = AssetLoader.seanHit;
+	    	currentLevel = Level.CITY;
     	}
 	}
 
@@ -192,5 +203,21 @@ public class Guy {
 
 	public void setGameWon(boolean gameWon) {
 		this.gameWon = gameWon;
+	}
+	
+	public Color getBackgroundColour() {
+		switch(currentLevel) {
+		case FOREST:
+			return Color.CYAN;
+		case TUNDRA:
+			return Color.SKY;
+		case VOLCANO:
+			return Color.ORANGE;
+		case CITY:
+			return Color.DARK_GRAY;
+		default:
+			Gdx.app.log("Guy", "Unsupported Level Type: " + currentLevel);
+			return Color.CYAN;
+		}
 	}
 }

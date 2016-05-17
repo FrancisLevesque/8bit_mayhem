@@ -8,11 +8,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.thedistrictheat.gameobjects.Enemy;
-import com.thedistrictheat.gameobjects.FirstBackgroundLayer;
 import com.thedistrictheat.gameobjects.Guy;
-import com.thedistrictheat.gameobjects.SecondBackgroundLayer;
-import com.thedistrictheat.gameobjects.ThirdBackgroundLayer;
+import com.thedistrictheat.gameobjects.Scrollable;
 import com.thedistrictheat.gameobjects.Tile;
 import com.thedistrictheat.helpers.AssetLoader;
 import com.thedistrictheat.helpers.GameInputHandler;
@@ -28,9 +27,9 @@ public class GameRenderer {
 	
 	// Game Objects
 	private Guy guy;
-    private FirstBackgroundLayer frontFirstLayer, backFirstLayer;
-    private SecondBackgroundLayer frontSecondLayer, backSecondLayer;
-    private ThirdBackgroundLayer frontThirdLayer, backThirdLayer;
+    private Scrollable frontFirstLayer, backFirstLayer;
+    private Scrollable frontSecondLayer, backSecondLayer;
+    private Scrollable frontThirdLayer, backThirdLayer;
 	
 	// Game Assets
 	private TextureRegion catWalking, catJumping, catFlying;
@@ -205,6 +204,11 @@ public class GameRenderer {
 	public void render(float runTime) {
         Gdx.gl.glClearColor(0.2f, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        
+        shapeRenderer.begin(ShapeType.Filled);
+        shapeRenderer.setColor(guy.getBackgroundColour());
+        shapeRenderer.rect(0, 0, gameWidth, gameHeight);
+        shapeRenderer.end();
         
         spriteBatcher.begin();
         drawBackground();

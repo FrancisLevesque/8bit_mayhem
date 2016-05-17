@@ -8,9 +8,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.thedistrictheat.gameobjects.Character;
 import com.thedistrictheat.gameobjects.ScrollHandler;
 import com.thedistrictheat.gameobjects.Scrollable;
-import com.thedistrictheat.gameobjects.Stars;
 
 public class CharacterSelectWorld {
+    private static final int STARS_IDLE_SPEED = 20;
+    private static final int STARS_SELECTED_SPEED = -50;
+    
 	private float gameWidthRatio;
 	private float gameHeightRatio;
 	private boolean characterSelected = false;
@@ -18,7 +20,7 @@ public class CharacterSelectWorld {
 	
 	private ScrollHandler scrollHandler;
 	private List<Scrollable> list;
-	private Stars stars, stars2;
+	private Scrollable stars, stars2;
 
 	public Character francis, brandon, stew, sean;
 	public enum CharacterType { FRANCIS, BRANDON, STEW, SEAN };
@@ -27,17 +29,17 @@ public class CharacterSelectWorld {
 		this.gameWidthRatio = gameWidthRatio;
 		this.gameHeightRatio = gameHeightRatio;    	
 
-		stars = new Stars(0, 0, gameWidth, gameHeight); 
-		stars2 = new Stars(gameWidth, 0, gameWidth, gameHeight); 
+		stars = new Scrollable(0, 0, gameWidth, gameHeight, STARS_IDLE_SPEED); 
+		stars2 = new Scrollable(gameWidth, 0, gameWidth, gameHeight, STARS_IDLE_SPEED); 
 		list = new ArrayList<Scrollable>();
     	list.add(stars);
     	list.add(stars2);
     	scrollHandler = new ScrollHandler(list);
 		
-		francis = new Character(gameWidth * 0.14f, gameHeight * 0.5f, Color.BLUE);
-		brandon = new Character(gameWidth * 0.34f, gameHeight * 0.5f, Color.YELLOW);
-		stew = new Character(gameWidth * 0.54f, gameHeight * 0.5f, Color.RED);
-		sean = new Character((int)(gameWidth * 0.74f), gameHeight * 0.5f, Color.GREEN);
+		francis = new Character(gameWidth * 0.14f, gameHeight * 0.5f, Color.FOREST);
+		brandon = new Character(gameWidth * 0.34f, gameHeight * 0.5f, Color.ROYAL);
+		stew = new Character(gameWidth * 0.54f, gameHeight * 0.5f, Color.FIREBRICK);
+		sean = new Character((int)(gameWidth * 0.74f), gameHeight * 0.5f, Color.DARK_GRAY);
 	}
 	
 	public void update(float delta) {
@@ -80,11 +82,12 @@ public class CharacterSelectWorld {
 		return characterSelected;
 	}
 	
-	public void setCharacterSelected(boolean value) {
-		if(value) {
-			stars.start();
+	public void setCharacterSelected(boolean selected) {
+		if(selected) {
+			scrollHandler.start(STARS_SELECTED_SPEED);
 			characterSelected = true;
 		} else {
+			scrollHandler.start(STARS_IDLE_SPEED);
 			francis.reset();
 			brandon.reset();
 			stew.reset();
@@ -109,11 +112,11 @@ public class CharacterSelectWorld {
 		return gameHeightRatio;
 	}
     
-    public Stars getStars() {
+    public Scrollable getStars() {
     	return stars;
     }
     
-    public Stars getStars2() {
+    public Scrollable getStars2() {
     	return stars2;
     }
 

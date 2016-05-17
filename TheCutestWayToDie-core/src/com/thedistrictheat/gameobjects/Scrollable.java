@@ -8,34 +8,47 @@ public class Scrollable {
     protected int width;
     protected int height;
     protected float scrollSpeed;
-    protected boolean isScrolledLeft;
+    protected float currentSpeed;
+    protected boolean isScrolledOffScreen;
     protected int startingX, startingY;
 
     public Scrollable(float x, float y, int width, int height, float scrollSpeed) {
         this.width = width;
         this.height = height;
         this.scrollSpeed = scrollSpeed;
+        this.currentSpeed = scrollSpeed;
         position = new Vector2(x, y);
         velocity = new Vector2(scrollSpeed, 0);
-        isScrolledLeft = false;
+        isScrolledOffScreen = false;
 		startingX = (int)x;
 		startingY = (int)y;
     }
 
     public void update(float delta) {
         position.add(velocity.cpy().scl(delta));
-        if (position.x + width < 0) {
-            isScrolledLeft = true;
+        if (currentSpeed < 0){
+            if (position.x + width < 0) {
+                isScrolledOffScreen = true;
+            }
+        } else {
+            if (position.x > width ) {
+                isScrolledOffScreen = true;
+            }
         }
     }
 
     public void reset() {
-        position.x = width;
-        isScrolledLeft = false;
+        if (currentSpeed < 0){
+	        position.x = width;
+	        isScrolledOffScreen = false;
+        } else {
+	        position.x = -width;
+	        isScrolledOffScreen = false;
+        }
     }
 
-    public boolean isScrolledLeft() {
-        return isScrolledLeft;
+    public boolean isScrolledOffScreen() {
+        return isScrolledOffScreen;
     }
 
     public float getX() {
@@ -60,15 +73,17 @@ public class Scrollable {
 
 	public void start() {
 		velocity.x = scrollSpeed;
+		currentSpeed = scrollSpeed;
 	}
 
 	public void start(float speed) {
 		velocity.x = speed;
+		currentSpeed = speed;
 	}
 	
     public void restart() {
         position.x = startingX;
         position.y = startingY;
-        isScrolledLeft = false;
+        isScrolledOffScreen = false;
     }
 }

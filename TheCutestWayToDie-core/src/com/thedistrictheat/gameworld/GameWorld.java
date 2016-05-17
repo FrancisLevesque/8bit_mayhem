@@ -5,12 +5,9 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.thedistrictheat.gameobjects.Enemy;
-import com.thedistrictheat.gameobjects.FirstBackgroundLayer;
 import com.thedistrictheat.gameobjects.Guy;
 import com.thedistrictheat.gameobjects.ScrollHandler;
 import com.thedistrictheat.gameobjects.Scrollable;
-import com.thedistrictheat.gameobjects.SecondBackgroundLayer;
-import com.thedistrictheat.gameobjects.ThirdBackgroundLayer;
 import com.thedistrictheat.gameobjects.Tile;
 import com.thedistrictheat.gameobjects.Tile.TileType;
 import com.thedistrictheat.helpers.AssetLoader;
@@ -23,9 +20,9 @@ public class GameWorld {
 	
 	private ScrollHandler scrollHandler;
 	private List<Scrollable> list;
-    private FirstBackgroundLayer frontFirstLayer, backFirstLayer;
-    private SecondBackgroundLayer frontSecondLayer, backSecondLayer;
-    private ThirdBackgroundLayer frontThirdLayer, backThirdLayer;
+    private Scrollable frontFirstLayer, backFirstLayer;
+    private Scrollable frontSecondLayer, backSecondLayer;
+    private Scrollable frontThirdLayer, backThirdLayer;
 
 	private Guy guy;
     private ArrayList<Enemy> enemyList;
@@ -43,12 +40,12 @@ public class GameWorld {
 		this.gameWidthRatio = gameWidthRatio;
 		this.gameHeightRatio = gameHeightRatio;
 
-		frontFirstLayer  = new FirstBackgroundLayer(0, 0, (int)(gameWidth), (int)(gameHeight/8));
-		backFirstLayer   = new FirstBackgroundLayer(0, 0, (int)(gameWidth), (int)(gameHeight/8));
-		frontSecondLayer = new SecondBackgroundLayer(0, 0, (int)(gameWidth), (int)(gameHeight/4));
-		backSecondLayer  = new SecondBackgroundLayer(0, 0, (int)(gameWidth), (int)(gameHeight/4));
-		frontThirdLayer  = new ThirdBackgroundLayer(0, 0, gameWidth, (int)(gameHeight * 0.8f));
-		backThirdLayer   = new ThirdBackgroundLayer(0, 0, gameWidth, (int)(gameHeight * 0.8f));
+		frontFirstLayer  = new Scrollable(0, 0, gameWidth, (int)(gameHeight/4), -30);
+		backFirstLayer   = new Scrollable(gameWidth, 0, gameWidth, (int)(gameHeight/4), -30);
+		frontSecondLayer = new Scrollable(0, 0, gameWidth, (int)(gameHeight/2), -10);
+		backSecondLayer  = new Scrollable(gameWidth, 0, gameWidth, (int)(gameHeight/2), -10);
+		frontThirdLayer  = new Scrollable(0, 0, gameWidth, gameHeight, -6);
+		backThirdLayer   = new Scrollable(gameWidth, 0, gameWidth, gameHeight, -6);
 
 		list = new ArrayList<Scrollable>();
     	list.add(frontFirstLayer);
@@ -201,27 +198,27 @@ public class GameWorld {
 		return guy;
 	}
 
-    public FirstBackgroundLayer getFrontFirstLayer() {
+    public Scrollable getFrontFirstLayer() {
 		return frontFirstLayer;
 	}
 
-	public FirstBackgroundLayer getBackFirstLayer() {
+	public Scrollable getBackFirstLayer() {
 		return backFirstLayer;
 	}
 
-    public SecondBackgroundLayer getFrontSecondLayer() {
+    public Scrollable getFrontSecondLayer() {
 		return frontSecondLayer;
 	}
 
-	public SecondBackgroundLayer getBackSecondLayer() {
+	public Scrollable getBackSecondLayer() {
 		return backSecondLayer;
 	}
 
-    public ThirdBackgroundLayer getFrontThirdLayer() {
+    public Scrollable getFrontThirdLayer() {
 		return frontThirdLayer;
 	}
 
-	public ThirdBackgroundLayer getBackThirdLayer() {
+	public Scrollable getBackThirdLayer() {
 		return backThirdLayer;
 	}
 	
