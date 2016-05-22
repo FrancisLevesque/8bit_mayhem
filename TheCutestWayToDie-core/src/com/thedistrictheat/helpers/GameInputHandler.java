@@ -23,6 +23,7 @@ public class GameInputHandler extends InputHandler {
 	    gameY = scaleY(invertedScreenY);
 	    if (backButton.checkIfPressed(gameX, gameY)) {
 	    	world.setGoToCharacterSelect(true);
+	    	AssetLoader.click.play();
 		}
 		if(world.isReady()) {
 			world.start();

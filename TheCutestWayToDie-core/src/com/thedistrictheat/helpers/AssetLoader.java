@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -45,6 +46,7 @@ public class AssetLoader {
 	public static TextureRegion topTile, topTileRight, topTileLeft;
 	public static TextureRegion bottomTile, bottomTileRight, bottomTileLeft;
 	public static TextureRegion firstBackgroundLayer, secondBackgroundLayer, thirdBackgroundLayer;
+	public static Sound jump, click, explosion;
 	public static Preferences prefs;
 	public static Guy guy = new Guy(20, 20);
 	public static ArrayList<Tile> tileList = new ArrayList<Tile>();
@@ -134,6 +136,11 @@ public class AssetLoader {
 		catFlyingExploding1 = new TextureRegion(enemiesTexture, 40, 20, 16, 20);
 		catFlyingExploding2 = new TextureRegion(enemiesTexture, 40, 40, 16, 20);
 		catFlyingExploding3 = new TextureRegion(enemiesTexture, 40, 60, 16, 20);
+		
+		// Audio
+		jump = Gdx.audio.newSound(Gdx.files.internal("audio/jump.mp3"));
+		click = Gdx.audio.newSound(Gdx.files.internal("audio/click.mp3"));
+		explosion = Gdx.audio.newSound(Gdx.files.internal("audio/explosion.mp3"));
 
 		// Preferences File
         prefs = Gdx.app.getPreferences("TheCutestWayToDie");
@@ -178,9 +185,9 @@ public class AssetLoader {
 		bottomTile            = new TextureRegion(levelTexture, 0, 10, 10, 10);
 		bottomTileRight       = new TextureRegion(levelTexture, 10, 10, 10, 10);
 		bottomTileLeft        = new TextureRegion(levelTexture, 20, 10, 10, 10);
-		firstBackgroundLayer  = new TextureRegion(levelTexture, 0, 20, 130, 10);
-		secondBackgroundLayer = new TextureRegion(levelTexture, 0, 30, 130, 20);
-		thirdBackgroundLayer  = new TextureRegion(levelTexture, 0, 50, 210, 60);
+		firstBackgroundLayer  = new TextureRegion(levelTexture, 0, 20, 180, 25);
+		secondBackgroundLayer = new TextureRegion(levelTexture, 0, 45, 180, 100);
+		thirdBackgroundLayer  = new TextureRegion(levelTexture, 0, 145, 180, 50);
 		
         // Creating level
         ArrayList<String> levelLines = new ArrayList<String>();

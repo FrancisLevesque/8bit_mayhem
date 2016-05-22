@@ -40,12 +40,12 @@ public class GameWorld {
 		this.gameWidthRatio = gameWidthRatio;
 		this.gameHeightRatio = gameHeightRatio;
 
-		frontFirstLayer  = new Scrollable(0, 0, gameWidth, (int)(gameHeight/4), -30);
-		backFirstLayer   = new Scrollable(gameWidth, 0, gameWidth, (int)(gameHeight/4), -30);
-		frontSecondLayer = new Scrollable(0, 0, gameWidth, (int)(gameHeight/2), -10);
-		backSecondLayer  = new Scrollable(gameWidth, 0, gameWidth, (int)(gameHeight/2), -10);
-		frontThirdLayer  = new Scrollable(0, 0, gameWidth, gameHeight, -6);
-		backThirdLayer   = new Scrollable(gameWidth, 0, gameWidth, gameHeight, -6);
+		frontFirstLayer  = new Scrollable(0, 0, gameWidth, (int)(gameHeight/4), -24);
+		backFirstLayer   = new Scrollable(gameWidth, 0, gameWidth, (int)(gameHeight/4), -24);
+		frontSecondLayer  = new Scrollable(0, 0, gameWidth, gameHeight, -10);
+		backSecondLayer   = new Scrollable(gameWidth, 0, gameWidth, gameHeight, -10);
+		frontThirdLayer = new Scrollable(0, 0, gameWidth, (int)(gameHeight/2), -6);
+		backThirdLayer  = new Scrollable(gameWidth, 0, gameWidth, (int)(gameHeight/2), -6);
 
 		list = new ArrayList<Scrollable>();
     	list.add(frontFirstLayer);

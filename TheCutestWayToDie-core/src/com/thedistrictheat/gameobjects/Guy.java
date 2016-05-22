@@ -85,6 +85,7 @@ public class Guy {
 		if (Intersector.overlaps(hitBox, enemy.getHitBox())) {
 			setIsAlive(false);
 			enemy.setIsExploding(true);
+			AssetLoader.explosion.play();
     	}
     }
 
@@ -92,6 +93,7 @@ public class Guy {
     	if (isAlive && jumping == false) {
     		velocity.y = JUMP_SPEED;
     		jumping = true;
+    		AssetLoader.jump.play();
     	}
     }
 
