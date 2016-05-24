@@ -11,7 +11,7 @@ import com.thedistrictheat.gameobjects.Scrollable;
 
 public class CharacterSelectWorld {
     private static final int STARS_IDLE_SPEED = 20;
-    private static final int STARS_SELECTED_SPEED = -50;
+    private static final int STARS_SELECTED_SPEED = -70;
     
 	private float gameWidthRatio;
 	private float gameHeightRatio;

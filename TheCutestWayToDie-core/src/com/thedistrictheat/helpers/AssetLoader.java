@@ -46,11 +46,12 @@ public class AssetLoader {
 	public static TextureRegion topTile, topTileRight, topTileLeft;
 	public static TextureRegion bottomTile, bottomTileRight, bottomTileLeft;
 	public static TextureRegion firstBackgroundLayer, secondBackgroundLayer, thirdBackgroundLayer;
-	public static Sound jump, click, explosion;
+	public static Sound jump, click, explosion1, explosion2, explosion3;
 	public static Preferences prefs;
 	public static Guy guy = new Guy(20, 20);
 	public static ArrayList<Tile> tileList = new ArrayList<Tile>();
 	public static ArrayList<Enemy> enemyList = new ArrayList<Enemy>();
+	public static ArrayList<Sound> explosions = new ArrayList<Sound>();
 	
 	public static void load() {
         // starsTexture
@@ -138,9 +139,14 @@ public class AssetLoader {
 		catFlyingExploding3 = new TextureRegion(enemiesTexture, 40, 60, 16, 20);
 		
 		// Audio
-		jump = Gdx.audio.newSound(Gdx.files.internal("audio/jump.mp3"));
-		click = Gdx.audio.newSound(Gdx.files.internal("audio/click.mp3"));
-		explosion = Gdx.audio.newSound(Gdx.files.internal("audio/explosion.mp3"));
+		jump = Gdx.audio.newSound(Gdx.files.internal("audio/jump.wav"));
+		click = Gdx.audio.newSound(Gdx.files.internal("audio/click.wav"));
+		explosion1 = Gdx.audio.newSound(Gdx.files.internal("audio/explosion1.wav"));
+		explosion2 = Gdx.audio.newSound(Gdx.files.internal("audio/explosion2.wav"));
+		explosion3 = Gdx.audio.newSound(Gdx.files.internal("audio/explosion3.wav"));
+		explosions.add(explosion1);
+		explosions.add(explosion2);
+		explosions.add(explosion3);
 
 		// Preferences File
         prefs = Gdx.app.getPreferences("TheCutestWayToDie");

@@ -1,5 +1,7 @@
 package com.thedistrictheat.gameobjects;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -85,8 +87,14 @@ public class Guy {
 		if (Intersector.overlaps(hitBox, enemy.getHitBox())) {
 			setIsAlive(false);
 			enemy.setIsExploding(true);
-			AssetLoader.explosion.play();
+			playExplosion();
     	}
+    }
+    
+    private void playExplosion() {
+    	Random random = new Random();
+    	int index = random.nextInt(AssetLoader.explosions.size());
+    	AssetLoader.explosions.get(index).play();
     }
 
 	public void onClick() {
