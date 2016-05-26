@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -47,6 +48,8 @@ public class AssetLoader {
 	public static TextureRegion bottomTile, bottomTileRight, bottomTileLeft;
 	public static TextureRegion firstBackgroundLayer, secondBackgroundLayer, thirdBackgroundLayer;
 	public static Sound jump, click, explosion1, explosion2, explosion3;
+	public static Music intro, thecutestwaytodie;
+	
 	public static Preferences prefs;
 	public static Guy guy = new Guy(20, 20);
 	public static ArrayList<Tile> tileList = new ArrayList<Tile>();
@@ -147,6 +150,10 @@ public class AssetLoader {
 		explosions.add(explosion1);
 		explosions.add(explosion2);
 		explosions.add(explosion3);
+//		intro = Gdx.audio.newMusic(Gdx.files.internal("audio/intro.wav"));
+//		intro.setLooping(true);
+		thecutestwaytodie = Gdx.audio.newMusic(Gdx.files.internal("audio/thecutestwaytodie.wav"));
+		thecutestwaytodie.setLooping(true);
 
 		// Preferences File
         prefs = Gdx.app.getPreferences("TheCutestWayToDie");

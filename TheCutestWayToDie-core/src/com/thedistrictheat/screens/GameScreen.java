@@ -59,10 +59,14 @@ public class GameScreen implements Screen {
         levelNotLoaded = true;
 		Gdx.input.setCatchBackKey(true);
         Gdx.input.setInputProcessor(inputHandler);
+//        AssetLoader.intro.stop();
+        AssetLoader.thecutestwaytodie.play();
     }
 
     @Override
     public void hide() {
+        AssetLoader.thecutestwaytodie.stop();
+//        AssetLoader.intro.play();
     	world.restart();
     }
 
