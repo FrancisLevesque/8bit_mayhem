@@ -33,6 +33,7 @@ public class CharacterSelectInputHandler extends InputHandler {
 		gameX = scaleX(screenX);
 	    gameY = scaleY(invertedScreenY);
 		if(world.characterSelected(gameX, gameY)) {
+	    	AssetLoader.click.play();
 		    if (playButton.checkIfReleased(gameX, gameY)) {
 		    	world.setStartGame(true);
 		    	return true;
