@@ -94,14 +94,14 @@ public class Guy {
     private void playExplosion() {
     	Random random = new Random();
     	int index = random.nextInt(AssetLoader.explosions.size());
-    	AssetLoader.explosions.get(index).play();
+    	AssetLoader.explosions.get(index).play(0.6f);
     }
 
 	public void onClick() {
     	if (isAlive && jumping == false) {
     		velocity.y = JUMP_SPEED;
     		jumping = true;
-    		AssetLoader.jump.play();
+    		AssetLoader.jump.play(0.5f);
     	}
     }
 

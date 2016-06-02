@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.thedistrictheat.gameworld.CharacterSelectRenderer;
 import com.thedistrictheat.gameworld.CharacterSelectWorld;
 import com.thedistrictheat.gameworld.CharacterSelectWorld.CharacterType;
+import com.thedistrictheat.helpers.AssetLoader;
 import com.thedistrictheat.helpers.CharacterSelectInputHandler;
 import com.thedistrictheat.thecutestwaytodie.TCWTDGame;
 
@@ -44,6 +45,8 @@ public class CharacterSelectScreen implements Screen {
         runTime = 0;
         
 		gameScreen = new GameScreen(game, this, gameWidth, gameHeight);
+
+        AssetLoader.intro.play();
     }
 
     @Override

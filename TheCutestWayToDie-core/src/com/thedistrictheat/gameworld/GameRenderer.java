@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -36,6 +37,7 @@ public class GameRenderer {
 	private TextureRegion topTile, topTileRight, topTileLeft;
 	private TextureRegion bottomTile, bottomTileRight, bottomTileLeft;
 	private TextureRegion firstBackgroundLayer, secondBackgroundLayer, thirdBackgroundLayer;
+	private Animation flag;
 	private TextureRegion clickToBeginText, gameOverText, youWinText;
     private SimpleButton backButton;
 	private ArrayList<Tile> tileList;
@@ -71,6 +73,7 @@ public class GameRenderer {
 		firstBackgroundLayer = AssetLoader.firstBackgroundLayer; 
 		secondBackgroundLayer = AssetLoader.secondBackgroundLayer;
 		thirdBackgroundLayer = AssetLoader.thirdBackgroundLayer;
+		flag = AssetLoader.flag;
 	}
 	
 	private void resetExplodingTime() {
@@ -166,7 +169,7 @@ public class GameRenderer {
 		}
 	}
 	
-	private void drawTiles() {
+	private void drawTiles(float runTime) {
 		for(int i = 0;i < tileList.size();i++) {
 			Tile tile = tileList.get(i);
 	        TextureRegion texture;
@@ -190,7 +193,7 @@ public class GameRenderer {
 				texture = bottomTileLeft;
 				break;
 			case TILE_FLAG:
-				texture = catWalking;
+				texture = flag.getKeyFrame(runTime);
 				break;
 			default:
 				Gdx.app.log("GameRenderer", "ERROR: Unsupported type: " + tile.tileType() + " passed in; defaulting to topTile...");
@@ -213,7 +216,7 @@ public class GameRenderer {
         spriteBatcher.begin();
         drawBackground();
         drawEnemies(runTime);
-        drawTiles();
+        drawTiles(runTime);
         
         if(world.isReady()) {
         	resetExplodingTime();

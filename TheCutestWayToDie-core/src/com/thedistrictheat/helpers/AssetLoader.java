@@ -46,6 +46,8 @@ public class AssetLoader {
 	public static TextureRegion catFlying, catFlyingExploding1, catFlyingExploding2, catFlyingExploding3;
 	public static TextureRegion topTile, topTileRight, topTileLeft;
 	public static TextureRegion bottomTile, bottomTileRight, bottomTileLeft;
+	public static TextureRegion flag1, flag2, flag3;
+	public static Animation flag;
 	public static TextureRegion firstBackgroundLayer, secondBackgroundLayer, thirdBackgroundLayer;
 	public static Sound jump, click, explosion1, explosion2, explosion3;
 	public static Music intro, thecutestwaytodie;
@@ -150,8 +152,8 @@ public class AssetLoader {
 		explosions.add(explosion1);
 		explosions.add(explosion2);
 		explosions.add(explosion3);
-//		intro = Gdx.audio.newMusic(Gdx.files.internal("audio/intro.wav"));
-//		intro.setLooping(true);
+		intro = Gdx.audio.newMusic(Gdx.files.internal("audio/intro.wav"));
+		intro.setLooping(true);
 		thecutestwaytodie = Gdx.audio.newMusic(Gdx.files.internal("audio/thecutestwaytodie.wav"));
 		thecutestwaytodie.setLooping(true);
 
@@ -201,6 +203,13 @@ public class AssetLoader {
 		firstBackgroundLayer  = new TextureRegion(levelTexture, 0, 20, 180, 25);
 		secondBackgroundLayer = new TextureRegion(levelTexture, 0, 45, 180, 100);
 		thirdBackgroundLayer  = new TextureRegion(levelTexture, 0, 145, 180, 50);
+		flag1                 = new TextureRegion(levelTexture, 150, 10, 10, 10);
+		flag2                 = new TextureRegion(levelTexture, 160, 10, 10, 10);
+		flag3                 = new TextureRegion(levelTexture, 170, 10, 10, 10);
+		
+        TextureRegion[] flags = { flag1, flag2, flag3 };
+        flag = new Animation(0.3f, flags);
+        flag.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
 		
         // Creating level
         ArrayList<String> levelLines = new ArrayList<String>();
