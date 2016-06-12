@@ -1,0 +1,5 @@
+- Fix flag logic so you can't jump over it
+- Add sound and music toggles
+- Add exit button
+- Mix songs
+- Add delay so user can't click twice really fast after dying
