@@ -2,6 +2,7 @@ package com.thedistrictheat.helpers;
 
 import com.thedistrictheat.gameworld.CharacterSelectWorld;
 import com.thedistrictheat.ui.SimpleButton;
+import com.thedistrictheat.ui.SimpleToggle;
 
 public class CharacterSelectInputHandler extends InputHandler {
 	private final int BUTTON_WIDTH = 30;
@@ -21,13 +22,13 @@ public class CharacterSelectInputHandler extends InputHandler {
         		(screenHeight*gameHeightRatio)/4 - (BUTTON_HEIGHT/2), 
         		BUTTON_WIDTH, BUTTON_HEIGHT, AssetLoader.playButtonUp, AssetLoader.playButtonDown);
         exitButton = new SimpleButton(0, (screenHeight*gameHeightRatio) - BUTTON_HEIGHT, 
-        		BUTTON_SMALL_WIDTH, BUTTON_HEIGHT, AssetLoader.playButtonUp, AssetLoader.playButtonDown);
-        musicButton = new SimpleButton((screenWidth*gameWidthRatio) - BUTTON_SMALL_WIDTH, 
+        		BUTTON_SMALL_WIDTH, BUTTON_HEIGHT, AssetLoader.exitButton, AssetLoader.exitButton);
+        musicButton = new SimpleToggle((screenWidth*gameWidthRatio) - BUTTON_SMALL_WIDTH, 
         		(screenHeight*gameHeightRatio) - BUTTON_HEIGHT, 
-        		BUTTON_SMALL_WIDTH, BUTTON_HEIGHT, AssetLoader.playButtonUp, AssetLoader.playButtonDown);
-        soundButton = new SimpleButton((screenWidth*gameWidthRatio) - BUTTON_SMALL_WIDTH, 
+        		BUTTON_SMALL_WIDTH, BUTTON_HEIGHT, AssetLoader.musicButtonOn, AssetLoader.musicButtonOff);
+        soundButton = new SimpleToggle((screenWidth*gameWidthRatio) - BUTTON_SMALL_WIDTH, 
         		(screenHeight*gameHeightRatio) - (BUTTON_HEIGHT * 2), 
-        		BUTTON_SMALL_WIDTH, BUTTON_HEIGHT, AssetLoader.playButtonUp, AssetLoader.playButtonDown);
+        		BUTTON_SMALL_WIDTH, BUTTON_HEIGHT, AssetLoader.soundButtonOn, AssetLoader.soundButtonOff);
 	}
 
 	@Override
@@ -38,8 +39,6 @@ public class CharacterSelectInputHandler extends InputHandler {
 			playButton.checkIfPressed(gameX, gameY);
 		}
 		exitButton.checkIfPressed(gameX, gameY);
-		musicButton.checkIfPressed(gameX, gameY);
-		soundButton.checkIfPressed(gameX, gameY);
 		return true;
 	}
 	
@@ -50,10 +49,10 @@ public class CharacterSelectInputHandler extends InputHandler {
 	    if (exitButton.checkIfReleased(gameX, gameY)) {
 	    	
 	    }		    
-	    if (musicButton.checkIfReleased(gameX, gameY)) {
+	    if (musicButton.checkIfPressed(gameX, gameY)) {
 	    	SoundHandler.toggleMusic();
 	    }		    
-	    if (soundButton.checkIfReleased(gameX, gameY)) {
+	    if (soundButton.checkIfPressed(gameX, gameY)) {
 	    	SoundHandler.toggleSound();
 	    }
 		if(world.characterSelected(gameX, gameY)) {

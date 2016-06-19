@@ -14,7 +14,7 @@ public class GameInputHandler extends InputHandler {
 		super(world.getGameWidthRatio(), world.getGameHeightRatio());
 		this.world = world;
 		this.guy = world.getGuy();
-		backButton = new SimpleButton(0, (screenHeight * gameHeightRatio) - 12, 20, 10, AssetLoader.backButton, AssetLoader.backButton);
+		backButton = new SimpleButton(0, (screenHeight * gameHeightRatio) - 12, 10, 10, AssetLoader.backButton, AssetLoader.backButton);
 	}
 
 	@Override

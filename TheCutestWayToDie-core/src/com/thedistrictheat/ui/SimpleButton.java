@@ -8,8 +8,8 @@ public class SimpleButton {
     private float x, y, width, height;
     private TextureRegion buttonUp;
     private TextureRegion buttonDown;
-    private Rectangle bounds;
-    private boolean isPressed = false;
+    protected Rectangle bounds;
+    protected boolean isPressed = false;
 
     public SimpleButton(float x, float y, float width, float height, TextureRegion buttonUp, TextureRegion buttonDown) {
         this.x = x;

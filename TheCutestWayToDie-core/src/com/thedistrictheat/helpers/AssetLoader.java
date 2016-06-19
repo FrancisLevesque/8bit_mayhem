@@ -27,9 +27,9 @@ import com.thedistrictheat.gameobjects.TileTopRight;
 import com.thedistrictheat.gameworld.CharacterSelectWorld.CharacterType;
 
 public class AssetLoader {
-	public static final int CAT_WIDTH = 13;
+	public static final int CAT_WIDTH = 10;
 	public static final int CAT_HEIGHT = 10;
-	public static final int CAT_FLYING_WIDTH = 15;
+	public static final int CAT_FLYING_WIDTH = 12;
 	
 	public static Texture starsTexture, charactersTexture, textTexture, enemiesTexture, levelTexture;
 	public static TextureRegion stars;
@@ -38,7 +38,8 @@ public class AssetLoader {
 	public static TextureRegion stew, stewHit, stewRun1, stewRun2, stewRun3, stewJump;
 	public static TextureRegion sean, seanHit, seanRun1, seanRun2, seanRun3, seanJump;
 	public static Animation francisRunning, brandonRunning, stewRunning, seanRunning;
-	public static TextureRegion playButtonUp, playButtonDown, backButton;
+	public static TextureRegion playButtonUp, playButtonDown, backButton, exitButton;
+	public static TextureRegion musicButtonOn, musicButtonOff, soundButtonOn, soundButtonOff;
 	public static TextureRegion selectYourCharacterText, clickToBeginText, gameOverText, youWinText;
 	public static TextureRegion francisText, brandonText, stewText, seanText;
 	public static TextureRegion catWalking, catWalkingExploding1, catWalkingExploding2, catWalkingExploding3;
@@ -117,6 +118,12 @@ public class AssetLoader {
         textTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		playButtonUp = new TextureRegion(textTexture, 0, 0, 30, 10);
         playButtonDown = new TextureRegion(textTexture, 0, 10, 30, 10);
+        backButton = new TextureRegion(textTexture, 30, 0, 20, 20);
+        exitButton = new TextureRegion(textTexture, 50, 0, 20, 20);
+        musicButtonOn = new TextureRegion(textTexture, 70, 0, 20, 20);
+        musicButtonOff = new TextureRegion(textTexture, 90, 0, 20, 20);
+        soundButtonOn = new TextureRegion(textTexture, 110, 0, 20, 20);
+        soundButtonOff = new TextureRegion(textTexture, 130, 0, 20, 20);
         selectYourCharacterText = new TextureRegion(textTexture, 0, 20, 122, 6);
         clickToBeginText = new TextureRegion(textTexture, 0, 30, 72, 6);
         gameOverText = new TextureRegion(textTexture, 0, 40, 51, 6);
@@ -125,7 +132,6 @@ public class AssetLoader {
         stewText = new TextureRegion(textTexture, 0, 70, 23, 6);
         seanText = new TextureRegion(textTexture, 0, 80, 23, 6);
         youWinText = new TextureRegion(textTexture, 0, 90, 37, 6);
-        backButton = new TextureRegion(textTexture, 30, 0, 20, 10);
         
         // enemiesTexture
         enemiesTexture = new Texture("graphics/enemies.png");
@@ -144,18 +150,18 @@ public class AssetLoader {
 		catFlyingExploding3 = new TextureRegion(enemiesTexture, 40, 60, 16, 20);
 		
 		// Audio
-//		jump = Gdx.audio.newSound(Gdx.files.internal("audio/jump.wav"));
-//		click = Gdx.audio.newSound(Gdx.files.internal("audio/click.wav"));
-//		explosion1 = Gdx.audio.newSound(Gdx.files.internal("audio/explosion1.wav"));
-//		explosion2 = Gdx.audio.newSound(Gdx.files.internal("audio/explosion2.wav"));
-//		explosion3 = Gdx.audio.newSound(Gdx.files.internal("audio/explosion3.wav"));
-//		explosions.add(explosion1);
-//		explosions.add(explosion2);
-//		explosions.add(explosion3);
-//		intro = Gdx.audio.newMusic(Gdx.files.internal("audio/intro.wav"));
-//		intro.setLooping(true);
-//		thecutestwaytodie = Gdx.audio.newMusic(Gdx.files.internal("audio/thecutestwaytodie.wav"));
-//		thecutestwaytodie.setLooping(true);
+		jump = Gdx.audio.newSound(Gdx.files.internal("audio/jump.wav"));
+		click = Gdx.audio.newSound(Gdx.files.internal("audio/click.wav"));
+		explosion1 = Gdx.audio.newSound(Gdx.files.internal("audio/explosion1.wav"));
+		explosion2 = Gdx.audio.newSound(Gdx.files.internal("audio/explosion2.wav"));
+		explosion3 = Gdx.audio.newSound(Gdx.files.internal("audio/explosion3.wav"));
+		explosions.add(explosion1);
+		explosions.add(explosion2);
+		explosions.add(explosion3);
+		intro = Gdx.audio.newMusic(Gdx.files.internal("audio/intro.wav"));
+		intro.setLooping(true);
+		thecutestwaytodie = Gdx.audio.newMusic(Gdx.files.internal("audio/thecutestwaytodie.wav"));
+		thecutestwaytodie.setLooping(true);
 
 		// Preferences File
         prefs = Gdx.app.getPreferences("TheCutestWayToDie");

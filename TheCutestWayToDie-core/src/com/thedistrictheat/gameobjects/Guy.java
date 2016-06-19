@@ -77,7 +77,6 @@ public class Guy {
     }
     
     public void flagCollision(Tile flag) {
-//		if (Intersector.overlaps(hitBox, flag.getBoundingRectangle())) {
     	if ((hitBox.getX() + hitBox.getWidth()) > flag.getX() + (flag.getWidth()/2)) {
 			setGameWon(true);
 		}
