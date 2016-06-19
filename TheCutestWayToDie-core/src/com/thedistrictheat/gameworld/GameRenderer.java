@@ -37,6 +37,7 @@ public class GameRenderer {
 	private TextureRegion topTile, topTileRight, topTileLeft;
 	private TextureRegion bottomTile, bottomTileRight, bottomTileLeft;
 	private TextureRegion firstBackgroundLayer, secondBackgroundLayer, thirdBackgroundLayer;
+	private TextureRegion flag_fixed;
 	private Animation flag;
 	private TextureRegion clickToBeginText, gameOverText, youWinText;
     private SimpleButton backButton;
@@ -73,6 +74,7 @@ public class GameRenderer {
 		firstBackgroundLayer = AssetLoader.firstBackgroundLayer; 
 		secondBackgroundLayer = AssetLoader.secondBackgroundLayer;
 		thirdBackgroundLayer = AssetLoader.thirdBackgroundLayer;
+		flag_fixed = AssetLoader.flag1;
 		flag = AssetLoader.flag;
 	}
 	
@@ -193,8 +195,13 @@ public class GameRenderer {
 				texture = bottomTileLeft;
 				break;
 			case TILE_FLAG:
-				texture = flag.getKeyFrame(runTime);
-				break;
+				if (world.isRunning()) {
+					texture = flag.getKeyFrame(runTime);
+					break;	
+				} else {
+					texture = flag_fixed;
+					break;
+				}
 			default:
 				Gdx.app.log("GameRenderer", "ERROR: Unsupported type: " + tile.tileType() + " passed in; defaulting to topTile...");
 				texture = topTile;

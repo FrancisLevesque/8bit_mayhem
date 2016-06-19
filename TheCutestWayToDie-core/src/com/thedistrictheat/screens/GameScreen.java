@@ -6,6 +6,7 @@ import com.thedistrictheat.gameworld.GameRenderer;
 import com.thedistrictheat.gameworld.GameWorld;
 import com.thedistrictheat.helpers.AssetLoader;
 import com.thedistrictheat.helpers.GameInputHandler;
+import com.thedistrictheat.helpers.SoundHandler;
 import com.thedistrictheat.thecutestwaytodie.TCWTDGame;
 
 public class GameScreen implements Screen {
@@ -59,23 +60,24 @@ public class GameScreen implements Screen {
         levelNotLoaded = true;
 		Gdx.input.setCatchBackKey(true);
         Gdx.input.setInputProcessor(inputHandler);
-        AssetLoader.intro.stop();
-        AssetLoader.thecutestwaytodie.play();
+        SoundHandler.toggleMainSong();
     }
 
     @Override
     public void hide() {
-        AssetLoader.thecutestwaytodie.stop();
-        AssetLoader.intro.play();
+        SoundHandler.toggleMainSong();
     	world.restart();
     }
 
     @Override
-    public void pause() {
+    public void resume() {
+    	this.show();
     }
 
     @Override
-    public void resume() {
+    public void pause() {
+        SoundHandler.stopSongs();
+    	world.restart();
     }
 
     @Override

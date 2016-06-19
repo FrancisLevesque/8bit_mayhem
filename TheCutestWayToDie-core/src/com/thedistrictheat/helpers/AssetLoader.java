@@ -28,7 +28,7 @@ import com.thedistrictheat.gameworld.CharacterSelectWorld.CharacterType;
 
 public class AssetLoader {
 	public static final int CAT_WIDTH = 13;
-	public static final int CAT_HEIGHT = 14;
+	public static final int CAT_HEIGHT = 10;
 	public static final int CAT_FLYING_WIDTH = 15;
 	
 	public static Texture starsTexture, charactersTexture, textTexture, enemiesTexture, levelTexture;
@@ -144,18 +144,18 @@ public class AssetLoader {
 		catFlyingExploding3 = new TextureRegion(enemiesTexture, 40, 60, 16, 20);
 		
 		// Audio
-		jump = Gdx.audio.newSound(Gdx.files.internal("audio/jump.wav"));
-		click = Gdx.audio.newSound(Gdx.files.internal("audio/click.wav"));
-		explosion1 = Gdx.audio.newSound(Gdx.files.internal("audio/explosion1.wav"));
-		explosion2 = Gdx.audio.newSound(Gdx.files.internal("audio/explosion2.wav"));
-		explosion3 = Gdx.audio.newSound(Gdx.files.internal("audio/explosion3.wav"));
-		explosions.add(explosion1);
-		explosions.add(explosion2);
-		explosions.add(explosion3);
-		intro = Gdx.audio.newMusic(Gdx.files.internal("audio/intro.wav"));
-		intro.setLooping(true);
-		thecutestwaytodie = Gdx.audio.newMusic(Gdx.files.internal("audio/thecutestwaytodie.wav"));
-		thecutestwaytodie.setLooping(true);
+//		jump = Gdx.audio.newSound(Gdx.files.internal("audio/jump.wav"));
+//		click = Gdx.audio.newSound(Gdx.files.internal("audio/click.wav"));
+//		explosion1 = Gdx.audio.newSound(Gdx.files.internal("audio/explosion1.wav"));
+//		explosion2 = Gdx.audio.newSound(Gdx.files.internal("audio/explosion2.wav"));
+//		explosion3 = Gdx.audio.newSound(Gdx.files.internal("audio/explosion3.wav"));
+//		explosions.add(explosion1);
+//		explosions.add(explosion2);
+//		explosions.add(explosion3);
+//		intro = Gdx.audio.newMusic(Gdx.files.internal("audio/intro.wav"));
+//		intro.setLooping(true);
+//		thecutestwaytodie = Gdx.audio.newMusic(Gdx.files.internal("audio/thecutestwaytodie.wav"));
+//		thecutestwaytodie.setLooping(true);
 
 		// Preferences File
         prefs = Gdx.app.getPreferences("TheCutestWayToDie");

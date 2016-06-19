@@ -1,7 +1,5 @@
 package com.thedistrictheat.gameobjects;
 
-import java.util.Random;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -11,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.thedistrictheat.gameworld.CharacterSelectWorld.CharacterType;
 import com.thedistrictheat.helpers.AssetLoader;
+import com.thedistrictheat.helpers.SoundHandler;
 
 public class Guy {	
 	private static final int WIDTH = 19;
@@ -77,8 +76,9 @@ public class Guy {
     	}
     }
     
-    public void flagCollision(Tile tile) {
-		if (Intersector.overlaps(hitBox, tile.getBoundingRectangle())) {
+    public void flagCollision(Tile flag) {
+//		if (Intersector.overlaps(hitBox, flag.getBoundingRectangle())) {
+    	if ((hitBox.getX() + hitBox.getWidth()) > flag.getX() + (flag.getWidth()/2)) {
 			setGameWon(true);
 		}
     }
@@ -87,21 +87,15 @@ public class Guy {
 		if (Intersector.overlaps(hitBox, enemy.getHitBox())) {
 			setIsAlive(false);
 			enemy.setIsExploding(true);
-			playExplosion();
+			SoundHandler.playExplosionSound();
     	}
-    }
-    
-    private void playExplosion() {
-    	Random random = new Random();
-    	int index = random.nextInt(AssetLoader.explosions.size());
-    	AssetLoader.explosions.get(index).play(0.6f);
     }
 
 	public void onClick() {
     	if (isAlive && jumping == false) {
     		velocity.y = JUMP_SPEED;
     		jumping = true;
-    		AssetLoader.jump.play(0.5f);
+    		SoundHandler.playJumpSound();
     	}
     }
 

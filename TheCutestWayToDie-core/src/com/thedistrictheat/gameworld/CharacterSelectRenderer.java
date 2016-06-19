@@ -31,7 +31,7 @@ public class CharacterSelectRenderer {
 	private TextureRegion selectYourCharacterText;
 	private TextureRegion francisText, brandonText, stewText, seanText;
 	private Animation francisRunning, brandonRunning, stewRunning, seanRunning;
-	private SimpleButton playButton;
+	private SimpleButton playButton, exitButton, musicButton, soundButton;
 	
 	public CharacterSelectRenderer(CharacterSelectWorld world, Color backgroundColor, int gameWidth, int gameHeight) {
 		this.world = world;
@@ -55,6 +55,9 @@ public class CharacterSelectRenderer {
 		stars = world.getStars();
 		stars2 = world.getStars2();
 		playButton = ((CharacterSelectInputHandler)(Gdx.input.getInputProcessor())).getPlayButton();
+		exitButton = ((CharacterSelectInputHandler)(Gdx.input.getInputProcessor())).getExitButton();
+		musicButton = ((CharacterSelectInputHandler)(Gdx.input.getInputProcessor())).getMusicButton();
+		soundButton = ((CharacterSelectInputHandler)(Gdx.input.getInputProcessor())).getSoundButton();
 	}
 	
 	private void initGameAssets() {
@@ -103,6 +106,9 @@ public class CharacterSelectRenderer {
         drawCharacter(world.brandon, brandonTexture, brandonRunning.getKeyFrame(runTime), brandonText);
         drawCharacter(world.stew, stewTexture, stewRunning.getKeyFrame(runTime), stewText);
         drawCharacter(world.sean, seanTexture, seanRunning.getKeyFrame(runTime), seanText);
+    	exitButton.draw(spriteBatcher);
+    	soundButton.draw(spriteBatcher);
+    	musicButton.draw(spriteBatcher);
         
         if(world.characterSelected()) {
         	playButton.draw(spriteBatcher);
