@@ -23,7 +23,7 @@ public class CharacterSelectRenderer {
 	private SpriteBatch spriteBatcher;
 		
 	// Game Objects
-	private Scrollable stars, stars2;
+	private Scrollable stars;
 	
 	// Game Assets
 	private Color backgroundColor;
@@ -31,7 +31,7 @@ public class CharacterSelectRenderer {
 	private TextureRegion selectYourCharacterText;
 	private TextureRegion francisText, brandonText, stewText, seanText;
 	private Animation francisRunning, brandonRunning, stewRunning, seanRunning;
-	private SimpleButton playButton, exitButton, musicButton, soundButton;
+	private SimpleButton playButton, musicButton, soundButton;
 	
 	public CharacterSelectRenderer(CharacterSelectWorld world, Color backgroundColor, int gameWidth, int gameHeight) {
 		this.world = world;
@@ -53,9 +53,7 @@ public class CharacterSelectRenderer {
 	
 	private void initGameObjects() {
 		stars = world.getStars();
-		stars2 = world.getStars2();
 		playButton = ((CharacterSelectInputHandler)(Gdx.input.getInputProcessor())).getPlayButton();
-		exitButton = ((CharacterSelectInputHandler)(Gdx.input.getInputProcessor())).getExitButton();
 		musicButton = ((CharacterSelectInputHandler)(Gdx.input.getInputProcessor())).getMusicButton();
 		soundButton = ((CharacterSelectInputHandler)(Gdx.input.getInputProcessor())).getSoundButton();
 	}
@@ -100,13 +98,13 @@ public class CharacterSelectRenderer {
 
         spriteBatcher.begin();
         spriteBatcher.draw(starsTexture, stars.getX(), stars.getY(), stars.getWidth(), stars.getHeight());
-        spriteBatcher.draw(starsTexture, stars2.getX(), stars2.getY(), stars2.getWidth(), stars2.getHeight());
+        spriteBatcher.draw(starsTexture, stars.getX() - stars.getWidth(), stars.getY(), stars.getWidth(), stars.getHeight());
+        spriteBatcher.draw(starsTexture, stars.getX() + stars.getWidth(), stars.getY(), stars.getWidth(), stars.getHeight());
         spriteBatcher.draw(selectYourCharacterText, (gameWidth/2)-(selectYourCharacterText.getRegionWidth()/2), gameHeight*0.9f, selectYourCharacterText.getRegionWidth(), selectYourCharacterText.getRegionHeight());
         drawCharacter(world.francis, francisTexture, francisRunning.getKeyFrame(runTime), francisText);
         drawCharacter(world.brandon, brandonTexture, brandonRunning.getKeyFrame(runTime), brandonText);
         drawCharacter(world.stew, stewTexture, stewRunning.getKeyFrame(runTime), stewText);
         drawCharacter(world.sean, seanTexture, seanRunning.getKeyFrame(runTime), seanText);
-    	exitButton.draw(spriteBatcher);
     	soundButton.draw(spriteBatcher);
     	musicButton.draw(spriteBatcher);
         

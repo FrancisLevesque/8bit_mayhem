@@ -38,7 +38,7 @@ public class AssetLoader {
 	public static TextureRegion stew, stewHit, stewRun1, stewRun2, stewRun3, stewJump;
 	public static TextureRegion sean, seanHit, seanRun1, seanRun2, seanRun3, seanJump;
 	public static Animation francisRunning, brandonRunning, stewRunning, seanRunning;
-	public static TextureRegion playButtonUp, playButtonDown, backButton, exitButton;
+	public static TextureRegion playButtonUp, playButtonDown, backButton;
 	public static TextureRegion musicButtonOn, musicButtonOff, soundButtonOn, soundButtonOff;
 	public static TextureRegion selectYourCharacterText, clickToBeginText, gameOverText, youWinText;
 	public static TextureRegion francisText, brandonText, stewText, seanText;
@@ -119,7 +119,6 @@ public class AssetLoader {
 		playButtonUp = new TextureRegion(textTexture, 0, 0, 30, 10);
         playButtonDown = new TextureRegion(textTexture, 0, 10, 30, 10);
         backButton = new TextureRegion(textTexture, 30, 0, 20, 20);
-        exitButton = new TextureRegion(textTexture, 50, 0, 20, 20);
         musicButtonOn = new TextureRegion(textTexture, 70, 0, 20, 20);
         musicButtonOff = new TextureRegion(textTexture, 90, 0, 20, 20);
         soundButtonOn = new TextureRegion(textTexture, 110, 0, 20, 20);

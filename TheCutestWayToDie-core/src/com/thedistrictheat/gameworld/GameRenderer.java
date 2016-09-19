@@ -28,9 +28,9 @@ public class GameRenderer {
 	
 	// Game Objects
 	private Guy guy;
-    private Scrollable frontFirstLayer, backFirstLayer;
-    private Scrollable frontSecondLayer, backSecondLayer;
-    private Scrollable frontThirdLayer, backThirdLayer;
+    private Scrollable firstLayer;
+    private Scrollable secondLayer;
+    private Scrollable thirdLayer;
 	
 	// Game Assets
 	private TextureRegion catWalking, catJumping, catFlying;
@@ -86,12 +86,9 @@ public class GameRenderer {
 	
 	private void initGameObjects() {
 		guy = world.getGuy();
-		frontFirstLayer = world.getFrontFirstLayer();
-		backFirstLayer = world.getBackFirstLayer();
-		frontSecondLayer = world.getFrontSecondLayer();
-		backSecondLayer = world.getBackSecondLayer();
-		frontThirdLayer = world.getFrontThirdLayer();
-		backThirdLayer = world.getBackThirdLayer();
+		firstLayer = world.getFirstLayer();
+		secondLayer = world.getSecondLayer();
+		thirdLayer = world.getThirdLayer();
 		backButton = ((GameInputHandler)(Gdx.input.getInputProcessor())).getBackButton();
 	}
 	
@@ -104,12 +101,12 @@ public class GameRenderer {
 	}
 
 	private void drawBackground() {
-		spriteBatcher.draw(thirdBackgroundLayer, frontThirdLayer.getX(), frontThirdLayer.getY(), frontThirdLayer.getWidth(), frontThirdLayer.getHeight());
-		spriteBatcher.draw(thirdBackgroundLayer, backThirdLayer.getX(), backThirdLayer.getY(), backThirdLayer.getWidth(), backThirdLayer.getHeight());
-		spriteBatcher.draw(secondBackgroundLayer, frontSecondLayer.getX(), frontSecondLayer.getY(), frontSecondLayer.getWidth(), frontSecondLayer.getHeight());
-		spriteBatcher.draw(secondBackgroundLayer, backSecondLayer.getX(), backSecondLayer.getY(), backSecondLayer.getWidth(), backSecondLayer.getHeight());
-		spriteBatcher.draw(firstBackgroundLayer, frontFirstLayer.getX(), frontFirstLayer.getY(), frontFirstLayer.getWidth(), frontFirstLayer.getHeight());
-		spriteBatcher.draw(firstBackgroundLayer, backFirstLayer.getX(), backFirstLayer.getY(), backFirstLayer.getWidth(), backFirstLayer.getHeight());
+		spriteBatcher.draw(thirdBackgroundLayer, thirdLayer.getX(), thirdLayer.getY(), thirdLayer.getWidth(), thirdLayer.getHeight());
+		spriteBatcher.draw(thirdBackgroundLayer, thirdLayer.getX() + thirdLayer.getWidth(), thirdLayer.getY(), thirdLayer.getWidth(), thirdLayer.getHeight());
+		spriteBatcher.draw(secondBackgroundLayer, secondLayer.getX(), secondLayer.getY(), secondLayer.getWidth(), secondLayer.getHeight());
+		spriteBatcher.draw(secondBackgroundLayer, secondLayer.getX() + secondLayer.getWidth(), secondLayer.getY(), secondLayer.getWidth(), secondLayer.getHeight());
+		spriteBatcher.draw(firstBackgroundLayer, firstLayer.getX(), firstLayer.getY(), firstLayer.getWidth(), firstLayer.getHeight());
+		spriteBatcher.draw(firstBackgroundLayer, firstLayer.getX() + firstLayer.getWidth(), firstLayer.getY(), firstLayer.getWidth(), firstLayer.getHeight());
 	}
 	
 	private void drawEnemies(float runTime) {

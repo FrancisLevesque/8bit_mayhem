@@ -20,9 +20,9 @@ public class GameWorld {
 	
 	private ScrollHandler scrollHandler;
 	private List<Scrollable> list;
-    private Scrollable frontFirstLayer, backFirstLayer;
-    private Scrollable frontSecondLayer, backSecondLayer;
-    private Scrollable frontThirdLayer, backThirdLayer;
+    private Scrollable firstLayer;
+    private Scrollable secondLayer;
+    private Scrollable thirdLayer;
 
 	private Guy guy;
     private ArrayList<Enemy> enemyList;
@@ -40,20 +40,14 @@ public class GameWorld {
 		this.gameWidthRatio = gameWidthRatio;
 		this.gameHeightRatio = gameHeightRatio;
 
-		frontFirstLayer  = new Scrollable(0, 0, gameWidth, (int)(gameHeight/4), -24);
-		backFirstLayer   = new Scrollable(gameWidth, 0, gameWidth, (int)(gameHeight/4), -24);
-		frontSecondLayer  = new Scrollable(0, 0, gameWidth, gameHeight, -10);
-		backSecondLayer   = new Scrollable(gameWidth, 0, gameWidth, gameHeight, -10);
-		frontThirdLayer = new Scrollable(0, 0, gameWidth, (int)(gameHeight/2), -6);
-		backThirdLayer  = new Scrollable(gameWidth, 0, gameWidth, (int)(gameHeight/2), -6);
+		firstLayer  = new Scrollable(0, 0, gameWidth, (int)(gameHeight/4), -24);
+		secondLayer  = new Scrollable(0, 0, gameWidth, gameHeight, -10);
+		thirdLayer = new Scrollable(0, 0, gameWidth, (int)(gameHeight/2), -6);
 
 		list = new ArrayList<Scrollable>();
-    	list.add(frontFirstLayer);
-    	list.add(backFirstLayer);
-    	list.add(frontSecondLayer);
-    	list.add(backSecondLayer);
-    	list.add(frontThirdLayer);
-    	list.add(backThirdLayer);
+    	list.add(firstLayer);
+    	list.add(secondLayer);
+    	list.add(thirdLayer);
     	scrollHandler = new ScrollHandler(list);
 
 		guy = AssetLoader.guy;
@@ -198,28 +192,16 @@ public class GameWorld {
 		return guy;
 	}
 
-    public Scrollable getFrontFirstLayer() {
-		return frontFirstLayer;
+    public Scrollable getFirstLayer() {
+		return firstLayer;
 	}
 
-	public Scrollable getBackFirstLayer() {
-		return backFirstLayer;
+    public Scrollable getSecondLayer() {
+		return secondLayer;
 	}
 
-    public Scrollable getFrontSecondLayer() {
-		return frontSecondLayer;
-	}
-
-	public Scrollable getBackSecondLayer() {
-		return backSecondLayer;
-	}
-
-    public Scrollable getFrontThirdLayer() {
-		return frontThirdLayer;
-	}
-
-	public Scrollable getBackThirdLayer() {
-		return backThirdLayer;
+    public Scrollable getThirdLayer() {
+		return thirdLayer;
 	}
 	
 	public ScrollHandler getScrollHandler() {

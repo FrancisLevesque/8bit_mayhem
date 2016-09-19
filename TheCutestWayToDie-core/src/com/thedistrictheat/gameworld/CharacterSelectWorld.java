@@ -20,7 +20,7 @@ public class CharacterSelectWorld {
 	
 	private ScrollHandler scrollHandler;
 	private List<Scrollable> list;
-	private Scrollable stars, stars2;
+	private Scrollable stars;
 
 	public Character francis, brandon, stew, sean;
 	public enum CharacterType { FRANCIS, BRANDON, STEW, SEAN };
@@ -30,10 +30,8 @@ public class CharacterSelectWorld {
 		this.gameHeightRatio = gameHeightRatio;    	
 
 		stars = new Scrollable(0, 0, gameWidth, gameHeight, STARS_IDLE_SPEED); 
-		stars2 = new Scrollable(gameWidth, 0, gameWidth, gameHeight, STARS_IDLE_SPEED); 
 		list = new ArrayList<Scrollable>();
     	list.add(stars);
-    	list.add(stars2);
     	scrollHandler = new ScrollHandler(list);
 		
 		francis = new Character(gameWidth * 0.14f, gameHeight * 0.5f, Color.FOREST);
@@ -114,10 +112,6 @@ public class CharacterSelectWorld {
     
     public Scrollable getStars() {
     	return stars;
-    }
-    
-    public Scrollable getStars2() {
-    	return stars2;
     }
 
 	public CharacterType getSelectedCharacter() {

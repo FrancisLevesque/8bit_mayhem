@@ -17,7 +17,7 @@ public class Enemy extends Scrollable {
 		WALKING, JUMPING, FLYING
 	}
 
-	public Enemy(float x, float y, int width, int height, float scrollSpeed, EnemyType type) {
+	public Enemy(int x, int y, int width, int height, float scrollSpeed, EnemyType type) {
 		super(x, y, width, height, scrollSpeed);
 		setAcceleration(new Vector2(0, GRAVITY));
 		hitBox = new Rectangle(x, y, width-4, height);

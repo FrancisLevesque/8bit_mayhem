@@ -11,7 +11,6 @@ public class CharacterSelectInputHandler extends InputHandler {
 	
 	private CharacterSelectWorld world;    
     private SimpleButton playButton;   
-    private SimpleButton exitButton;   
     private SimpleButton musicButton;   
     private SimpleButton soundButton;
 	
@@ -21,8 +20,6 @@ public class CharacterSelectInputHandler extends InputHandler {
         playButton = new SimpleButton((screenWidth*gameWidthRatio)/2 - (BUTTON_WIDTH/2), 
         		(screenHeight*gameHeightRatio)/4 - (BUTTON_HEIGHT/2), 
         		BUTTON_WIDTH, BUTTON_HEIGHT, AssetLoader.playButtonUp, AssetLoader.playButtonDown);
-        exitButton = new SimpleButton(0, (screenHeight*gameHeightRatio) - BUTTON_HEIGHT, 
-        		BUTTON_SMALL_WIDTH, BUTTON_HEIGHT, AssetLoader.exitButton, AssetLoader.exitButton);
         musicButton = new SimpleToggle((screenWidth*gameWidthRatio) - BUTTON_SMALL_WIDTH, 
         		(screenHeight*gameHeightRatio) - BUTTON_HEIGHT, 
         		BUTTON_SMALL_WIDTH, BUTTON_HEIGHT, AssetLoader.musicButtonOn, AssetLoader.musicButtonOff);
@@ -38,17 +35,13 @@ public class CharacterSelectInputHandler extends InputHandler {
 		if(world.characterSelected(gameX, gameY)) {
 			playButton.checkIfPressed(gameX, gameY);
 		}
-		exitButton.checkIfPressed(gameX, gameY);
 		return true;
 	}
 	
 	@Override
 	public boolean touchUp(int screenX, int invertedScreenY, int pointer, int button) {
 		gameX = scaleX(screenX);
-	    gameY = scaleY(invertedScreenY);		    
-	    if (exitButton.checkIfReleased(gameX, gameY)) {
-	    	
-	    }		    
+	    gameY = scaleY(invertedScreenY);		    		    
 	    if (musicButton.checkIfPressed(gameX, gameY)) {
 	    	SoundHandler.toggleMusic();
 	    }		    
@@ -67,10 +60,6 @@ public class CharacterSelectInputHandler extends InputHandler {
 	
 	public SimpleButton getPlayButton() {
 		return playButton;
-	}
-	
-	public SimpleButton getExitButton() {
-		return exitButton;
 	}
 	
 	public SimpleButton getMusicButton() {

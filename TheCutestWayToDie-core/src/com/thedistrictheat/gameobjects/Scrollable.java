@@ -38,13 +38,13 @@ public class Scrollable {
     }
 
     public void reset() {
-        if (currentSpeed < 0){
-	        position.x = width;
+//        if (currentSpeed < 0){
+	        position.x = startingX;
 	        isScrolledOffScreen = false;
-        } else {
-	        position.x = -width;
-	        isScrolledOffScreen = false;
-        }
+//        } else {
+//	        position.x = -width;
+//	        isScrolledOffScreen = false;
+//        }
     }
 
     public boolean isScrolledOffScreen() {

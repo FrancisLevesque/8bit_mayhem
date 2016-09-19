@@ -45,7 +45,6 @@ public class CharacterSelectScreen implements Screen {
         runTime = 0;
         
 		gameScreen = new GameScreen(game, this, gameWidth, gameHeight);
-		
 		SoundHandler.toggleIntroSong();
     }
 
@@ -70,6 +69,7 @@ public class CharacterSelectScreen implements Screen {
 		renderer.setBackgroundColor(BACKGROUND_COLOR);
 		Gdx.input.setCatchBackKey(false);
         Gdx.input.setInputProcessor(inputHandler);
+		SoundHandler.toggleIntroSong();
     }
 
     @Override
