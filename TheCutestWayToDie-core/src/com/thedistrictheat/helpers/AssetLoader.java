@@ -31,7 +31,7 @@ public class AssetLoader {
 	public static final int CAT_HEIGHT = 10;
 	public static final int CAT_FLYING_WIDTH = 12;
 	
-	public static Texture starsTexture, charactersTexture, textTexture, enemiesTexture, levelTexture;
+	public static Texture starsTexture, charactersTexture, textTexture, enemiesTexture, levelTexture, howToPlayTexture;
 	public static TextureRegion stars;
 	public static TextureRegion francis, francisHit, francisRun1, francisRun2, francisRun3, francisJump;
 	public static TextureRegion brandon, brandonHit, brandonRun1, brandonRun2, brandonRun3, brandonJump;
@@ -50,6 +50,7 @@ public class AssetLoader {
 	public static TextureRegion flag1, flag2, flag3;
 	public static Animation flag;
 	public static TextureRegion firstBackgroundLayer, secondBackgroundLayer, thirdBackgroundLayer;
+	public static TextureRegion howToPlay;
 	public static Sound jump, click, explosion1, explosion2, explosion3;
 	public static Music intro, thecutestwaytodie;
 	
@@ -161,11 +162,30 @@ public class AssetLoader {
 		intro.setLooping(true);
 		thecutestwaytodie = Gdx.audio.newMusic(Gdx.files.internal("audio/thecutestwaytodie.wav"));
 		thecutestwaytodie.setLooping(true);
+		
+		// howToPlayTexture
+		howToPlayTexture = new Texture("graphics/howToPlay.png");
+		howToPlayTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		howToPlay = new TextureRegion(howToPlayTexture, 0, 0, 360, 200);		
 
 		// Preferences File
         prefs = Gdx.app.getPreferences("TheCutestWayToDie");
-        if(!prefs.contains("highScore")) {
-        	prefs.putInteger("highScore", 0);
+        if(prefs.contains("firstTime")) {
+        	prefs.putBoolean("firstTime", false);
+        } else {
+        	prefs.putBoolean("firstTime", true);
+        }
+        if(!prefs.contains("beatFrancisLevel")) {
+        	prefs.putBoolean("beatFrancisLevel", false);
+        }
+        if(!prefs.contains("beatBrandonLevel")) {
+        	prefs.putBoolean("beatBrandonLevel", false);
+        }
+        if(!prefs.contains("beatStewLevel")) {
+        	prefs.putBoolean("beatStewLevel", false);
+        }
+        if(!prefs.contains("beatSeanLevel")) {
+        	prefs.putBoolean("beatSeanLevel", false);
         }
 	}
 	

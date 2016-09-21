@@ -1,5 +1,6 @@
 package com.thedistrictheat.ui;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -10,6 +11,7 @@ public class SimpleButton {
     private TextureRegion buttonDown;
     protected Rectangle bounds;
     protected boolean isPressed = false;
+    protected boolean isEnabled = false;
 
     public SimpleButton(float x, float y, float width, float height, TextureRegion buttonUp, TextureRegion buttonDown) {
         this.x = x;
@@ -32,6 +34,13 @@ public class SimpleButton {
     public boolean checkIfPressed(int gameX, int gameY) {
         if (bounds.contains(gameX, gameY)) {
             isPressed = true;
+            if (isEnabled) {
+				Gdx.app.log("SimpleButton", "isEnabled = false");
+            	isEnabled = false;
+            } else {
+				Gdx.app.log("SimpleButton", "isEnabled = true");
+            	isEnabled = true;
+            }
             return true;
         }
         return false;
@@ -44,5 +53,14 @@ public class SimpleButton {
         }
         isPressed = false;
         return false;
+    }
+    
+    public boolean isEnabled() { 
+    	return isEnabled;
+    }
+    
+    public void reset() {
+		Gdx.app.log("SimpleButton", "isEnabled = false");
+    	isEnabled = false;
     }
 }

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.thedistrictheat.gameobjects.Character;
 import com.thedistrictheat.gameobjects.ScrollHandler;
 import com.thedistrictheat.gameobjects.Scrollable;
+import com.thedistrictheat.helpers.AssetLoader;
 
 public class CharacterSelectWorld {
     private static final int STARS_IDLE_SPEED = 20;
@@ -27,7 +28,7 @@ public class CharacterSelectWorld {
 	
 	public CharacterSelectWorld(int gameWidth, int gameHeight, float gameWidthRatio, float gameHeightRatio) {
 		this.gameWidthRatio = gameWidthRatio;
-		this.gameHeightRatio = gameHeightRatio;    	
+		this.gameHeightRatio = gameHeightRatio;
 
 		stars = new Scrollable(0, 0, gameWidth, gameHeight, STARS_IDLE_SPEED); 
 		list = new ArrayList<Scrollable>();

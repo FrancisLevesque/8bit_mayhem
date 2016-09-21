@@ -30,14 +30,14 @@ public class CharacterSelectRenderer {
 	private TextureRegion starsTexture, francisTexture, brandonTexture, stewTexture, seanTexture;
 	private TextureRegion selectYourCharacterText;
 	private TextureRegion francisText, brandonText, stewText, seanText;
+	private TextureRegion howToPlay;
 	private Animation francisRunning, brandonRunning, stewRunning, seanRunning;
-	private SimpleButton playButton, musicButton, soundButton;
+	private SimpleButton howToPlayButton, playButton, musicButton, soundButton;
 	
 	public CharacterSelectRenderer(CharacterSelectWorld world, Color backgroundColor, int gameWidth, int gameHeight) {
 		this.world = world;
 		this.gameWidth = gameWidth;
 		this.gameHeight = gameHeight;
-
 		this.backgroundColor = backgroundColor;
 		
 		camera = new OrthographicCamera();
@@ -53,6 +53,7 @@ public class CharacterSelectRenderer {
 	
 	private void initGameObjects() {
 		stars = world.getStars();
+		howToPlayButton = ((CharacterSelectInputHandler)(Gdx.input.getInputProcessor())).getHowToPlayButton();
 		playButton = ((CharacterSelectInputHandler)(Gdx.input.getInputProcessor())).getPlayButton();
 		musicButton = ((CharacterSelectInputHandler)(Gdx.input.getInputProcessor())).getMusicButton();
 		soundButton = ((CharacterSelectInputHandler)(Gdx.input.getInputProcessor())).getSoundButton();
@@ -73,6 +74,7 @@ public class CharacterSelectRenderer {
 		stewRunning = AssetLoader.stewRunning;
 		seanTexture = AssetLoader.sean;
 		seanRunning = AssetLoader.seanRunning;
+		howToPlay = AssetLoader.howToPlay;
 	}
 	
 	private void drawCharacter(Character character, TextureRegion waiting, TextureRegion running, TextureRegion name) {        
@@ -107,10 +109,16 @@ public class CharacterSelectRenderer {
         drawCharacter(world.sean, seanTexture, seanRunning.getKeyFrame(runTime), seanText);
     	soundButton.draw(spriteBatcher);
     	musicButton.draw(spriteBatcher);
+    	howToPlayButton.draw(spriteBatcher);
         
         if(world.characterSelected()) {
         	playButton.draw(spriteBatcher);
         }
+        
+        if(AssetLoader.prefs.getBoolean("firstTime") == true || howToPlayButton.isEnabled()) {
+        	spriteBatcher.draw(howToPlay, 0, 0, gameWidth, gameHeight);
+        }
+        
         spriteBatcher.end();
 	}
 	
