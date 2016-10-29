@@ -43,6 +43,7 @@ public class GameRenderer {
     private SimpleButton backButton;
 	private ArrayList<Tile> tileList;
 	private ArrayList<Enemy> enemyList;
+	private float beginTextHeight, beginTextWidth, gameOverTextHeight, gameOverTextWidth, winTextHeight, winTextWidth;
 	
 	public GameRenderer(GameWorld world, int gameWidth, int gameHeight) {
 		this.world = world;
@@ -222,9 +223,16 @@ public class GameRenderer {
         drawEnemies(runTime);
         drawTiles(runTime);
         
+    	beginTextHeight = clickToBeginText.getRegionHeight()/4;
+    	beginTextWidth = clickToBeginText.getRegionWidth()/4;
+    	gameOverTextHeight = gameOverText.getRegionHeight()/4;
+    	gameOverTextWidth = gameOverText.getRegionWidth()/4;
+    	winTextHeight = youWinText.getRegionHeight()/4;
+    	winTextWidth = youWinText.getRegionWidth()/4;
+        
         if(world.isReady()) {
         	resetExplodingTime();
-        	spriteBatcher.draw(clickToBeginText, (gameWidth/2)-(clickToBeginText.getRegionWidth()/2), gameHeight*0.9f, clickToBeginText.getRegionWidth(), clickToBeginText.getRegionHeight());
+        	spriteBatcher.draw(clickToBeginText, (gameWidth/2)-(beginTextWidth/2), gameHeight*0.9f, beginTextWidth, beginTextHeight);
         	spriteBatcher.draw(guy.standingSprite(), guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
         }
         else if (world.isRunning()) {
@@ -237,13 +245,13 @@ public class GameRenderer {
         }
         else if(world.isGameOver()) {
            	spriteBatcher.draw(guy.hitSprite(), guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
-            spriteBatcher.draw(gameOverText, (gameWidth/2)-(gameOverText.getRegionWidth()/2), gameHeight*0.9f, gameOverText.getRegionWidth(), gameOverText.getRegionHeight());
-        	spriteBatcher.draw(clickToBeginText, (gameWidth/2)-(clickToBeginText.getRegionWidth()/2), gameHeight*0.8f, clickToBeginText.getRegionWidth(), clickToBeginText.getRegionHeight());
+            spriteBatcher.draw(gameOverText, (gameWidth/2)-(gameOverTextWidth/2), gameHeight*0.9f, gameOverTextWidth, gameOverTextHeight);
+        	spriteBatcher.draw(clickToBeginText, (gameWidth/2)-(beginTextWidth/2), gameHeight*0.8f, beginTextWidth, beginTextHeight);
         } 
         else if (world.isWinner()) {
            	spriteBatcher.draw(guy.jumpingSprite(), guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
-        	spriteBatcher.draw(youWinText, (gameWidth/2)-(youWinText.getRegionWidth()/2), gameHeight*0.9f, youWinText.getRegionWidth(), youWinText.getRegionHeight());
-        	spriteBatcher.draw(clickToBeginText, (gameWidth/2)-(clickToBeginText.getRegionWidth()/2), gameHeight*0.8f, clickToBeginText.getRegionWidth(), clickToBeginText.getRegionHeight());
+        	spriteBatcher.draw(youWinText, (gameWidth/2)-(winTextWidth/2), gameHeight*0.9f, winTextWidth, winTextHeight);
+        	spriteBatcher.draw(clickToBeginText, (gameWidth/2)-(beginTextWidth/2), gameHeight*0.8f, beginTextWidth, beginTextHeight);
         }
         
         backButton.draw(spriteBatcher);

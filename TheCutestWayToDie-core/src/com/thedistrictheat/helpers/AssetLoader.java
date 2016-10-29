@@ -31,14 +31,14 @@ public class AssetLoader {
 	public static final int CAT_HEIGHT = 10;
 	public static final int CAT_FLYING_WIDTH = 12;
 	
-	public static Texture starsTexture, charactersTexture, textTexture, enemiesTexture, levelTexture, howToPlayTexture;
+	public static Texture starsTexture, charactersTexture, textTexture, buttonTexture, enemiesTexture, levelTexture, howToPlayTexture;
 	public static TextureRegion stars;
 	public static TextureRegion francis, francisHit, francisRun1, francisRun2, francisRun3, francisJump;
 	public static TextureRegion brandon, brandonHit, brandonRun1, brandonRun2, brandonRun3, brandonJump;
 	public static TextureRegion stew, stewHit, stewRun1, stewRun2, stewRun3, stewJump;
 	public static TextureRegion sean, seanHit, seanRun1, seanRun2, seanRun3, seanJump;
 	public static Animation francisRunning, brandonRunning, stewRunning, seanRunning;
-	public static TextureRegion playButtonUp, playButtonDown, backButton;
+	public static TextureRegion howToPlayButtonUp, howToPlayButtonDown, playButtonUp, playButtonDown, playButtonDisabled, backButton, downloadButtonUp, downloadButtonDown;
 	public static TextureRegion musicButtonOn, musicButtonOff, soundButtonOn, soundButtonOff;
 	public static TextureRegion selectYourCharacterText, clickToBeginText, gameOverText, youWinText;
 	public static TextureRegion francisText, brandonText, stewText, seanText;
@@ -47,6 +47,8 @@ public class AssetLoader {
 	public static TextureRegion catFlying, catFlyingExploding1, catFlyingExploding2, catFlyingExploding3;
 	public static TextureRegion topTile, topTileRight, topTileLeft;
 	public static TextureRegion bottomTile, bottomTileRight, bottomTileLeft;
+	public static TextureRegion star1, star2, star3, star4;
+	public static Animation star;
 	public static TextureRegion flag1, flag2, flag3;
 	public static Animation flag;
 	public static TextureRegion firstBackgroundLayer, secondBackgroundLayer, thirdBackgroundLayer;
@@ -117,21 +119,37 @@ public class AssetLoader {
 		// textTexture
         textTexture = new Texture("graphics/text.png");
         textTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-		playButtonUp = new TextureRegion(textTexture, 0, 0, 30, 10);
-        playButtonDown = new TextureRegion(textTexture, 0, 10, 30, 10);
-        backButton = new TextureRegion(textTexture, 30, 0, 20, 20);
-        musicButtonOn = new TextureRegion(textTexture, 70, 0, 20, 20);
-        musicButtonOff = new TextureRegion(textTexture, 90, 0, 20, 20);
-        soundButtonOn = new TextureRegion(textTexture, 110, 0, 20, 20);
-        soundButtonOff = new TextureRegion(textTexture, 130, 0, 20, 20);
-        selectYourCharacterText = new TextureRegion(textTexture, 0, 20, 122, 6);
-        clickToBeginText = new TextureRegion(textTexture, 0, 30, 72, 6);
-        gameOverText = new TextureRegion(textTexture, 0, 40, 51, 6);
-        francisText = new TextureRegion(textTexture, 0, 50, 37, 6);
-        brandonText = new TextureRegion(textTexture, 0, 60, 41, 6);
-        stewText = new TextureRegion(textTexture, 0, 70, 23, 6);
-        seanText = new TextureRegion(textTexture, 0, 80, 23, 6);
-        youWinText = new TextureRegion(textTexture, 0, 90, 37, 6);
+        selectYourCharacterText = new TextureRegion(textTexture, 0, 0, 490, 26);
+        clickToBeginText = new TextureRegion(textTexture, 0, 40, 286, 26);
+        gameOverText = new TextureRegion(textTexture, 0, 80, 206, 26);
+        francisText = new TextureRegion(textTexture, 0, 120, 150, 26);
+        brandonText = new TextureRegion(textTexture, 0, 160, 166, 26);
+        stewText = new TextureRegion(textTexture, 0, 200, 94, 26);
+        seanText = new TextureRegion(textTexture, 0, 240, 94, 26);
+        youWinText = new TextureRegion(textTexture, 0, 280, 150, 26);
+        
+        // buttonTexture
+        buttonTexture = new Texture("graphics/buttons.png");
+        buttonTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		howToPlayButtonDown = new TextureRegion(buttonTexture, 0, 0, 272, 40);
+        howToPlayButtonUp = new TextureRegion(buttonTexture, 0, 40, 272, 40);
+		playButtonDown = new TextureRegion(buttonTexture, 0, 80, 272, 40);
+        playButtonUp = new TextureRegion(buttonTexture, 0, 120, 272, 40);
+        playButtonDisabled = new TextureRegion(buttonTexture, 0, 160, 272, 40);
+        downloadButtonDown = new TextureRegion(buttonTexture, 0, 200, 272, 40);
+        downloadButtonUp = new TextureRegion(buttonTexture, 0, 240, 272, 40);
+        backButton = new TextureRegion(buttonTexture, 0, 280, 80, 80);
+        musicButtonOn = new TextureRegion(buttonTexture, 0, 360, 80, 80);
+        musicButtonOff = new TextureRegion(buttonTexture, 0, 440, 80, 80);
+        soundButtonOn = new TextureRegion(buttonTexture, 0, 520, 80, 80);
+        soundButtonOff = new TextureRegion(buttonTexture, 0, 600, 80, 80);
+        star1 = new TextureRegion(buttonTexture, 0, 680, 80, 80);
+		star2 = new TextureRegion(buttonTexture, 0, 760, 80, 80);
+		star3 = new TextureRegion(buttonTexture, 0, 840, 80, 80);
+		star4 = new TextureRegion(buttonTexture, 0, 920, 80, 80);
+        TextureRegion[] stars = { star1, star2, star3, star4 };
+        star = new Animation(0.15f, stars);
+        star.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
         
         // enemiesTexture
         enemiesTexture = new Texture("graphics/enemies.png");
@@ -170,11 +188,6 @@ public class AssetLoader {
 
 		// Preferences File
         prefs = Gdx.app.getPreferences("TheCutestWayToDie");
-        if(prefs.contains("firstTime")) {
-        	prefs.putBoolean("firstTime", false);
-        } else {
-        	prefs.putBoolean("firstTime", true);
-        }
         if(!prefs.contains("beatFrancisLevel")) {
         	prefs.putBoolean("beatFrancisLevel", false);
         }
@@ -225,9 +238,9 @@ public class AssetLoader {
 		bottomTile            = new TextureRegion(levelTexture, 0, 10, 10, 10);
 		bottomTileRight       = new TextureRegion(levelTexture, 10, 10, 10, 10);
 		bottomTileLeft        = new TextureRegion(levelTexture, 20, 10, 10, 10);
-		firstBackgroundLayer  = new TextureRegion(levelTexture, 0, 20, 180, 25);
-		secondBackgroundLayer = new TextureRegion(levelTexture, 0, 45, 180, 100);
-		thirdBackgroundLayer  = new TextureRegion(levelTexture, 0, 145, 180, 50);
+		firstBackgroundLayer  = new TextureRegion(levelTexture, 0, 20, 180, 100);
+		secondBackgroundLayer = new TextureRegion(levelTexture, 0, 120, 180, 100);
+		thirdBackgroundLayer  = new TextureRegion(levelTexture, 0, 220, 180, 100);
 		flag1                 = new TextureRegion(levelTexture, 150, 10, 10, 10);
 		flag2                 = new TextureRegion(levelTexture, 160, 10, 10, 10);
 		flag3                 = new TextureRegion(levelTexture, 170, 10, 10, 10);

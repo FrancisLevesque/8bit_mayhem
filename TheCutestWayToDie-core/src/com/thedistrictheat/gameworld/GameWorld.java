@@ -40,9 +40,9 @@ public class GameWorld {
 		this.gameWidthRatio = gameWidthRatio;
 		this.gameHeightRatio = gameHeightRatio;
 
-		firstLayer  = new Scrollable(0, 0, gameWidth, (int)(gameHeight/4), -24);
-		secondLayer  = new Scrollable(0, 0, gameWidth, gameHeight, -10);
-		thirdLayer = new Scrollable(0, 0, gameWidth, (int)(gameHeight/2), -6);
+		firstLayer  = new Scrollable(0, 0, gameWidth, (int)(gameHeight), -18);
+		secondLayer  = new Scrollable(0, 0, gameWidth, gameHeight, -8);
+		thirdLayer = new Scrollable(0, 0, gameWidth, (int)(gameHeight), -4);
 
 		list = new ArrayList<Scrollable>();
     	list.add(firstLayer);

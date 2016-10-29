@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.thedistrictheat.gameobjects.Character;
 import com.thedistrictheat.gameobjects.ScrollHandler;
 import com.thedistrictheat.gameobjects.Scrollable;
-import com.thedistrictheat.helpers.AssetLoader;
 
 public class CharacterSelectWorld {
     private static final int STARS_IDLE_SPEED = 20;

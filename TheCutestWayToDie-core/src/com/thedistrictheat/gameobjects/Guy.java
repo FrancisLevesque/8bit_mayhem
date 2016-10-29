@@ -33,6 +33,8 @@ public class Guy {
 
 	private Rectangle hitBox;
 	
+	private CharacterType characterType;
+	
 	public static enum Level {
 		FOREST, VOLCANO, TUNDRA, CITY
 	}
@@ -79,6 +81,22 @@ public class Guy {
     public void flagCollision(Tile flag) {
     	if ((hitBox.getX() + hitBox.getWidth()) > flag.getX() + (flag.getWidth()/2)) {
 			setGameWon(true);
+	    	if(characterType == CharacterType.FRANCIS) {
+		    	AssetLoader.prefs.putBoolean("beatFrancisLevel", true);
+		    	AssetLoader.prefs.flush();
+	    	}
+	    	else if (characterType == CharacterType.BRANDON) {
+	    		AssetLoader.prefs.putBoolean("beatBrandonLevel", true); 
+		    	AssetLoader.prefs.flush();
+	    	}
+	    	else if (characterType == CharacterType.STEW) {
+	    		AssetLoader.prefs.putBoolean("beatStewLevel", true);
+		    	AssetLoader.prefs.flush();
+	    	}
+	    	else if (characterType == CharacterType.SEAN) {
+	    		AssetLoader.prefs.putBoolean("beatSeanLevel", true);
+		    	AssetLoader.prefs.flush();
+	    	}
 		}
     }
     
@@ -122,6 +140,7 @@ public class Guy {
 	}
 
     public void setSprites(CharacterType type) {
+    	characterType = type;
     	if(type == CharacterType.FRANCIS) {
 	    	standingSprite = AssetLoader.francis;
 	    	runningAnimation = AssetLoader.francisRunning;
@@ -151,6 +170,10 @@ public class Guy {
 	    	currentLevel = Level.CITY;
     	}
 	}
+    
+    public CharacterType getCharacterType() {
+    	return characterType; 
+    }
 
     public float getX() {
         return position.x;
@@ -215,7 +238,7 @@ public class Guy {
 		case TUNDRA:
 			return Color.SKY;
 		case VOLCANO:
-			return Color.ORANGE;
+			return Color.FIREBRICK;
 		case CITY:
 			return Color.DARK_GRAY;
 		default:
