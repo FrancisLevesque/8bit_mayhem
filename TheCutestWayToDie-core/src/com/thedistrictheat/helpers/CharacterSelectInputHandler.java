@@ -1,5 +1,6 @@
 package com.thedistrictheat.helpers;
 
+import com.badlogic.gdx.Gdx;
 import com.thedistrictheat.gameworld.CharacterSelectWorld;
 import com.thedistrictheat.ui.SimpleButton;
 import com.thedistrictheat.ui.SimpleToggle;
@@ -42,6 +43,7 @@ public class CharacterSelectInputHandler extends InputHandler {
 			    howToPlayButton.checkIfPressed(gameX, gameY);
 				playButton.checkIfPressed(gameX, gameY);
 			}
+			downloadButton.checkIfPressed(gameX, gameY);
 		}
 		return true;
 	}
@@ -66,6 +68,9 @@ public class CharacterSelectInputHandler extends InputHandler {
 			    	world.setStartGame(true);
 			    	return true;
 			    }
+			}
+			if (downloadButton.checkIfReleased(gameX, gameY)) {
+				Gdx.net.openURI("http://thedistrictheat.ca/free_music.html");
 			}
 		}
 		return false;
