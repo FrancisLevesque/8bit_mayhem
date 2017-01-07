@@ -129,9 +129,9 @@ public class CharacterSelectRenderer {
         if(AssetLoader.prefs.getBoolean("beatSeanLevel")) {
         	spriteBatcher.draw(star.getKeyFrame(runTime+2.3f), world.sean.getX() + world.sean.getWidth(), world.sean.getY()+world.sean.getHeight(), world.sean.getWidth()/4, world.sean.getHeight()/4);
         }
-        //if(AssetLoader.prefs.getBoolean("beatFrancisLevel") && AssetLoader.prefs.getBoolean("beatBrandonLevel") && AssetLoader.prefs.getBoolean("beatStewLevel") && AssetLoader.prefs.getBoolean("beatSeanLevel")) {
+        if(AssetLoader.prefs.getBoolean("beatFrancisLevel") && AssetLoader.prefs.getBoolean("beatBrandonLevel") && AssetLoader.prefs.getBoolean("beatStewLevel") && AssetLoader.prefs.getBoolean("beatSeanLevel")) {
             downloadButton.draw(spriteBatcher);
-        //}
+        }
         
         if(world.characterSelected()) {
         	howToPlayButton.draw(spriteBatcher);
