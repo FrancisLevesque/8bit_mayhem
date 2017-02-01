@@ -174,6 +174,9 @@ public class GameRenderer {
 			Tile tile = tileList.get(i);
 	        TextureRegion texture;
 			switch (tile.tileType()) {
+			case TALK_TILE:
+				texture = topTile;
+				break;
 			case TILE_TOP:
 				texture = topTile;
 				break;
@@ -242,6 +245,10 @@ public class GameRenderer {
             else {
             	spriteBatcher.draw(guy.runningAnimation().getKeyFrame(runTime), guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
             }
+        }
+        else if(world.isPaused()) {
+        	spriteBatcher.draw(guy.standingSprite(), guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
+        	// Draw Tutorial Tip
         }
         else if(world.isGameOver()) {
            	spriteBatcher.draw(guy.hitSprite(), guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());

@@ -25,6 +25,7 @@ public class Guy {
 	private int startingX, startingY;
 	private boolean jumping = false;
 	private boolean isAlive = true;
+	private boolean helpTip = false;
 	private boolean gameWon = false;
 	private Level currentLevel;
 	
@@ -66,6 +67,15 @@ public class Guy {
         updateBoundingBoxes();
     }
     
+    public void talkTileCollision(TalkTile tile) {
+    	if(tile.isEnabled()) {
+    		if (hitBox.getX() > (tile.getX() - tile.width/2)) {
+		    	setHelpTip(true);
+				tile.disable();
+			}
+    	}
+    }
+    
     public void tileCollision(Tile tile) {
     	if(velocity.y < 0) {
 			if (Intersector.overlaps(hitBox, tile.getBoundingRectangle())) {
@@ -81,22 +91,29 @@ public class Guy {
     public void flagCollision(Tile flag) {
     	if ((hitBox.getX() + hitBox.getWidth()) > flag.getX() + (flag.getWidth()/2)) {
 			setGameWon(true);
-	    	if(characterType == CharacterType.FRANCIS) {
-		    	AssetLoader.prefs.putBoolean("beatFrancisLevel", true);
-		    	AssetLoader.prefs.flush();
-	    	}
-	    	else if (characterType == CharacterType.BRANDON) {
-	    		AssetLoader.prefs.putBoolean("beatBrandonLevel", true); 
-		    	AssetLoader.prefs.flush();
-	    	}
-	    	else if (characterType == CharacterType.STEW) {
-	    		AssetLoader.prefs.putBoolean("beatStewLevel", true);
-		    	AssetLoader.prefs.flush();
-	    	}
-	    	else if (characterType == CharacterType.SEAN) {
-	    		AssetLoader.prefs.putBoolean("beatSeanLevel", true);
-		    	AssetLoader.prefs.flush();
-	    	}
+			if(AssetLoader.prefs.getBoolean("firstTime") == true) {
+				AssetLoader.prefs.putBoolean("firstTime", false);
+				AssetLoader.prefs.flush();
+			}
+			else {
+		    	if(characterType == CharacterType.FRANCIS) {
+			    	AssetLoader.prefs.putBoolean("beatFrancisLevel", true);
+			    	AssetLoader.prefs.flush();
+		    	}
+		    	else if (characterType == CharacterType.BRANDON) {
+		    		AssetLoader.prefs.putBoolean("beatBrandonLevel", true); 
+			    	AssetLoader.prefs.flush();
+		    	}
+		    	else if (characterType == CharacterType.STEW) {
+		    		AssetLoader.prefs.putBoolean("beatStewLevel", true);
+			    	AssetLoader.prefs.flush();
+		    	}
+		    	else if (characterType == CharacterType.SEAN) {
+		    		AssetLoader.prefs.putBoolean("beatSeanLevel", true);
+			    	AssetLoader.prefs.flush();
+		    	}
+			}
+    		SoundHandler.playWinSound();
 		}
     }
     
@@ -110,6 +127,11 @@ public class Guy {
 
 	public void onClick() {
     	if (isAlive && jumping == false) {
+    		if(AssetLoader.prefs.getBoolean("firstTime") == true) {
+    			if(!isHelpTipOn()) {
+    				return ;
+    			}
+    		}
     		velocity.y = JUMP_SPEED;
     		jumping = true;
     		SoundHandler.playJumpSound();
@@ -221,6 +243,14 @@ public class Guy {
 
 	public TextureRegion hitSprite() {
 		return hitSprite;
+	}
+	
+	public boolean isHelpTipOn() {
+		return helpTip;
+	}
+
+	public void setHelpTip(boolean helpTip) {
+		this.helpTip = helpTip;
 	}
 
 	public boolean isGameWon() {

@@ -11,7 +11,7 @@ public class Tile extends Scrollable {
 	private TileType type;
 
 	public static enum TileType {
-		TILE_TOP, TILE_TOP_RIGHT, TILE_TOP_LEFT, TILE_BOTTOM, TILE_BOTTOM_RIGHT, TILE_BOTTOM_LEFT, TILE_FLAG
+		TALK_TILE, TALK_TILE_RIGHT, TILE_TOP, TILE_TOP_RIGHT, TILE_TOP_LEFT, TILE_BOTTOM, TILE_BOTTOM_RIGHT, TILE_BOTTOM_LEFT, TILE_FLAG
 	}
 	
 	public Tile(int x, int y, TileType type) {

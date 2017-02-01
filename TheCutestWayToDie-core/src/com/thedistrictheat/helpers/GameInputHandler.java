@@ -19,20 +19,27 @@ public class GameInputHandler extends InputHandler {
 
 	@Override
 	public boolean touchDown(int screenX, int invertedScreenY, int pointer, int button) {
-		gameX = scaleX(screenX);
-	    gameY = scaleY(invertedScreenY);
-	    if (backButton.checkIfPressed(gameX, gameY)) {
-	    	world.setGoToCharacterSelect(true);
-	    	SoundHandler.playClickSound();
-		}
-		if(world.isReady()) {
-			world.start();
-		}
-		else if (world.isRunning()){
-			guy.onClick();
-		}
-		else if(world.isGameOver() || world.isWinner()) {
-			world.restart();
+		if(!world.isPausedByWin()) {
+			gameX = scaleX(screenX);
+		    gameY = scaleY(invertedScreenY);
+		    if (backButton.checkIfPressed(gameX, gameY)) {
+		    	world.setGoToCharacterSelect(true);
+				world.unpause();
+		    	return true;
+			}
+			if(world.isReady()) {
+				world.start();
+			}
+			else if (world.isRunning()){
+				guy.onClick();
+			}
+			else if (world.isPaused()){
+				guy.onClick();
+				world.unpause();
+			}
+			else if(world.isGameOver() || world.isWinner()) {
+				world.restart();
+			}
 		}
 		return true;
 	}

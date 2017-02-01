@@ -16,6 +16,7 @@ import com.thedistrictheat.gameobjects.EnemyFlying;
 import com.thedistrictheat.gameobjects.EnemyJumping;
 import com.thedistrictheat.gameobjects.EnemyWalking;
 import com.thedistrictheat.gameobjects.Guy;
+import com.thedistrictheat.gameobjects.TalkTile;
 import com.thedistrictheat.gameobjects.Tile;
 import com.thedistrictheat.gameobjects.TileBottom;
 import com.thedistrictheat.gameobjects.TileBottomLeft;
@@ -31,14 +32,14 @@ public class AssetLoader {
 	public static final int CAT_HEIGHT = 10;
 	public static final int CAT_FLYING_WIDTH = 12;
 	
-	public static Texture starsTexture, charactersTexture, textTexture, buttonTexture, enemiesTexture, levelTexture, howToPlayTexture;
+	public static Texture starsTexture, charactersTexture, textTexture, buttonTexture, enemiesTexture, levelTexture;
 	public static TextureRegion stars;
 	public static TextureRegion francis, francisHit, francisRun1, francisRun2, francisRun3, francisJump;
 	public static TextureRegion brandon, brandonHit, brandonRun1, brandonRun2, brandonRun3, brandonJump;
 	public static TextureRegion stew, stewHit, stewRun1, stewRun2, stewRun3, stewJump;
 	public static TextureRegion sean, seanHit, seanRun1, seanRun2, seanRun3, seanJump;
 	public static Animation francisRunning, brandonRunning, stewRunning, seanRunning;
-	public static TextureRegion howToPlayButtonUp, howToPlayButtonDown, playButtonUp, playButtonDown, playButtonDisabled, backButton, downloadButtonUp, downloadButtonDown;
+	public static TextureRegion playButtonUp, playButtonDown, playButtonDisabled, backButton, downloadButtonUp, downloadButtonDown;
 	public static TextureRegion musicButtonOn, musicButtonOff, soundButtonOn, soundButtonOff;
 	public static TextureRegion selectYourCharacterText, clickToBeginText, gameOverText, youWinText;
 	public static TextureRegion francisText, brandonText, stewText, seanText;
@@ -52,8 +53,7 @@ public class AssetLoader {
 	public static TextureRegion flag1, flag2, flag3;
 	public static Animation flag;
 	public static TextureRegion firstBackgroundLayer, secondBackgroundLayer, thirdBackgroundLayer;
-	public static TextureRegion howToPlay;
-	public static Sound jump, click, explosion1, explosion2, explosion3;
+	public static Sound jump, click, win, explosion1, explosion2, explosion3;
 	public static Music intro, thecutestwaytodie;
 	
 	public static Preferences prefs;
@@ -131,8 +131,6 @@ public class AssetLoader {
         // buttonTexture
         buttonTexture = new Texture("graphics/buttons.png");
         buttonTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-		howToPlayButtonDown = new TextureRegion(buttonTexture, 0, 0, 272, 40);
-        howToPlayButtonUp = new TextureRegion(buttonTexture, 0, 40, 272, 40);
 		playButtonDown = new TextureRegion(buttonTexture, 0, 80, 272, 40);
         playButtonUp = new TextureRegion(buttonTexture, 0, 120, 272, 40);
         playButtonDisabled = new TextureRegion(buttonTexture, 0, 160, 272, 40);
@@ -170,6 +168,7 @@ public class AssetLoader {
 		// Audio
 		jump = Gdx.audio.newSound(Gdx.files.internal("audio/jump.wav"));
 		click = Gdx.audio.newSound(Gdx.files.internal("audio/click.wav"));
+		win = Gdx.audio.newSound(Gdx.files.internal("audio/win.wav"));
 		explosion1 = Gdx.audio.newSound(Gdx.files.internal("audio/explosion1.wav"));
 		explosion2 = Gdx.audio.newSound(Gdx.files.internal("audio/explosion2.wav"));
 		explosion3 = Gdx.audio.newSound(Gdx.files.internal("audio/explosion3.wav"));
@@ -179,12 +178,7 @@ public class AssetLoader {
 		intro = Gdx.audio.newMusic(Gdx.files.internal("audio/intro.wav"));
 		intro.setLooping(true);
 		thecutestwaytodie = Gdx.audio.newMusic(Gdx.files.internal("audio/thecutestwaytodie.wav"));
-		thecutestwaytodie.setLooping(true);
-		
-		// howToPlayTexture
-		howToPlayTexture = new Texture("graphics/howToPlay.png");
-		howToPlayTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-		howToPlay = new TextureRegion(howToPlayTexture, 0, 0, 360, 200);		
+		thecutestwaytodie.setLooping(true);		
 
 		// Preferences File
         prefs = Gdx.app.getPreferences("TheCutestWayToDie");
@@ -229,6 +223,14 @@ public class AssetLoader {
 			textFile     = "levels/level_forest.txt";
 			break;
 		}
+		
+		if(!prefs.contains("firstTime")) {
+			prefs.putBoolean("firstTime", true);
+	    	prefs.flush();
+		}
+		if(prefs.getBoolean("firstTime") == true) {
+			textFile = "levels/how_to_play.txt";
+		}
 
 		levelTexture = new Texture(graphicsFile);
 		levelTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
@@ -268,12 +270,13 @@ public class AssetLoader {
 //        W: Walking Cats
 //        J: Jumping Cats
 //        F: Flying Cats
+//        T: Talk Tile
 //        -: Top Tile
-//        {: TopTileLeft
-//        }: TopTileRight
-//        =: BottomTile
-//        [: BottomTileLeft
-//        ]: BottomTileRight
+//        {: Top Tile Left
+//        }: Top Tile Right
+//        =: Bottom Tile
+//        [: Bottom Tile Left
+//        ]: Bottom Tile Right
 //        !: End of Level Flag
 
 		Gdx.app.log("AssetLoader", "Creating lists.");
@@ -297,6 +300,9 @@ public class AssetLoader {
     				break;
     			case 'F':
     				enemyList.add(new EnemyFlying(i * 10, j * 10, CAT_FLYING_WIDTH, CAT_HEIGHT));
+    				break;
+    			case 'T':
+    				tileList.add(new TalkTile(i, j));
     				break;
     			case '-':
     				tileList.add(new TileTop(i, j));

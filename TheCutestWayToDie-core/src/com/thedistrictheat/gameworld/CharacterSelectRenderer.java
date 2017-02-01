@@ -30,9 +30,8 @@ public class CharacterSelectRenderer {
 	private TextureRegion starsTexture, francisTexture, brandonTexture, stewTexture, seanTexture;
 	private TextureRegion selectYourCharacterText;
 	private TextureRegion francisText, brandonText, stewText, seanText;
-	private TextureRegion howToPlay;
 	private Animation francisRunning, brandonRunning, stewRunning, seanRunning;
-	private SimpleButton howToPlayButton, playButton, musicButton, soundButton, downloadButton;
+	private SimpleButton playButton, musicButton, soundButton, downloadButton;
 	private Animation star;
 	private float textHeight, textWidth;
 	
@@ -55,7 +54,6 @@ public class CharacterSelectRenderer {
 	
 	private void initGameObjects() {
 		stars = world.getStars();
-		howToPlayButton = ((CharacterSelectInputHandler)(Gdx.input.getInputProcessor())).getHowToPlayButton();
 		playButton = ((CharacterSelectInputHandler)(Gdx.input.getInputProcessor())).getPlayButton();
 		musicButton = ((CharacterSelectInputHandler)(Gdx.input.getInputProcessor())).getMusicButton();
 		soundButton = ((CharacterSelectInputHandler)(Gdx.input.getInputProcessor())).getSoundButton();
@@ -77,7 +75,6 @@ public class CharacterSelectRenderer {
 		stewRunning = AssetLoader.stewRunning;
 		seanTexture = AssetLoader.sean;
 		seanRunning = AssetLoader.seanRunning;
-		howToPlay = AssetLoader.howToPlay;
 		star = AssetLoader.star;
 	}
 	
@@ -134,12 +131,7 @@ public class CharacterSelectRenderer {
         }
         
         if(world.characterSelected()) {
-        	howToPlayButton.draw(spriteBatcher);
         	playButton.draw(spriteBatcher);
-        }
-        
-        if(howToPlayButton.isEnabled()) {
-        	spriteBatcher.draw(howToPlay, 0, 0, gameWidth, gameHeight);
         }
         
         spriteBatcher.end();

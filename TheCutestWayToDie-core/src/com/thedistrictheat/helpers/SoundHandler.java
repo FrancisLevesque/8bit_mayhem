@@ -67,6 +67,12 @@ public class SoundHandler {
 		}		
 	}
 	
+	public static void playWinSound() {
+		if(soundEnabled) {
+			AssetLoader.win.play(0.8f);
+		}		
+	}
+	
 	public static void playExplosionSound() {
 		if(soundEnabled) {
 	    	Random random = new Random();
