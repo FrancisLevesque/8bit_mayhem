@@ -29,11 +29,12 @@ public class CharacterSelectRenderer {
 	private Color backgroundColor;
 	private TextureRegion starsTexture, francisTexture, brandonTexture, stewTexture, seanTexture;
 	private TextureRegion selectYourCharacterText;
+	private TextureRegion selectYourCharacterPlate;
 	private TextureRegion francisText, brandonText, stewText, seanText;
 	private Animation francisRunning, brandonRunning, stewRunning, seanRunning;
 	private SimpleButton playButton, musicButton, soundButton, downloadButton;
 	private Animation star;
-	private float textHeight, textWidth;
+	private float textHeight, textWidth, plateHeight, plateWidth;
 	
 	public CharacterSelectRenderer(CharacterSelectWorld world, Color backgroundColor, int gameWidth, int gameHeight) {
 		this.world = world;
@@ -63,6 +64,7 @@ public class CharacterSelectRenderer {
 	private void initGameAssets() {
 	    starsTexture = AssetLoader.stars;
 	    selectYourCharacterText = AssetLoader.selectYourCharacterText;
+	    selectYourCharacterPlate = AssetLoader.selectYourCharacterPlate;
 	    francisText = AssetLoader.francisText;
 	    brandonText = AssetLoader.brandonText;
 	    stewText = AssetLoader.stewText;
@@ -103,9 +105,12 @@ public class CharacterSelectRenderer {
         spriteBatcher.draw(starsTexture, stars.getX(), stars.getY(), stars.getWidth(), stars.getHeight());
         spriteBatcher.draw(starsTexture, stars.getX() - stars.getWidth(), stars.getY(), stars.getWidth(), stars.getHeight());
         spriteBatcher.draw(starsTexture, stars.getX() + stars.getWidth(), stars.getY(), stars.getWidth(), stars.getHeight());
-        textHeight = selectYourCharacterText.getRegionHeight()/4;
-        textWidth = selectYourCharacterText.getRegionWidth()/4;
-        spriteBatcher.draw(selectYourCharacterText, (gameWidth/2)-(textWidth/2), gameHeight*0.9f, textWidth, textHeight);
+//        textHeight = selectYourCharacterText.getRegionHeight()/4;
+//        textWidth = selectYourCharacterText.getRegionWidth()/4;
+//        spriteBatcher.draw(selectYourCharacterText, (gameWidth/2)-(textWidth/2), gameHeight*0.9f, textWidth, textHeight);
+        plateHeight = selectYourCharacterPlate.getRegionHeight()/2;
+        plateWidth  = selectYourCharacterPlate.getRegionWidth()/2;
+        spriteBatcher.draw(selectYourCharacterPlate, (gameWidth/2)-(plateWidth/2), gameHeight*0.6f, plateWidth, plateHeight);
     	soundButton.draw(spriteBatcher);
     	musicButton.draw(spriteBatcher);
     	

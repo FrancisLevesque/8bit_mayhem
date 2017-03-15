@@ -30,7 +30,8 @@ public class GameWorld {
     private ArrayList<Tile> tileList;
 
     private float pauseTimeOnWin;
-    private boolean isPausedByWin;
+    private boolean isPausedByWin;	
+    private boolean firstTip;
 	
 	public enum GameState {
 		READY, RUNNING, PAUSED, GAMEOVER, WINNER
@@ -56,6 +57,7 @@ public class GameWorld {
 
     	pauseTimeOnWin = 0f;
     	isPausedByWin = false;
+		firstTip = true;
 
 		guy = AssetLoader.guy;
     	enemyList = AssetLoader.enemyList;
@@ -176,6 +178,10 @@ public class GameWorld {
 		return isPausedByWin;
 	}
 	
+	public boolean showFirstTip() {
+		return firstTip;
+	}
+	
 	public void ready() {
 		currentState = GameState.READY;
 	}
@@ -205,6 +211,7 @@ public class GameWorld {
 	
 	public void unpause() {
 		guy.setHelpTip(false);
+		firstTip = false;
 		start();
 	}
 	

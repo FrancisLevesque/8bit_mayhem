@@ -32,7 +32,7 @@ public class AssetLoader {
 	public static final int CAT_HEIGHT = 10;
 	public static final int CAT_FLYING_WIDTH = 12;
 	
-	public static Texture starsTexture, charactersTexture, textTexture, buttonTexture, enemiesTexture, levelTexture;
+	public static Texture starsTexture, charactersTexture, textTexture, textPlatesTexture, buttonTexture, enemiesTexture, levelTexture;
 	public static TextureRegion stars;
 	public static TextureRegion francis, francisHit, francisRun1, francisRun2, francisRun3, francisJump;
 	public static TextureRegion brandon, brandonHit, brandonRun1, brandonRun2, brandonRun3, brandonJump;
@@ -42,6 +42,7 @@ public class AssetLoader {
 	public static TextureRegion playButtonUp, playButtonDown, playButtonDisabled, backButton, downloadButtonUp, downloadButtonDown;
 	public static TextureRegion musicButtonOn, musicButtonOff, soundButtonOn, soundButtonOff;
 	public static TextureRegion selectYourCharacterText, clickToBeginText, gameOverText, youWinText;
+	public static TextureRegion clickToBeginPlate, youWinPlate, gameOverPlate, selectYourCharacterPlate, watchOutForKittensPlate, tapTheScreenToJumpPlate;
 	public static TextureRegion francisText, brandonText, stewText, seanText;
 	public static TextureRegion catWalking, catWalkingExploding1, catWalkingExploding2, catWalkingExploding3;
 	public static TextureRegion catJumping, catJumpingExploding1, catJumpingExploding2, catJumpingExploding3;
@@ -127,6 +128,16 @@ public class AssetLoader {
         stewText = new TextureRegion(textTexture, 0, 200, 94, 26);
         seanText = new TextureRegion(textTexture, 0, 240, 94, 26);
         youWinText = new TextureRegion(textTexture, 0, 280, 150, 26);
+		
+		// textPlatesTexture
+        textPlatesTexture = new Texture("graphics/text_plates.png");
+        textPlatesTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+        clickToBeginPlate = new TextureRegion(textPlatesTexture, 0, 0, 120, 80);
+        youWinPlate = new TextureRegion(textPlatesTexture, 0, 80, 120, 80);
+        gameOverPlate = new TextureRegion(textPlatesTexture, 0, 160, 120, 80);
+        selectYourCharacterPlate = new TextureRegion(textPlatesTexture, 0, 240, 160, 80);
+        watchOutForKittensPlate = new TextureRegion(textPlatesTexture, 0, 320, 160, 80);
+        tapTheScreenToJumpPlate = new TextureRegion(textPlatesTexture, 0, 400, 200, 80);
         
         // buttonTexture
         buttonTexture = new Texture("graphics/buttons.png");
