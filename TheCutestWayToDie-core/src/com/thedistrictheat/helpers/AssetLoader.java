@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.thedistrictheat.gameobjects.Billboard;
 import com.thedistrictheat.gameobjects.Enemy;
 import com.thedistrictheat.gameobjects.EnemyFlying;
 import com.thedistrictheat.gameobjects.EnemyJumping;
@@ -32,8 +33,8 @@ public class AssetLoader {
 	public static final int CAT_HEIGHT = 10;
 	public static final int CAT_FLYING_WIDTH = 12;
 	
-	public static Texture starsTexture, charactersTexture, textTexture, textPlatesTexture, buttonTexture, enemiesTexture, levelTexture;
-	public static TextureRegion stars;
+	public static Texture bombsTexture, charactersTexture, textTexture, textPlatesTexture, buttonTexture, enemiesTexture, levelTexture;
+	public static TextureRegion bombs;
 	public static TextureRegion francis, francisHit, francisRun1, francisRun2, francisRun3, francisJump;
 	public static TextureRegion brandon, brandonHit, brandonRun1, brandonRun2, brandonRun3, brandonJump;
 	public static TextureRegion stew, stewHit, stewRun1, stewRun2, stewRun3, stewJump;
@@ -60,14 +61,15 @@ public class AssetLoader {
 	public static Preferences prefs;
 	public static Guy guy = new Guy(20, 20);
 	public static ArrayList<Tile> tileList = new ArrayList<Tile>();
+	public static ArrayList<Billboard> boardList = new ArrayList<Billboard>();
 	public static ArrayList<Enemy> enemyList = new ArrayList<Enemy>();
 	public static ArrayList<Sound> explosions = new ArrayList<Sound>();
 	
 	public static void load() {
-        // starsTexture
-        starsTexture = new Texture("graphics/stars.png");
-        starsTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-        stars = new TextureRegion(starsTexture, 0, 0, 980, 540);
+        // bombsTexture
+        bombsTexture = new Texture("graphics/bombs.png");
+        bombsTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+        bombs = new TextureRegion(bombsTexture, 0, 0, 980, 540);
         
 		// charactersTexture
         charactersTexture = new Texture("graphics/characters.png");
@@ -281,6 +283,8 @@ public class AssetLoader {
 //        W: Walking Cats
 //        J: Jumping Cats
 //        F: Flying Cats
+//        B: Billboard 1
+//        b: Billboard 2
 //        T: Talk Tile
 //        -: Top Tile
 //        {: Top Tile Left
@@ -293,6 +297,7 @@ public class AssetLoader {
 		Gdx.app.log("AssetLoader", "Creating lists.");
 		boolean guyInLevel = false;
         tileList.clear();
+        boardList.clear();
         enemyList.clear();
         for(int j = 0;j < levelHeight;j++){
     		String line = (String) levelLines.get(levelHeight - 1 - j);
@@ -311,6 +316,12 @@ public class AssetLoader {
     				break;
     			case 'F':
     				enemyList.add(new EnemyFlying(i * 10, j * 10, CAT_FLYING_WIDTH, CAT_HEIGHT));
+    				break;
+    			case 'B':
+    				boardList.add(new Billboard(i, j, tapTheScreenToJumpPlate));
+    				break;
+    			case 'b':
+    				boardList.add(new Billboard(i, j, watchOutForKittensPlate));
     				break;
     			case 'T':
     				tileList.add(new TalkTile(i, j));
@@ -362,9 +373,10 @@ public class AssetLoader {
 	}
 	
 	public static void dispose() {
-		starsTexture.dispose();
+		bombsTexture.dispose();
 		charactersTexture.dispose();
 		textTexture.dispose();
+		textPlatesTexture.dispose();
 		enemiesTexture.dispose();
 		levelTexture.dispose();
 	}

@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.thedistrictheat.gameobjects.Billboard;
 import com.thedistrictheat.gameobjects.Enemy;
 import com.thedistrictheat.gameobjects.Guy;
 import com.thedistrictheat.gameobjects.Scrollable;
@@ -39,13 +40,14 @@ public class GameRenderer {
 	private TextureRegion firstBackgroundLayer, secondBackgroundLayer, thirdBackgroundLayer;
 	private TextureRegion flag_fixed;
 	private Animation flag;
-	private TextureRegion clickToBeginText, gameOverText, youWinText;
-	private TextureRegion clickToBeginPlate, youWinPlate, gameOverPlate, watchOutForKittensPlate, tapTheScreenToJumpPlate;
+//	private TextureRegion clickToBeginText, gameOverText, youWinText;
+	private TextureRegion clickToBeginPlate, youWinPlate, gameOverPlate;//, watchOutForKittensPlate, tapTheScreenToJumpPlate;
     private SimpleButton backButton;
 	private ArrayList<Tile> tileList;
+	private ArrayList<Billboard> boardList;
 	private ArrayList<Enemy> enemyList;
-	private float beginTextHeight, beginTextWidth, gameOverTextHeight, gameOverTextWidth, winTextHeight, winTextWidth;
-	private float beginPlateHeight, beginPlateWidth, gameOverPlateHeight, gameOverPlateWidth, winPlateHeight, winPlateWidth, watchPlateHeight, watchPlateWidth, tapPlateHeight, tapPlateWidth;
+//	private float beginTextHeight, beginTextWidth, gameOverTextHeight, gameOverTextWidth, winTextHeight, winTextWidth;
+	private float beginPlateHeight, beginPlateWidth, gameOverPlateHeight, gameOverPlateWidth, winPlateHeight, winPlateWidth;//, watchPlateHeight, watchPlateWidth, tapPlateHeight, tapPlateWidth;
 	
 	public GameRenderer(GameWorld world, int gameWidth, int gameHeight) {
 		this.world = world;
@@ -97,15 +99,16 @@ public class GameRenderer {
 	
 	private void initGameAssets() {
 		enemyList = AssetLoader.enemyList;
+		boardList = AssetLoader.boardList;
 		tileList = AssetLoader.tileList;
-		clickToBeginText = AssetLoader.clickToBeginText;
-		gameOverText = AssetLoader.gameOverText;
-		youWinText = AssetLoader.youWinText;
+//		clickToBeginText = AssetLoader.clickToBeginText;
+//		gameOverText = AssetLoader.gameOverText;
+//		youWinText = AssetLoader.youWinText;
 		clickToBeginPlate = AssetLoader.clickToBeginPlate;
 		gameOverPlate = AssetLoader.gameOverPlate;
 		youWinPlate = AssetLoader.youWinPlate;
-		watchOutForKittensPlate = AssetLoader.watchOutForKittensPlate;
-		tapTheScreenToJumpPlate = AssetLoader.tapTheScreenToJumpPlate;
+//		watchOutForKittensPlate = AssetLoader.watchOutForKittensPlate;
+//		tapTheScreenToJumpPlate = AssetLoader.tapTheScreenToJumpPlate;
 	}
 
 	private void drawBackground() {
@@ -219,6 +222,14 @@ public class GameRenderer {
 		}
 	}
 	
+	private void drawBoards(float runTime) {
+		for(int i = 0;i < boardList.size();i++) {
+			Billboard board = boardList.get(i);
+        	spriteBatcher.draw(board.getBoard(), board.getX(), board.getY(), board.getWidth(), board.getHeight());
+		}
+	}
+			
+	
 	public void render(float runTime) {
         Gdx.gl.glClearColor(0.2f, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -245,10 +256,10 @@ public class GameRenderer {
     	gameOverPlateWidth = gameOverPlate.getRegionWidth()/2;
     	winPlateHeight = youWinPlate.getRegionHeight()/2;
     	winPlateWidth = youWinPlate.getRegionWidth()/2;
-    	watchPlateHeight = watchOutForKittensPlate.getRegionHeight()/2;
-    	watchPlateWidth = watchOutForKittensPlate.getRegionWidth()/2;
-    	tapPlateHeight = tapTheScreenToJumpPlate.getRegionHeight()/2;
-    	tapPlateWidth = tapTheScreenToJumpPlate.getRegionWidth()/2;
+//    	watchPlateHeight = watchOutForKittensPlate.getRegionHeight()/2;
+//    	watchPlateWidth = watchOutForKittensPlate.getRegionWidth()/2;
+//    	tapPlateHeight = tapTheScreenToJumpPlate.getRegionHeight()/2;
+//    	tapPlateWidth = tapTheScreenToJumpPlate.getRegionWidth()/2;
         
         if(world.isReady()) {
         	resetExplodingTime();
@@ -257,6 +268,7 @@ public class GameRenderer {
         	spriteBatcher.draw(guy.standingSprite(), guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
         }
         else if (world.isRunning()) {
+            drawBoards(runTime);
             if(guy.isJumping()) {
             	spriteBatcher.draw(guy.jumpingSprite(), guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
             }
@@ -265,12 +277,13 @@ public class GameRenderer {
             }
         }
         else if(world.isPaused()) {
+            drawBoards(runTime);
         	spriteBatcher.draw(guy.standingSprite(), guy.getX(), guy.getY(), guy.getWidth(), guy.getHeight());
         	if(world.showFirstTip()) {
-                spriteBatcher.draw(tapTheScreenToJumpPlate, (gameWidth/2)-(tapPlateWidth/2), gameHeight*0.58f, tapPlateWidth, tapPlateHeight);
+//                spriteBatcher.draw(tapTheScreenToJumpPlate, (gameWidth/2)-(tapPlateWidth/2), gameHeight*0.58f, tapPlateWidth, tapPlateHeight);
         	}
         	else {
-                spriteBatcher.draw(watchOutForKittensPlate, (gameWidth/2)-(watchPlateWidth/2), gameHeight*0.58f, watchPlateWidth, watchPlateHeight);
+//                spriteBatcher.draw(watchOutForKittensPlate, (gameWidth/2)-(watchPlateWidth/2), gameHeight*0.58f, watchPlateWidth, watchPlateHeight);
         	}
         }
         else if(world.isGameOver()) {

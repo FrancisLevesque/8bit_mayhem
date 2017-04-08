@@ -23,18 +23,19 @@ public class CharacterSelectRenderer {
 	private SpriteBatch spriteBatcher;
 		
 	// Game Objects
-	private Scrollable stars;
+	private Scrollable bombs;
 	
 	// Game Assets
 	private Color backgroundColor;
-	private TextureRegion starsTexture, francisTexture, brandonTexture, stewTexture, seanTexture;
-	private TextureRegion selectYourCharacterText;
+	private TextureRegion bombsTexture, francisTexture, brandonTexture, stewTexture, seanTexture;
+//	private TextureRegion selectYourCharacterText;
 	private TextureRegion selectYourCharacterPlate;
 	private TextureRegion francisText, brandonText, stewText, seanText;
 	private Animation francisRunning, brandonRunning, stewRunning, seanRunning;
 	private SimpleButton playButton, musicButton, soundButton, downloadButton;
 	private Animation star;
-	private float textHeight, textWidth, plateHeight, plateWidth;
+//	private float textHeight, textWidth;
+	private float plateHeight, plateWidth;
 	
 	public CharacterSelectRenderer(CharacterSelectWorld world, Color backgroundColor, int gameWidth, int gameHeight) {
 		this.world = world;
@@ -54,7 +55,7 @@ public class CharacterSelectRenderer {
 	}
 	
 	private void initGameObjects() {
-		stars = world.getStars();
+		bombs = world.getBombs();
 		playButton = ((CharacterSelectInputHandler)(Gdx.input.getInputProcessor())).getPlayButton();
 		musicButton = ((CharacterSelectInputHandler)(Gdx.input.getInputProcessor())).getMusicButton();
 		soundButton = ((CharacterSelectInputHandler)(Gdx.input.getInputProcessor())).getSoundButton();
@@ -62,8 +63,8 @@ public class CharacterSelectRenderer {
 	}
 	
 	private void initGameAssets() {
-	    starsTexture = AssetLoader.stars;
-	    selectYourCharacterText = AssetLoader.selectYourCharacterText;
+	    bombsTexture = AssetLoader.bombs;
+//	    selectYourCharacterText = AssetLoader.selectYourCharacterText;
 	    selectYourCharacterPlate = AssetLoader.selectYourCharacterPlate;
 	    francisText = AssetLoader.francisText;
 	    brandonText = AssetLoader.brandonText;
@@ -102,9 +103,9 @@ public class CharacterSelectRenderer {
         shapeRenderer.end();
 
         spriteBatcher.begin();
-        spriteBatcher.draw(starsTexture, stars.getX(), stars.getY(), stars.getWidth(), stars.getHeight());
-        spriteBatcher.draw(starsTexture, stars.getX() - stars.getWidth(), stars.getY(), stars.getWidth(), stars.getHeight());
-        spriteBatcher.draw(starsTexture, stars.getX() + stars.getWidth(), stars.getY(), stars.getWidth(), stars.getHeight());
+        spriteBatcher.draw(bombsTexture, bombs.getX(), bombs.getY(), bombs.getWidth(), bombs.getHeight());
+        spriteBatcher.draw(bombsTexture, bombs.getX() - bombs.getWidth(), bombs.getY(), bombs.getWidth(), bombs.getHeight());
+        spriteBatcher.draw(bombsTexture, bombs.getX() + bombs.getWidth(), bombs.getY(), bombs.getWidth(), bombs.getHeight());
 //        textHeight = selectYourCharacterText.getRegionHeight()/4;
 //        textWidth = selectYourCharacterText.getRegionWidth()/4;
 //        spriteBatcher.draw(selectYourCharacterText, (gameWidth/2)-(textWidth/2), gameHeight*0.9f, textWidth, textHeight);
@@ -120,16 +121,16 @@ public class CharacterSelectRenderer {
         drawCharacter(world.sean, seanTexture, seanRunning.getKeyFrame(runTime), seanText);
         
         if(AssetLoader.prefs.getBoolean("beatFrancisLevel")) {
-        	spriteBatcher.draw(star.getKeyFrame(runTime), world.francis.getX() + world.francis.getWidth(), world.francis.getY()+world.francis.getHeight(), world.francis.getWidth()/4, world.francis.getHeight()/4);
+        	spriteBatcher.draw(star.getKeyFrame(runTime), world.francis.getX()+((world.francis.getWidth()*5)/6), world.francis.getY()+((world.francis.getHeight()*5)/6), world.francis.getWidth()/4, world.francis.getHeight()/4);
         }
         if(AssetLoader.prefs.getBoolean("beatBrandonLevel")) {
-        	spriteBatcher.draw(star.getKeyFrame(runTime+1f), world.brandon.getX() + world.brandon.getWidth(), world.brandon.getY()+world.brandon.getHeight(), world.brandon.getWidth()/4, world.brandon.getHeight()/4);
+        	spriteBatcher.draw(star.getKeyFrame(runTime+1f), world.brandon.getX()+((world.brandon.getWidth()*5)/6), world.brandon.getY()+((world.brandon.getHeight()*5)/6), world.brandon.getWidth()/4, world.brandon.getHeight()/4);
         }
         if(AssetLoader.prefs.getBoolean("beatStewLevel")) {
-        	spriteBatcher.draw(star.getKeyFrame(runTime+1.7f), world.stew.getX() + world.stew.getWidth(), world.stew.getY()+world.stew.getHeight(), world.stew.getWidth()/4, world.stew.getHeight()/4);
+        	spriteBatcher.draw(star.getKeyFrame(runTime+1.7f), world.stew.getX()+((world.stew.getWidth()*5)/6), world.stew.getY()+((world.stew.getHeight()*5)/6), world.stew.getWidth()/4, world.stew.getHeight()/4);
         }
         if(AssetLoader.prefs.getBoolean("beatSeanLevel")) {
-        	spriteBatcher.draw(star.getKeyFrame(runTime+2.3f), world.sean.getX() + world.sean.getWidth(), world.sean.getY()+world.sean.getHeight(), world.sean.getWidth()/4, world.sean.getHeight()/4);
+        	spriteBatcher.draw(star.getKeyFrame(runTime+2.3f), world.sean.getX()+((world.sean.getWidth()*5)/6), world.sean.getY()+((world.sean.getHeight()*5)/6), world.sean.getWidth()/4, world.sean.getHeight()/4);
         }
         if(AssetLoader.prefs.getBoolean("beatFrancisLevel") && AssetLoader.prefs.getBoolean("beatBrandonLevel") && AssetLoader.prefs.getBoolean("beatStewLevel") && AssetLoader.prefs.getBoolean("beatSeanLevel")) {
             downloadButton.draw(spriteBatcher);

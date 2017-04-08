@@ -37,8 +37,18 @@ public class GameInputHandler extends InputHandler {
 				guy.onClick();
 				world.unpause();
 			}
-			else if(world.isGameOver() || world.isWinner()) {
+			else if(world.isGameOver()){
 				world.restart();
+			}
+			else if(world.isWinner()) {
+				if(AssetLoader.prefs.getBoolean("firstTime") == true){
+					AssetLoader.prefs.putBoolean("firstTime", false);
+					AssetLoader.prefs.flush();
+					world.restart();
+				} else {
+					world.setGoToCharacterSelect(true);	
+				}
+		    	return true;
 			}
 		}
 		return true;

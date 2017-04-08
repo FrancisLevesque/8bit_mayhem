@@ -10,8 +10,8 @@ import com.thedistrictheat.gameobjects.ScrollHandler;
 import com.thedistrictheat.gameobjects.Scrollable;
 
 public class CharacterSelectWorld {
-    private static final int STARS_IDLE_SPEED = 20;
-    private static final int STARS_SELECTED_SPEED = -70;
+    private static final int STARS_IDLE_SPEED = 10;
+    private static final int STARS_SELECTED_SPEED = -50;
     
 	private float gameWidthRatio;
 	private float gameHeightRatio;
@@ -20,7 +20,7 @@ public class CharacterSelectWorld {
 	
 	private ScrollHandler scrollHandler;
 	private List<Scrollable> list;
-	private Scrollable stars;
+	private Scrollable bombs;
 
 	public Character francis, brandon, stew, sean;
 	public enum CharacterType { FRANCIS, BRANDON, STEW, SEAN };
@@ -29,15 +29,15 @@ public class CharacterSelectWorld {
 		this.gameWidthRatio = gameWidthRatio;
 		this.gameHeightRatio = gameHeightRatio;
 
-		stars = new Scrollable(0, 0, gameWidth, gameHeight, STARS_IDLE_SPEED); 
+		bombs = new Scrollable(0, 0, gameWidth, gameHeight, STARS_IDLE_SPEED); 
 		list = new ArrayList<Scrollable>();
-    	list.add(stars);
+    	list.add(bombs);
     	scrollHandler = new ScrollHandler(list);
 		
-		francis = new Character(gameWidth * 0.14f, gameHeight * 0.5f, Color.FOREST);
-		brandon = new Character(gameWidth * 0.34f, gameHeight * 0.5f, Color.ROYAL);
-		stew = new Character(gameWidth * 0.54f, gameHeight * 0.5f, Color.FIREBRICK);
-		sean = new Character((int)(gameWidth * 0.74f), gameHeight * 0.5f, Color.DARK_GRAY);
+		francis = new Character(gameWidth * 0.14f, gameHeight * 0.5f, Color.valueOf("22BB33FF"));
+		brandon = new Character(gameWidth * 0.34f, gameHeight * 0.5f, Color.valueOf("3377BBAA"));
+		stew = new Character(gameWidth * 0.54f, gameHeight * 0.5f, Color.valueOf("BB4422FF"));
+		sean = new Character((int)(gameWidth * 0.74f), gameHeight * 0.5f, Color.valueOf("444444FF"));
 	}
 	
 	public void update(float delta) {
@@ -110,8 +110,8 @@ public class CharacterSelectWorld {
 		return gameHeightRatio;
 	}
     
-    public Scrollable getStars() {
-    	return stars;
+    public Scrollable getBombs() {
+    	return bombs;
     }
 
 	public CharacterType getSelectedCharacter() {

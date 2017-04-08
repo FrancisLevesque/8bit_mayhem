@@ -92,8 +92,7 @@ public class Guy {
     	if ((hitBox.getX() + hitBox.getWidth()) > flag.getX() + (flag.getWidth()/2)) {
 			setGameWon(true);
 			if(AssetLoader.prefs.getBoolean("firstTime") == true) {
-				AssetLoader.prefs.putBoolean("firstTime", false);
-				AssetLoader.prefs.flush();
+				// NOP
 			}
 			else {
 		    	if(characterType == CharacterType.FRANCIS) {

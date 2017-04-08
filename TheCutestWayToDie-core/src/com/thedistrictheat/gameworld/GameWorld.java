@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.thedistrictheat.gameobjects.Billboard;
 import com.thedistrictheat.gameobjects.Enemy;
 import com.thedistrictheat.gameobjects.Guy;
 import com.thedistrictheat.gameobjects.ScrollHandler;
@@ -27,6 +28,7 @@ public class GameWorld {
 
 	private Guy guy;
     private ArrayList<Enemy> enemyList;
+    private ArrayList<Billboard> boardList;
     private ArrayList<Tile> tileList;
 
     private float pauseTimeOnWin;
@@ -61,6 +63,7 @@ public class GameWorld {
 
 		guy = AssetLoader.guy;
     	enemyList = AssetLoader.enemyList;
+    	boardList = AssetLoader.boardList;
     	tileList = AssetLoader.tileList;
 	}
 	
@@ -72,6 +75,9 @@ public class GameWorld {
 		for(int i = 0;i < enemyList.size();i++) {
 			enemyList.get(i).update(delta, gameWidth);
 		}
+    	for(int i = 0;i < boardList.size();i++) {
+    		boardList.get(i).update(delta);
+    	}
     	for(int i = 0;i < tileList.size();i++) {
     		tileList.get(i).update(delta);
     	}
@@ -198,6 +204,9 @@ public class GameWorld {
 		scrollHandler.restart();
     	for(int i = 0;i < enemyList.size();i++) {
     		enemyList.get(i).restart();
+    	}
+    	for(int i = 0;i < boardList.size();i++) {
+    		boardList.get(i).restart();
     	}
     	for(int i = 0;i < tileList.size();i++) {
     		tileList.get(i).restart();
